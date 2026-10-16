@@ -1,0 +1,1 @@
+specify-cli 1.2.0 (installed via pip; initialized with: specify init --here --integration claude --script sh)
