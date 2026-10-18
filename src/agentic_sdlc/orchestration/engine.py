@@ -1001,7 +1001,9 @@ class Engine:
         now = self._clock()
         for kind, content in result.artifacts:
             previous = ctx.artifacts.get(kind)
-            version = previous.version + 1 if previous and previous.stage == name else 1
+            # versions are per artifact kind: a revision produced by a different stage
+            # (requirement_revision after ingest) is still the next version of that kind
+            version = previous.version + 1 if previous else 1
             artifact = ArtifactRecord(
                 run_id=run_id,
                 stage=name,

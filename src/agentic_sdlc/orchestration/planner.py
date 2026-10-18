@@ -13,8 +13,8 @@ Shape (see plan §3):
 
     ingest → quality_check →(needs clarification)→ clarification [H] →(replan: requirement_revision)
            →(brownfield)→ impact_analysis → decompose → design → design_approval [H]
-           → {implement, test_plan, docs_draft} → verify (retry) → {security_review (fallback),
-             compliance_check} →(blocking)→ policy_exception [H] → release_readiness [H] → summary
+           → {implement ∥ test_plan ∥ docs_draft} → verify (retry) → security_review (fallback)
+           → compliance_check →(blocking)→ policy_exception [H] → release_readiness [H] → summary
 """
 
 from __future__ import annotations
@@ -195,7 +195,9 @@ def make_planner(settings: Settings) -> Callable[[RunContext], WorkflowGraph]:
             StageSpec(
                 "compliance_check",
                 "compliance_check",
-                depends_on=("verify",),
+                # after security_review on purpose: SEC-003 must see the review's outcome
+                # (automated vs fallback) and CMP-001 must not observe an in-flight sibling
+                depends_on=("verify", "security_review"),
                 retry=NO_RETRY,
                 timeout=timeout,
                 purpose="evaluate every versioned policy; block or raise an exception gate",
@@ -204,7 +206,7 @@ def make_planner(settings: Settings) -> Callable[[RunContext], WorkflowGraph]:
             StageSpec(
                 "policy_exception",
                 HUMAN,
-                depends_on=("security_review", "compliance_check"),
+                depends_on=("compliance_check",),
                 owner=HUMAN,
                 gate=gate,
                 condition=policy_blocking,
