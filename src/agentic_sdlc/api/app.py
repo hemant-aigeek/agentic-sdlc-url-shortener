@@ -13,7 +13,8 @@ from fastapi import FastAPI, Request, Response
 
 from agentic_sdlc import __version__
 from agentic_sdlc.api.problems import install_problem_handlers
-from agentic_sdlc.api.routers import health
+from agentic_sdlc.api.ratelimit import TokenBucketLimiter
+from agentic_sdlc.api.routers import health, links, redirect
 from agentic_sdlc.config import Settings, load_settings
 from agentic_sdlc.persistence.db import Database
 from agentic_sdlc.telemetry.logging import bind, configure_logging, unbind
@@ -38,6 +39,10 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.state.settings = settings
     app.state.db = Database(settings.database_url)
     app.state.db.create_all()
+    app.state.limiter = TokenBucketLimiter(
+        capacity=settings.rate_limit_capacity,
+        refill_per_second=settings.rate_limit_refill_per_second,
+    )
 
     @app.middleware("http")
     async def _correlation(
@@ -55,4 +60,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
 
     install_problem_handlers(app)
     app.include_router(health.router)
+    app.include_router(links.router)
+    # The unversioned redirect catch-all must be registered last.
+    app.include_router(redirect.router)
     return app

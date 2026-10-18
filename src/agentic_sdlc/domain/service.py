@@ -160,6 +160,9 @@ class ShortenerService:
             redirects_by_day=dict(sorted(per_day.items())),
         )
 
+    def get_by_idempotency_key(self, key: str) -> ShortLink | None:
+        return self._links.get_by_idempotency_key(key)
+
     def get(self, code: str) -> ShortLink:
         link = self._links.get_by_code(code)
         if link is None:
