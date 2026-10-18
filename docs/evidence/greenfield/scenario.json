@@ -1,0 +1,53 @@
+{
+  "demo_faults": {
+    "demo_fault_verify_transient_failures": 2
+  },
+  "description": "A complete, consistent, testable requirement proceeds without a clarification gate (the reason is recorded), fans out implement/test_plan/docs_draft in parallel, and recovers from two injected transient verify failures by bounded retry.",
+  "expected_terminal": "COMPLETED / READY",
+  "note": "Scripted decisions were recorded through Engine.decide by the named actor; demonstration faults are injected via Settings and labelled.",
+  "outcome": {
+    "release_decision": "READY",
+    "run_id": "01a1502e01bb9f20673485e06a",
+    "scenario": "greenfield",
+    "state": "COMPLETED",
+    "steps": [
+      {
+        "max_batches": null,
+        "state": "WAITING_APPROVAL",
+        "step": "run"
+      },
+      {
+        "actor": "hemant",
+        "decision": "approve",
+        "gate": "design_approval",
+        "payload": {
+          "api_change_acknowledged": true
+        },
+        "step": "decide"
+      },
+      {
+        "max_batches": null,
+        "state": "WAITING_APPROVAL",
+        "step": "run"
+      },
+      {
+        "actor": "hemant",
+        "decision": "approve",
+        "gate": "release_readiness",
+        "payload": {},
+        "step": "decide"
+      },
+      {
+        "max_batches": null,
+        "state": "COMPLETED",
+        "step": "run"
+      }
+    ],
+    "stopped_at_gate": null,
+    "terminal_reason": null
+  },
+  "requirement": "Add a per-link analytics summary endpoint GET /api/v1/links/{code}/analytics/summary returning total redirects, first and last redirect time, and redirects per day. Unknown codes return 404. Expired links keep their analytics readable.",
+  "scenario": "greenfield",
+  "scope": "greenfield",
+  "title": "SCN-A greenfield: per-link analytics summary endpoint"
+}
