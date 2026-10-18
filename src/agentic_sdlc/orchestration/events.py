@@ -21,6 +21,7 @@ class ActorType(StrEnum):
 
 class EventKind(StrEnum):
     RUN_CREATED = "run_created"
+    RUN_STARTED = "run_started"
     STAGE_READY = "stage_ready"
     STAGE_STARTED = "stage_started"
     STAGE_SUCCEEDED = "stage_succeeded"

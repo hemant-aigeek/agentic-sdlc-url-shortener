@@ -36,6 +36,7 @@ class StageSpec:
     fallback: str | None = None  # agent key executed when retries are exhausted
     compensable: bool = False  # stage registers an inverse action
     gate: GatePolicy = field(default_factory=GatePolicy)
+    gate_kind: str = "approval"  # "approval" | "clarification" (human-owned stages only)
     purpose: str = ""
     emits: tuple[str, ...] = ()  # artifact kinds produced
     retry_max_attempts: int | None = None  # convenience override used by tests/planner
@@ -43,6 +44,8 @@ class StageSpec:
     def __post_init__(self) -> None:
         if self.owner not in {"agent", "human"}:
             raise GraphError(f"stage {self.name!r}: owner must be 'agent' or 'human'")
+        if self.gate_kind not in {"approval", "clarification"}:
+            raise GraphError(f"stage {self.name!r}: unknown gate_kind {self.gate_kind!r}")
         if self.retry_max_attempts is not None:
             object.__setattr__(
                 self,
@@ -244,6 +247,7 @@ class WorkflowGraph:
                     "fallback": s.fallback,
                     "compensable": s.compensable,
                     "gate_timeout_s": s.gate.timeout_s,
+                    "gate_kind": s.gate_kind if s.is_gate else None,
                     "parallel_group": groups.get(s.name),
                     "purpose": s.purpose,
                     "emits": list(s.emits),
