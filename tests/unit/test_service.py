@@ -1,4 +1,4 @@
-"""FR-U01, U05–U09, U11: ShortenerService behaviour against in-memory fakes."""
+"""FR-U01, U05-U09, U11: ShortenerService behaviour against in-memory fakes."""
 
 from __future__ import annotations
 
