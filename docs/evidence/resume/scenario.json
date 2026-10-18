@@ -1,0 +1,55 @@
+{
+  "demo_faults": {},
+  "description": "The run is suspended after one batch; a new engine instance resumes from the persisted state without re-executing the completed stage.",
+  "expected_terminal": "COMPLETED / READY",
+  "note": "Scripted decisions were recorded through Engine.decide by the named actor; demonstration faults are injected via Settings and labelled.",
+  "outcome": {
+    "release_decision": "READY",
+    "run_id": "01a1502e97430c8446291361be",
+    "scenario": "resume",
+    "state": "COMPLETED",
+    "steps": [
+      {
+        "max_batches": 1,
+        "state": "SUSPENDED",
+        "step": "run"
+      },
+      {
+        "state": "WAITING_APPROVAL",
+        "step": "restart+resume"
+      },
+      {
+        "actor": "hemant",
+        "decision": "approve",
+        "gate": "design_approval",
+        "payload": {
+          "api_change_acknowledged": true
+        },
+        "step": "decide"
+      },
+      {
+        "max_batches": null,
+        "state": "WAITING_APPROVAL",
+        "step": "run"
+      },
+      {
+        "actor": "hemant",
+        "decision": "approve",
+        "gate": "release_readiness",
+        "payload": {},
+        "step": "decide"
+      },
+      {
+        "max_batches": null,
+        "state": "COMPLETED",
+        "step": "run"
+      }
+    ],
+    "stopped_at_gate": null,
+    "terminal_reason": null
+  },
+  "requirement": "Add a per-link analytics summary endpoint GET /api/v1/links/{code}/analytics/summary returning total redirects, first and last redirect time, and redirects per day. Unknown codes return 404. Expired links keep their analytics readable.",
+  "scenario": "resume",
+  "scope": "greenfield",
+  "title": "Demo: interruption after one batch, resumed by a fresh engine"
+}

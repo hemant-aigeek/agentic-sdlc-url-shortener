@@ -1,0 +1,522 @@
+[
+  {
+    "content": {
+      "acceptance_criteria": [
+        {
+          "id": "AC-01",
+          "observable": "endpoint exists in the OpenAPI contract and returns the stated fields",
+          "statement": "Add a per-link analytics summary endpoint GET /api/v1/links/{code}/analytics/summary returning total redirects, first and last redirect time, and redirects per day."
+        },
+        {
+          "id": "AC-02",
+          "observable": "HTTP response status is 404",
+          "statement": "Unknown codes return 404."
+        },
+        {
+          "id": "AC-03",
+          "observable": "an expired link is not redirected; its status is observable",
+          "statement": "Expired links keep their analytics readable."
+        }
+      ],
+      "classified_scope": "greenfield",
+      "constraints": [],
+      "functional_statements": [
+        "Add a per-link analytics summary endpoint GET /api/v1/links/{code}/analytics/summary returning total redirects, first and last redirect time, and redirects per day.",
+        "Unknown codes return 404.",
+        "Expired links keep their analytics readable."
+      ],
+      "intent": "Add a per-link analytics summary endpoint GET /api/v1/links/{code}/analytics/summary returning total redirects, first and last redirect time, and redirects per day.",
+      "scope": "greenfield",
+      "scope_cues": [
+        "add "
+      ],
+      "scope_source": "explicit",
+      "source": "requirement_raw",
+      "title": "Demo: forced mandatory policy failure (SEC-002) safe-stops the run",
+      "version": 1
+    },
+    "created_at": "2026-10-18 18:04:12.740409+00:00",
+    "derived_from": [],
+    "id": 106,
+    "invalidated": false,
+    "kind": "normalized_requirement",
+    "policy_version": "1.0.0",
+    "run_id": "01a1502f801e8c7a9ffe691f73",
+    "stage": "ingest",
+    "version": 1
+  },
+  {
+    "content": {
+      "ambiguities": [],
+      "checks": {
+        "boundaries": {
+          "detail": "within approved scope",
+          "passed": true
+        },
+        "completeness": {
+          "detail": "3 statements, 3 acceptance criteria derived",
+          "passed": true
+        },
+        "consistency": {
+          "detail": "no conflicts with approved requirements",
+          "passed": true
+        },
+        "testability": {
+          "detail": "3/3 statements have an observable outcome",
+          "passed": true
+        }
+      },
+      "clarification_required": false,
+      "failed_checks": [],
+      "max_severity": "NONE",
+      "reason": "no clarification needed: all requirement-quality checks passed (completeness, consistency, testability, boundaries); max ambiguity severity NONE",
+      "reason_no_clarification": "no clarification needed: all requirement-quality checks passed (completeness, consistency, testability, boundaries); max ambiguity severity NONE",
+      "requirement_version": 1
+    },
+    "created_at": "2026-10-18 18:04:12.753984+00:00",
+    "derived_from": [
+      106
+    ],
+    "id": 107,
+    "invalidated": false,
+    "kind": "quality_check",
+    "policy_version": "1.0.0",
+    "run_id": "01a1502f801e8c7a9ffe691f73",
+    "stage": "quality_check",
+    "version": 1
+  },
+  {
+    "content": {
+      "components": [
+        "domain/service.py",
+        "api/routers/redirect.py",
+        "errors.py",
+        "api/problems.py",
+        "persistence/link_repository.py",
+        "api/routers/links.py",
+        "api/schemas.py",
+        "domain/codes.py",
+        "api/app.py"
+      ],
+      "critical_path": [
+        "T90-docs",
+        "T99-verify"
+      ],
+      "parallel_tasks": [
+        "T01-test",
+        "T01-impl",
+        "T02-test",
+        "T02-impl",
+        "T03-test",
+        "T03-impl"
+      ],
+      "requirement_version": 1,
+      "tasks": [
+        {
+          "acceptance": "endpoint exists in the OpenAPI contract and returns the stated fields",
+          "components": [
+            "tests for domain/service.py"
+          ],
+          "criterion": "AC-01",
+          "depends_on": [],
+          "id": "T01-test",
+          "kind": "test",
+          "objective": "Write a failing test for AC-01: Add a per-link analytics summary endpoint GET /api/v1/links/{code}/analytics/summary returning total redirects, first and last redirect time, and redirects per day.",
+          "parallel": true,
+          "tdd": "red"
+        },
+        {
+          "acceptance": "T01-test passes; regression suite green",
+          "components": [
+            "domain/service.py"
+          ],
+          "criterion": "AC-01",
+          "depends_on": [
+            "T01-test"
+          ],
+          "id": "T01-impl",
+          "kind": "implement",
+          "objective": "Implement the smallest change satisfying AC-01",
+          "parallel": true,
+          "tdd": "green"
+        },
+        {
+          "acceptance": "HTTP response status is 404",
+          "components": [
+            "tests for api/routers/redirect.py"
+          ],
+          "criterion": "AC-02",
+          "depends_on": [],
+          "id": "T02-test",
+          "kind": "test",
+          "objective": "Write a failing test for AC-02: Unknown codes return 404.",
+          "parallel": true,
+          "tdd": "red"
+        },
+        {
+          "acceptance": "T02-test passes; regression suite green",
+          "components": [
+            "api/routers/redirect.py"
+          ],
+          "criterion": "AC-02",
+          "depends_on": [
+            "T02-test"
+          ],
+          "id": "T02-impl",
+          "kind": "implement",
+          "objective": "Implement the smallest change satisfying AC-02",
+          "parallel": true,
+          "tdd": "green"
+        },
+        {
+          "acceptance": "an expired link is not redirected; its status is observable",
+          "components": [
+            "tests for errors.py"
+          ],
+          "criterion": "AC-03",
+          "depends_on": [],
+          "id": "T03-test",
+          "kind": "test",
+          "objective": "Write a failing test for AC-03: Expired links keep their analytics readable.",
+          "parallel": true,
+          "tdd": "red"
+        },
+        {
+          "acceptance": "T03-test passes; regression suite green",
+          "components": [
+            "errors.py"
+          ],
+          "criterion": "AC-03",
+          "depends_on": [
+            "T03-test"
+          ],
+          "id": "T03-impl",
+          "kind": "implement",
+          "objective": "Implement the smallest change satisfying AC-03",
+          "parallel": true,
+          "tdd": "green"
+        },
+        {
+          "acceptance": "contract drift check passes; docs describe new behaviour",
+          "components": [
+            "specs/contracts/openapi.yaml",
+            "README.md"
+          ],
+          "criterion": "ALL",
+          "depends_on": [
+            "T01-impl",
+            "T02-impl",
+            "T03-impl"
+          ],
+          "id": "T90-docs",
+          "kind": "docs",
+          "objective": "Update API documentation, contract and README for the change",
+          "parallel": false,
+          "tdd": "n/a"
+        },
+        {
+          "acceptance": "exit code 0",
+          "components": [
+            "tests/"
+          ],
+          "criterion": "ALL",
+          "depends_on": [
+            "T01-impl",
+            "T02-impl",
+            "T03-impl",
+            "T90-docs"
+          ],
+          "id": "T99-verify",
+          "kind": "verify",
+          "objective": "Run the regression suite and the impacted test targets",
+          "parallel": false,
+          "tdd": "refactor"
+        }
+      ]
+    },
+    "created_at": "2026-10-18 18:04:12.769560+00:00",
+    "derived_from": [],
+    "id": 108,
+    "invalidated": false,
+    "kind": "decomposition",
+    "policy_version": "1.0.0",
+    "run_id": "01a1502f801e8c7a9ffe691f73",
+    "stage": "decompose",
+    "version": 1
+  },
+  {
+    "content": {
+      "api_changes": [
+        {
+          "change": "add",
+          "detail": "Add a per-link analytics summary endpoint GET /api/v1/links/{code}/analytics/summary returning total redirects, first and last redirect time, and redirects per day.",
+          "path": "/api/v1/links/{code}/analytics/summary"
+        },
+        {
+          "change": "status-code",
+          "detail": "status 404: Unknown codes return 404.",
+          "path": "(affected route)"
+        }
+      ],
+      "api_or_schema_impact": true,
+      "components": [
+        "domain/service.py",
+        "api/routers/redirect.py",
+        "errors.py",
+        "api/problems.py",
+        "persistence/link_repository.py",
+        "api/routers/links.py",
+        "api/schemas.py",
+        "domain/codes.py",
+        "api/app.py"
+      ],
+      "contract_version_impact": "minor (additive)",
+      "decisions": [
+        "Keep the change inside existing module boundaries (ADR-001)",
+        "No new runtime dependency; stdlib + existing stack (ADR-002)",
+        "Contract exported and drift-checked before approval (CHG-002)"
+      ],
+      "new_dependencies": [],
+      "requirement_version": 1,
+      "risks": [
+        "Consumer breakage on contract changes",
+        "Regression in the shared not-found / gone handling"
+      ],
+      "schema_changes": [],
+      "trade_offs": [
+        "Smallest change that satisfies the acceptance criteria over a broader refactor",
+        "Backward compatibility is traded for correctness where a status code changes"
+      ],
+      "validation": "contract tests + impacted regression targets executed by verify"
+    },
+    "created_at": "2026-10-18 18:04:12.782396+00:00",
+    "derived_from": [
+      108
+    ],
+    "id": 109,
+    "invalidated": false,
+    "kind": "design",
+    "policy_version": "1.0.0",
+    "run_id": "01a1502f801e8c7a9ffe691f73",
+    "stage": "design",
+    "version": 1
+  },
+  {
+    "content": {
+      "format": "markdown",
+      "text": "# Demo: forced mandatory policy failure (SEC-002) safe-stops the run\n\nRequirement version 1 (greenfield).\n\n## Behaviour\n- Add a per-link analytics summary endpoint GET /api/v1/links/{code}/analytics/summary returning total redirects, first and last redirect time, and redirects per day.\n- Unknown codes return 404.\n- Expired links keep their analytics readable.\n\n## Acceptance criteria\n- AC-01: Add a per-link analytics summary endpoint GET /api/v1/links/{code}/analytics/summary returning total redirects, first and last redirect time, and redirects per day. \u2014 observable: endpoint exists in the OpenAPI contract and returns the stated fields\n- AC-02: Unknown codes return 404. \u2014 observable: HTTP response status is 404\n- AC-03: Expired links keep their analytics readable. \u2014 observable: an expired link is not redirected; its status is observable\n\n## API impact\n- api_or_schema_impact: True\n- contract version impact: minor (additive)\n"
+    },
+    "created_at": "2026-10-18 18:04:12.821510+00:00",
+    "derived_from": [],
+    "id": 110,
+    "invalidated": false,
+    "kind": "docs",
+    "policy_version": "1.0.0",
+    "run_id": "01a1502f801e8c7a9ffe691f73",
+    "stage": "docs_draft",
+    "version": 1
+  },
+  {
+    "content": {
+      "cases": [
+        {
+          "criterion": "AC-01",
+          "given": "a valid precondition for the criterion",
+          "id": "TC-AC-01-pos",
+          "level": "contract",
+          "negative": false,
+          "then": "endpoint exists in the OpenAPI contract and returns the stated fields"
+        },
+        {
+          "criterion": "AC-01",
+          "given": "the precondition is violated (unknown code, expired link, bad input)",
+          "id": "TC-AC-01-neg",
+          "level": "contract",
+          "negative": true,
+          "then": "structured problem response with the stated status; no partial effect"
+        },
+        {
+          "criterion": "AC-02",
+          "given": "a valid precondition for the criterion",
+          "id": "TC-AC-02-pos",
+          "level": "contract",
+          "negative": false,
+          "then": "HTTP response status is 404"
+        },
+        {
+          "criterion": "AC-02",
+          "given": "the precondition is violated (unknown code, expired link, bad input)",
+          "id": "TC-AC-02-neg",
+          "level": "contract",
+          "negative": true,
+          "then": "structured problem response with the stated status; no partial effect"
+        },
+        {
+          "criterion": "AC-03",
+          "given": "a valid precondition for the criterion",
+          "id": "TC-AC-03-pos",
+          "level": "unit",
+          "negative": false,
+          "then": "an expired link is not redirected; its status is observable"
+        },
+        {
+          "criterion": "AC-03",
+          "given": "the precondition is violated (unknown code, expired link, bad input)",
+          "id": "TC-AC-03-neg",
+          "level": "unit",
+          "negative": true,
+          "then": "structured problem response with the stated status; no partial effect"
+        },
+        {
+          "criterion": "ALL",
+          "given": "the full existing suite",
+          "id": "TC-REG",
+          "level": "regression",
+          "negative": false,
+          "then": "all existing tests remain green (executed by verify)"
+        }
+      ],
+      "levels": [
+        "contract",
+        "regression",
+        "unit"
+      ],
+      "requirement_version": 1,
+      "tdd": "each positive case is written red before its implementation task"
+    },
+    "created_at": "2026-10-18 18:04:12.827063+00:00",
+    "derived_from": [],
+    "id": 111,
+    "invalidated": false,
+    "kind": "test_plan",
+    "policy_version": "1.0.0",
+    "run_id": "01a1502f801e8c7a9ffe691f73",
+    "stage": "test_plan",
+    "version": 1
+  },
+  {
+    "content": {
+      "changes": [
+        {
+          "action": "write",
+          "bytes": 941,
+          "path": "tests/test_ac_01.py"
+        },
+        {
+          "action": "write",
+          "bytes": 718,
+          "path": "tests/test_ac_02.py"
+        },
+        {
+          "action": "write",
+          "bytes": 801,
+          "path": "tests/test_ac_03.py"
+        },
+        {
+          "action": "write",
+          "bytes": 726,
+          "path": "CHANGESET.md"
+        }
+      ],
+      "description": "red tests + change plan for requirement v1",
+      "files": {
+        "CHANGESET.md": "# Change set for requirement v1: Demo: forced mandatory policy failure (SEC-002) safe-stops the run\n\nGenerated by the deterministic implement agent. Each red test below states one\nacceptance criterion; the implementation tasks are listed with their target\ncomponents. Promotion into the repository is a human act.\n\n| Task | Criterion | Components |\n|---|---|---|\n| T01-test | AC-01 | tests for domain/service.py |\n| T01-impl | AC-01 | domain/service.py |\n| T02-test | AC-02 | tests for api/routers/redirect.py |\n| T02-impl | AC-02 | api/routers/redirect.py |\n| T03-test | AC-03 | tests for errors.py |\n| T03-impl | AC-03 | errors.py |\n| T90-docs | ALL | specs/contracts/openapi.yaml, README.md |\n| T99-verify | ALL | tests/ |\n",
+        "tests/test_ac_01.py": "\"\"\"Generated by the implement stage for T01-test (requirement v1).\n\nAcceptance criterion AC-01: Add a per-link analytics summary endpoint GET /api/v1/links/{code}/analytics/summary returning total redirects, first and last redirect time, and redirects per day.\nObservable: endpoint exists in the OpenAPI contract and returns the stated fields\n\nThis is a red test scaffold: it states the expected behaviour as an executable\nassertion against the HTTP API and is meant to fail until the implementation\ntask T01-impl is done. It is promoted into the\nrepository only by a human (controlled-autonomy boundary, ADR-010).\n\"\"\"\n\nimport pytest\n\npytestmark = pytest.mark.req(\"AC-01\")\n\n\ndef test_ac_01(client) -> None:  # noqa: ANN001 - fixture from the target repo\n    # Arrange: see criterion statement above.\n    # Act / Assert: endpoint exists in the OpenAPI contract and returns the stated fields\n    raise AssertionError(\"not implemented: AC-01\")\n",
+        "tests/test_ac_02.py": "\"\"\"Generated by the implement stage for T02-test (requirement v1).\n\nAcceptance criterion AC-02: Unknown codes return 404.\nObservable: HTTP response status is 404\n\nThis is a red test scaffold: it states the expected behaviour as an executable\nassertion against the HTTP API and is meant to fail until the implementation\ntask T02-impl is done. It is promoted into the\nrepository only by a human (controlled-autonomy boundary, ADR-010).\n\"\"\"\n\nimport pytest\n\npytestmark = pytest.mark.req(\"AC-02\")\n\n\ndef test_ac_02(client) -> None:  # noqa: ANN001 - fixture from the target repo\n    # Arrange: see criterion statement above.\n    # Act / Assert: HTTP response status is 404\n    raise AssertionError(\"not implemented: AC-02\")\n",
+        "tests/test_ac_03.py": "\"\"\"Generated by the implement stage for T03-test (requirement v1).\n\nAcceptance criterion AC-03: Expired links keep their analytics readable.\nObservable: an expired link is not redirected; its status is observable\n\nThis is a red test scaffold: it states the expected behaviour as an executable\nassertion against the HTTP API and is meant to fail until the implementation\ntask T03-impl is done. It is promoted into the\nrepository only by a human (controlled-autonomy boundary, ADR-010).\n\"\"\"\n\nimport pytest\n\npytestmark = pytest.mark.req(\"AC-03\")\n\n\ndef test_ac_03(client) -> None:  # noqa: ANN001 - fixture from the target repo\n    # Arrange: see criterion statement above.\n    # Act / Assert: an expired link is not redirected; its status is observable\n    raise AssertionError(\"not implemented: AC-03\")\n"
+      },
+      "id": "cs-01a1502f-v1",
+      "receipt": {
+        "change_set": "cs-01a1502f-v1",
+        "files_changed": [
+          "tests/test_ac_01.py",
+          "tests/test_ac_02.py",
+          "tests/test_ac_03.py",
+          "CHANGESET.md"
+        ],
+        "inverse": {
+          "CHANGESET.md": null,
+          "tests/test_ac_01.py": null,
+          "tests/test_ac_02.py": null,
+          "tests/test_ac_03.py": null
+        }
+      },
+      "workspace": "/home/claude/agentic-sdlc-url-shortener/data/runs/01a1502f801e8c7a9ffe691f73/workspace"
+    },
+    "created_at": "2026-10-18 18:04:12.832190+00:00",
+    "derived_from": [],
+    "id": 112,
+    "invalidated": false,
+    "kind": "change_set",
+    "policy_version": "1.0.0",
+    "run_id": "01a1502f801e8c7a9ffe691f73",
+    "stage": "implement",
+    "version": 1
+  },
+  {
+    "content": {
+      "attempt": 1,
+      "command": "/home/claude/agentic-sdlc-url-shortener/.venv/bin/python3 -m pytest -q -p no:cacheprovider -x tests/unit tests/contract",
+      "cwd": "/home/claude/agentic-sdlc-url-shortener",
+      "duration_s": 5.074,
+      "executed": true,
+      "exit_code": 0,
+      "fault_injected_attempts": 0,
+      "mode": "pytest",
+      "output_tail": [
+        ".venv/lib/python3.13/site-packages/fastapi/testclient.py:1",
+        "  /home/claude/agentic-sdlc-url-shortener/.venv/lib/python3.13/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.",
+        "    from starlette.testclient import TestClient as TestClient  # noqa",
+        "",
+        "-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html"
+      ],
+      "targets": [
+        "tests/unit",
+        "tests/contract"
+      ]
+    },
+    "created_at": "2026-10-18 18:04:17.918769+00:00",
+    "derived_from": [
+      110,
+      111,
+      112
+    ],
+    "id": 113,
+    "invalidated": false,
+    "kind": "verification",
+    "policy_version": "1.0.0",
+    "run_id": "01a1502f801e8c7a9ffe691f73",
+    "stage": "verify",
+    "version": 1
+  },
+  {
+    "content": {
+      "automated": true,
+      "change_set": "cs-01a1502f-v1",
+      "files_reviewed": [
+        "CHANGESET.md",
+        "tests/test_ac_01.py",
+        "tests/test_ac_02.py",
+        "tests/test_ac_03.py"
+      ],
+      "findings": [],
+      "high_findings": 0,
+      "threat_model_notes": [
+        "open redirect: targets are validated against scheme allow-list (FR-U02)",
+        "SSRF via redirector: loopback/private/metadata targets rejected (FR-U03)",
+        "approval spoofing: decisions require API key + actor header (AMB-06)"
+      ]
+    },
+    "created_at": "2026-10-18 18:04:17.933941+00:00",
+    "derived_from": [
+      113
+    ],
+    "id": 114,
+    "invalidated": false,
+    "kind": "security_review",
+    "policy_version": "1.0.0",
+    "run_id": "01a1502f801e8c7a9ffe691f73",
+    "stage": "security_review",
+    "version": 1
+  }
+]

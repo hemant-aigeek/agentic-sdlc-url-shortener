@@ -1,0 +1,96 @@
+{
+  "evaluations": [
+    {
+      "at": "2026-10-18 18:03:18.519377+00:00",
+      "detail": "change set does not touch URL validation",
+      "id": 46,
+      "outcome": "PASS",
+      "policy_id": "SEC-001",
+      "policy_version": "1.0.0",
+      "run_id": "01a1502e97430c8446291361be",
+      "stage": "compliance_check"
+    },
+    {
+      "at": "2026-10-18 18:03:18.519377+00:00",
+      "detail": "no secret patterns in 9 artifacts",
+      "id": 47,
+      "outcome": "PASS",
+      "policy_id": "SEC-002",
+      "policy_version": "1.0.0",
+      "run_id": "01a1502e97430c8446291361be",
+      "stage": "compliance_check"
+    },
+    {
+      "at": "2026-10-18 18:03:18.519377+00:00",
+      "detail": "automated security review completed",
+      "id": 48,
+      "outcome": "PASS",
+      "policy_id": "SEC-003",
+      "policy_version": "1.0.0",
+      "run_id": "01a1502e97430c8446291361be",
+      "stage": "compliance_check"
+    },
+    {
+      "at": "2026-10-18 18:03:18.519377+00:00",
+      "detail": "10 executed stages and 1 gates fully recorded",
+      "id": 49,
+      "outcome": "PASS",
+      "policy_id": "CMP-001",
+      "policy_version": "1.0.0",
+      "run_id": "01a1502e97430c8446291361be",
+      "stage": "compliance_check"
+    },
+    {
+      "at": "2026-10-18 18:03:18.519377+00:00",
+      "detail": "36 audit events carry actor, action, timestamp and target",
+      "id": 50,
+      "outcome": "PASS",
+      "policy_id": "CMP-002",
+      "policy_version": "1.0.0",
+      "run_id": "01a1502e97430c8446291361be",
+      "stage": "compliance_check"
+    },
+    {
+      "at": "2026-10-18 18:03:18.519377+00:00",
+      "detail": "scope is greenfield; impact analysis is required for brownfield only",
+      "id": 51,
+      "outcome": "NOT-APPLICABLE",
+      "policy_id": "CHG-001",
+      "policy_version": "1.0.0",
+      "run_id": "01a1502e97430c8446291361be",
+      "stage": "compliance_check"
+    },
+    {
+      "at": "2026-10-18 18:03:18.519377+00:00",
+      "detail": "API/schema change acknowledged at design approval",
+      "id": 52,
+      "outcome": "PASS",
+      "policy_id": "CHG-002",
+      "policy_version": "1.0.0",
+      "run_id": "01a1502e97430c8446291361be",
+      "stage": "compliance_check"
+    },
+    {
+      "at": "2026-10-18 18:03:18.519377+00:00",
+      "detail": "no new dependencies declared",
+      "id": 53,
+      "outcome": "PASS",
+      "policy_id": "DEP-001",
+      "policy_version": "1.0.0",
+      "run_id": "01a1502e97430c8446291361be",
+      "stage": "compliance_check"
+    },
+    {
+      "at": "2026-10-18 18:03:18.519377+00:00",
+      "detail": "audit retention recorded: life of the local store",
+      "id": 54,
+      "outcome": "PASS",
+      "policy_id": "AUD-001",
+      "policy_version": "1.0.0",
+      "run_id": "01a1502e97430c8446291361be",
+      "stage": "compliance_check"
+    }
+  ],
+  "exceptions": [],
+  "policy_version": "1.0.0"
+}

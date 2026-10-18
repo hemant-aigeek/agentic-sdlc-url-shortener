@@ -1,0 +1,15 @@
+[
+  {
+    "actor": "hemant",
+    "artifact_version": 1,
+    "decided_at": "2026-10-18 18:04:12.794752+00:00",
+    "decision": "approve",
+    "gate": "design_approval",
+    "id": 23,
+    "payload": {
+      "api_change_acknowledged": true
+    },
+    "reason": "design stays inside existing module boundaries; API/schema change acknowledged",
+    "run_id": "01a1502f801e8c7a9ffe691f73"
+  }
+]

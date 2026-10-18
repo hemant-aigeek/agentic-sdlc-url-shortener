@@ -1,0 +1,26 @@
+[
+  {
+    "actor": "hemant",
+    "artifact_version": 1,
+    "decided_at": "2026-10-18 18:03:06.852442+00:00",
+    "decision": "approve",
+    "gate": "design_approval",
+    "id": 10,
+    "payload": {
+      "api_change_acknowledged": true
+    },
+    "reason": "design stays inside existing module boundaries; API/schema change acknowledged",
+    "run_id": "01a1502e7e828b519da9c898ae"
+  },
+  {
+    "actor": "hemant",
+    "artifact_version": 1,
+    "decided_at": "2026-10-18 18:03:12.239228+00:00",
+    "decision": "reject",
+    "gate": "release_readiness",
+    "id": 11,
+    "payload": {},
+    "reason": "not this sprint; defer the endpoint",
+    "run_id": "01a1502e7e828b519da9c898ae"
+  }
+]
