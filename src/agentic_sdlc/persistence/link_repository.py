@@ -45,7 +45,7 @@ class SqlShortLinkRepository(ShortLinkRepository):
 
     def insert(self, link: ShortLink) -> ShortLink:
         try:
-            with self._db.engine.begin() as conn:
+            with self._db.begin() as conn:
                 conn.execute(
                     insert(short_links).values(
                         code=link.code,
@@ -61,12 +61,12 @@ class SqlShortLinkRepository(ShortLinkRepository):
         return link
 
     def get_by_code(self, code: str) -> ShortLink | None:
-        with self._db.engine.connect() as conn:
+        with self._db.connect() as conn:
             row = conn.execute(select(short_links).where(short_links.c.code == code)).first()
         return _row_to_link(row) if row is not None else None
 
     def get_by_idempotency_key(self, key: str) -> ShortLink | None:
-        with self._db.engine.connect() as conn:
+        with self._db.connect() as conn:
             row = conn.execute(
                 select(short_links).where(short_links.c.idempotency_key == key)
             ).first()
@@ -78,7 +78,7 @@ class SqlAnalyticsRepository(AnalyticsRepository):
         self._db = db
 
     def record(self, event: RedirectEvent) -> None:
-        with self._db.engine.begin() as conn:
+        with self._db.begin() as conn:
             conn.execute(
                 insert(redirect_events).values(
                     code=event.code,
@@ -89,7 +89,7 @@ class SqlAnalyticsRepository(AnalyticsRepository):
             )
 
     def summary(self, code: str) -> tuple[int, datetime | None, datetime | None, dict[str, int]]:
-        with self._db.engine.connect() as conn:
+        with self._db.connect() as conn:
             agg = conn.execute(
                 select(
                     func.count(redirect_events.c.id),

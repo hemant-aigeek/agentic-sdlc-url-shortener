@@ -11,8 +11,8 @@ from collections.abc import Iterator
 from contextlib import contextmanager
 from pathlib import Path
 
-from sqlalchemy import Engine, create_engine, event, insert, select, text
-from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy import Connection, Engine, create_engine, event, insert, select, text
+from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 from sqlalchemy.orm import Session, sessionmaker
 from sqlalchemy.pool import StaticPool
 
@@ -52,6 +52,28 @@ class Database:
             return True
         except SQLAlchemyError:
             return False
+
+    @contextmanager
+    def connect(self) -> Iterator[Connection]:
+        """Read-only connection; infrastructure errors become StoreUnavailableError."""
+        try:
+            with self.engine.connect() as conn:
+                yield conn
+        except IntegrityError:
+            raise
+        except SQLAlchemyError as exc:
+            raise StoreUnavailableError("persistence unavailable") from exc
+
+    @contextmanager
+    def begin(self) -> Iterator[Connection]:
+        """Transactional connection; IntegrityError passes through for callers to map."""
+        try:
+            with self.engine.begin() as conn:
+                yield conn
+        except IntegrityError:
+            raise
+        except SQLAlchemyError as exc:
+            raise StoreUnavailableError("persistence unavailable") from exc
 
     @contextmanager
     def session(self) -> Iterator[Session]:

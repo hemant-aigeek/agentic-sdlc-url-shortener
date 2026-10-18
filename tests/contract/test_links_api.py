@@ -16,13 +16,14 @@ KEY = {"X-API-Key": "test-key"}
 
 
 def make_client(**overrides: object) -> TestClient:
-    settings = Settings(
-        database_url="sqlite+pysqlite:///:memory:",
-        api_key="test-key",
-        base_url="http://short.test",
-        rate_limit_capacity=1000,
-        **overrides,  # type: ignore[arg-type]
-    )
+    params: dict[str, object] = {
+        "database_url": "sqlite+pysqlite:///:memory:",
+        "api_key": "test-key",
+        "base_url": "http://short.test",
+        "rate_limit_capacity": 1000,
+        **overrides,
+    }
+    settings = Settings(**params)  # type: ignore[arg-type]
     return TestClient(create_app(settings), raise_server_exceptions=False)
 
 

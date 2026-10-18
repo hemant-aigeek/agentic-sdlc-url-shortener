@@ -12,7 +12,7 @@ PKG = "agentic_sdlc"
 
 # module -> set of internal top-level modules it may import
 ALLOWED: dict[str, set[str]] = {
-    "domain": set(),
+    "domain": {"errors"},  # errors.py is a leaf module shared by both planes
     "telemetry": {"config"},
     "config": set(),
     "errors": set(),

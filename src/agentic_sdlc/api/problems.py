@@ -39,7 +39,8 @@ def problem(
         "instance": getattr(request.state, "correlation_id", "unknown"),
     }
     body.update({k: v for k, v in extra.items() if v is not None})
-    return JSONResponse(body, status_code=status, media_type=MEDIA_TYPE)
+    headers = {"Retry-After": str(extra["retry_after"])} if "retry_after" in extra else None
+    return JSONResponse(body, status_code=status, media_type=MEDIA_TYPE, headers=headers)
 
 
 def install_problem_handlers(app: FastAPI) -> None:
