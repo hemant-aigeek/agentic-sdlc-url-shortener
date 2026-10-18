@@ -14,7 +14,7 @@ from fastapi import FastAPI, Request, Response
 from agentic_sdlc import __version__
 from agentic_sdlc.api.problems import install_problem_handlers
 from agentic_sdlc.api.ratelimit import TokenBucketLimiter
-from agentic_sdlc.api.routers import decisions, health, links, redirect, workflows
+from agentic_sdlc.api.routers import decisions, health, links, metrics, redirect, workflows
 from agentic_sdlc.config import Settings, load_settings
 from agentic_sdlc.orchestration.agents.base import AgentRegistry
 from agentic_sdlc.orchestration.engine import Engine, Planner
@@ -84,6 +84,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.include_router(links.router)
     app.include_router(workflows.router)
     app.include_router(decisions.router)
+    app.include_router(metrics.router)
     # The unversioned redirect catch-all must be registered last.
     app.include_router(redirect.router)
     return app

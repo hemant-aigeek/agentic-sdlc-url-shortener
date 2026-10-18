@@ -8,3 +8,8 @@ control plane never evaluates against an unversioned policy set.
 from __future__ import annotations
 
 POLICY_VERSION = "1.0.0"
+
+
+def describe() -> list[dict[str, object]]:
+    """Catalogue of policies; populated with the registry in task group G7."""
+    return []
