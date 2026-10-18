@@ -20,8 +20,27 @@ ALLOWED: dict[str, set[str]] = {
     "policy": {"orchestration", "config", "errors"},
     "orchestration": {"policy", "telemetry", "config", "errors"},
     "scenarios": {"orchestration", "policy", "config", "errors"},
-    "api": {"domain", "persistence", "orchestration", "policy", "telemetry", "config", "errors", "scenarios"},
-    "cli": {"api", "domain", "persistence", "orchestration", "policy", "telemetry", "config", "errors", "scenarios"},
+    "api": {
+        "domain",
+        "persistence",
+        "orchestration",
+        "policy",
+        "telemetry",
+        "config",
+        "errors",
+        "scenarios",
+    },
+    "cli": {
+        "api",
+        "domain",
+        "persistence",
+        "orchestration",
+        "policy",
+        "telemetry",
+        "config",
+        "errors",
+        "scenarios",
+    },
 }
 
 
