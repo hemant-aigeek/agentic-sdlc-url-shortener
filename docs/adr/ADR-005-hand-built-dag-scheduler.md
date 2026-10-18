@@ -1,7 +1,7 @@
 # ADR-005: Hand-built dependency graph and tick scheduler with thread-pool parallelism
 
 ## Status
-Proposed (Gate 4 pending)
+Accepted — 2026-10-18 (Gate 4, docs/approvals/GATE-4-architecture.md)
 
 ## Context
 The assignment's critical differentiator is an orchestration layer with an

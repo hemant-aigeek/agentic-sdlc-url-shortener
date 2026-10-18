@@ -1,7 +1,7 @@
 # ADR-006: Current-state rows plus append-only event log
 
 ## Status
-Proposed (Gate 4 pending)
+Accepted — 2026-10-18 (Gate 4, docs/approvals/GATE-4-architecture.md)
 
 ## Context
 State, context, artifact provenance, decisions and lineage must be persisted

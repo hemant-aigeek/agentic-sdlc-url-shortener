@@ -1,7 +1,7 @@
 # ADR-001: Modular monolith with separated application and control planes
 
 ## Status
-Proposed (Gate 4 pending)
+Accepted — 2026-10-18 (Gate 4, docs/approvals/GATE-4-architecture.md)
 
 ## Context
 The assignment asks for a URL shortener *and* an orchestration system that

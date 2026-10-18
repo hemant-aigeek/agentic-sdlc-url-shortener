@@ -1,7 +1,7 @@
 # ADR-011: Versioned in-code policy registry with four outcomes and blocking semantics
 
 ## Status
-Proposed (Gate 4 pending)
+Accepted — 2026-10-18 (Gate 4, docs/approvals/GATE-4-architecture.md)
 
 ## Context
 FR-G06..G10 and constitution VI require versioned policies, four outcomes,

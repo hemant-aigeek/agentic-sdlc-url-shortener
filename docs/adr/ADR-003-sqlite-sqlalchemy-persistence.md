@@ -1,7 +1,7 @@
 # ADR-003: SQLite via SQLAlchemy behind repository/store interfaces
 
 ## Status
-Proposed (Gate 4 pending)
+Accepted — 2026-10-18 (Gate 4, docs/approvals/GATE-4-architecture.md)
 
 ## Context
 Short-code uniqueness (FR-U04), idempotency (FR-U09), concurrency (FR-U10),

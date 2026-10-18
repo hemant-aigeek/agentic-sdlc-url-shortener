@@ -1,7 +1,7 @@
 # ADR-008: Per-stage retry/timeout/fallback; safe-stop terminal; rollback-vs-compensation rule
 
 ## Status
-Proposed (Gate 4 pending) — resolves AMB-10, AS-01.
+Accepted — 2026-10-18 (Gate 4, docs/approvals/GATE-4-architecture.md)
 
 ## Context
 FR-O08..O13 and constitution VIII require bounded retries, timeouts,

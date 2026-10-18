@@ -1,7 +1,7 @@
 # ADR-004: Random 7-character base62 short codes with bounded regeneration
 
 ## Status
-Proposed (Gate 4 pending) — resolves AMB-01/AMB-02 (Gate 3).
+Accepted — 2026-10-18 (Gate 4, docs/approvals/GATE-4-architecture.md)
 
 ## Context
 Short codes must be unique, URL-safe, and not predictable (FR-U04). The
