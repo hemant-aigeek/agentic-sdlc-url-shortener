@@ -1,0 +1,227 @@
+{
+  "$defs": {
+    "EdgeView": {
+      "properties": {
+        "from": {
+          "title": "From",
+          "type": "string"
+        },
+        "kind": {
+          "title": "Kind",
+          "type": "string"
+        },
+        "to": {
+          "title": "To",
+          "type": "string"
+        }
+      },
+      "required": [
+        "from",
+        "to",
+        "kind"
+      ],
+      "title": "EdgeView",
+      "type": "object",
+      "x-schema-version": "1.0.0"
+    },
+    "StageView": {
+      "properties": {
+        "agent": {
+          "title": "Agent",
+          "type": "string"
+        },
+        "attempt": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Attempt"
+        },
+        "condition": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Condition"
+        },
+        "depends_on": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Depends On",
+          "type": "array"
+        },
+        "ended_at": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Ended At"
+        },
+        "failure_kind": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Failure Kind"
+        },
+        "fallback": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Fallback"
+        },
+        "fallback_used": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Fallback Used"
+        },
+        "gate_kind": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Gate Kind"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "owner": {
+          "title": "Owner",
+          "type": "string"
+        },
+        "parallel_group": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Parallel Group"
+        },
+        "purpose": {
+          "default": "",
+          "title": "Purpose",
+          "type": "string"
+        },
+        "started_at": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Started At"
+        },
+        "state": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "State"
+        }
+      },
+      "required": [
+        "name",
+        "agent",
+        "owner",
+        "depends_on",
+        "condition",
+        "parallel_group",
+        "fallback"
+      ],
+      "title": "StageView",
+      "type": "object",
+      "x-schema-version": "1.0.0"
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "properties": {
+    "edges": {
+      "items": {
+        "$ref": "#/$defs/EdgeView"
+      },
+      "title": "Edges",
+      "type": "array"
+    },
+    "graph_version": {
+      "title": "Graph Version",
+      "type": "integer"
+    },
+    "open_gates": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Open Gates",
+      "type": "array"
+    },
+    "run_state": {
+      "title": "Run State",
+      "type": "string"
+    },
+    "stages": {
+      "items": {
+        "$ref": "#/$defs/StageView"
+      },
+      "title": "Stages",
+      "type": "array"
+    }
+  },
+  "required": [
+    "run_state",
+    "graph_version",
+    "open_gates",
+    "stages",
+    "edges"
+  ],
+  "title": "GraphView",
+  "type": "object",
+  "x-schema-version": "1.0.0"
+}

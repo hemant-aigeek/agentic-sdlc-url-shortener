@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "properties": {
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "graph_version": {
+      "title": "Graph Version",
+      "type": "integer"
+    },
+    "id": {
+      "title": "Id",
+      "type": "string"
+    },
+    "open_gates": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Open Gates",
+      "type": "array"
+    },
+    "policy_version": {
+      "title": "Policy Version",
+      "type": "string"
+    },
+    "requirement_version": {
+      "title": "Requirement Version",
+      "type": "integer"
+    },
+    "scope": {
+      "title": "Scope",
+      "type": "string"
+    },
+    "stage_states": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "title": "Stage States",
+      "type": "object"
+    },
+    "state": {
+      "title": "State",
+      "type": "string"
+    },
+    "terminal_reason": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Terminal Reason"
+    },
+    "title": {
+      "title": "Title",
+      "type": "string"
+    },
+    "updated_at": {
+      "format": "date-time",
+      "title": "Updated At",
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "title",
+    "scope",
+    "state",
+    "requirement_version",
+    "graph_version",
+    "policy_version",
+    "created_at",
+    "updated_at",
+    "terminal_reason",
+    "open_gates",
+    "stage_states"
+  ],
+  "title": "WorkflowRunView",
+  "type": "object",
+  "x-schema-version": "1.0.0"
+}

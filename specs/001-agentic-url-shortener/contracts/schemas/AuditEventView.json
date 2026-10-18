@@ -1,0 +1,97 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "properties": {
+    "actor_type": {
+      "title": "Actor Type",
+      "type": "string"
+    },
+    "at": {
+      "format": "date-time",
+      "title": "At",
+      "type": "string"
+    },
+    "attempt": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Attempt"
+    },
+    "data": {
+      "additionalProperties": true,
+      "title": "Data",
+      "type": "object"
+    },
+    "kind": {
+      "title": "Kind",
+      "type": "string"
+    },
+    "reason": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Reason"
+    },
+    "result": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Result"
+    },
+    "seq": {
+      "title": "Seq",
+      "type": "integer"
+    },
+    "stage": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Stage"
+    },
+    "target": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Target"
+    }
+  },
+  "required": [
+    "seq",
+    "kind",
+    "actor_type",
+    "at",
+    "stage",
+    "attempt",
+    "target",
+    "result",
+    "reason",
+    "data"
+  ],
+  "title": "AuditEventView",
+  "type": "object",
+  "x-schema-version": "1.0.0"
+}

@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "properties": {
+    "data": {
+      "additionalProperties": true,
+      "title": "Data",
+      "type": "object"
+    },
+    "planner": {
+      "default": "sdlc",
+      "title": "Planner",
+      "type": "string"
+    },
+    "requirement": {
+      "maxLength": 20000,
+      "title": "Requirement",
+      "type": "string"
+    },
+    "run": {
+      "default": true,
+      "description": "Advance immediately until a gate or terminal state",
+      "title": "Run",
+      "type": "boolean"
+    },
+    "scope": {
+      "default": "auto",
+      "enum": [
+        "greenfield",
+        "brownfield",
+        "ambiguous",
+        "auto"
+      ],
+      "title": "Scope",
+      "type": "string"
+    },
+    "title": {
+      "maxLength": 200,
+      "title": "Title",
+      "type": "string"
+    }
+  },
+  "required": [
+    "title",
+    "requirement"
+  ],
+  "title": "WorkflowCreateRequest",
+  "type": "object",
+  "x-schema-version": "1.0.0"
+}

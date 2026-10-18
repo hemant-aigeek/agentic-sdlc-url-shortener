@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "properties": {
+    "decision": {
+      "enum": [
+        "approve",
+        "reject",
+        "clarify"
+      ],
+      "title": "Decision",
+      "type": "string"
+    },
+    "payload": {
+      "additionalProperties": true,
+      "title": "Payload",
+      "type": "object"
+    },
+    "reason": {
+      "maxLength": 2000,
+      "minLength": 1,
+      "title": "Reason",
+      "type": "string"
+    },
+    "run": {
+      "default": true,
+      "description": "Advance after recording the decision",
+      "title": "Run",
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "decision",
+    "reason"
+  ],
+  "title": "DecisionRequest",
+  "type": "object",
+  "x-schema-version": "1.0.0"
+}

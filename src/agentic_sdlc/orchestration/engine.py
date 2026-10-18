@@ -969,6 +969,9 @@ class Engine:
         failure_kind: str | None = None,
         error: str | None = None,
     ) -> None:
+        if loaded.stages[name].state is StageState.READY:
+            # a gate is "executed" by the human decision: READY -> RUNNING -> outcome
+            self._set_stage_state(loaded, name, StageState.RUNNING)
         rec = self._set_stage_state(loaded, name, state, failure_kind=failure_kind, error=error)
         rec.ended_at = self._clock()
         if output is not None:
