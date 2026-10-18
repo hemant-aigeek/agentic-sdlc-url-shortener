@@ -1,0 +1,933 @@
+[
+  {
+    "content": {
+      "acceptance_criteria": [
+        {
+          "id": "AC-01",
+          "observable": "an expired link is not redirected; its status is observable",
+          "statement": "Links should expire after a while and be reusable."
+        }
+      ],
+      "classified_scope": "greenfield",
+      "constraints": [],
+      "functional_statements": [
+        "Links should expire after a while and be reusable."
+      ],
+      "intent": "Links should expire after a while and be reusable.",
+      "scope": "greenfield",
+      "scope_cues": [
+        "no scope cue found; defaulting to greenfield"
+      ],
+      "scope_source": "classified",
+      "source": "requirement_raw",
+      "title": "SCN-C ambiguous: links expire 'after a while' and are 'reusable'",
+      "version": 1
+    },
+    "created_at": "2026-10-18 18:04:06.583142+00:00",
+    "derived_from": [],
+    "id": 93,
+    "invalidated": false,
+    "kind": "normalized_requirement",
+    "policy_version": "1.0.0",
+    "run_id": "01a1502f681045c398f321de78",
+    "stage": "ingest",
+    "version": 1
+  },
+  {
+    "content": {
+      "ambiguities": [
+        {
+          "id": "AMB-R1",
+          "kind": "undefined_quantity",
+          "options": [
+            {
+              "id": "ttl_30d",
+              "impact": "default TTL field",
+              "label": "30 days after creation"
+            },
+            {
+              "id": "ttl_explicit",
+              "impact": "no default; existing FR-U06 behaviour",
+              "label": "Only when the client sets expires_at"
+            },
+            {
+              "id": "ttl_config",
+              "impact": "new setting + migration of existing rows",
+              "label": "Configurable default TTL"
+            }
+          ],
+          "phrase": "a while",
+          "question": "How long after creation should a link expire?",
+          "severity": "HIGH",
+          "statement": "Links should expire after a while and be reusable."
+        },
+        {
+          "conflicts_with": "FR-U04",
+          "id": "AMB-R2",
+          "kind": "conflict",
+          "options": [
+            {
+              "id": "reuse_never",
+              "impact": "no change to FR-U04",
+              "label": "Codes are never reused; expired codes return 410"
+            },
+            {
+              "id": "reuse_after_expiry",
+              "impact": "weakens FR-U04; needs grace-period rule, analytics split per assignment",
+              "label": "Expired codes may be reassigned after a grace period"
+            },
+            {
+              "id": "reuse_means_reactivate",
+              "impact": "new PATCH endpoint; API/schema change",
+              "label": "'Reusable' means the owner can extend expiry"
+            }
+          ],
+          "phrase": "reusable",
+          "question": "'reusable' conflicts with short-code uniqueness (FR-U04): a code is never reassigned \u2014 which interpretation applies?",
+          "severity": "HIGH",
+          "statement": "Links should expire after a while and be reusable."
+        }
+      ],
+      "checks": {
+        "boundaries": {
+          "detail": "within approved scope",
+          "passed": true
+        },
+        "completeness": {
+          "detail": "1 statements, 1 acceptance criteria derived",
+          "passed": true
+        },
+        "consistency": {
+          "detail": "'reusable' conflicts with short-code uniqueness (FR-U04): a code is never reassigned \u2014 which interpretation applies?",
+          "passed": false
+        },
+        "testability": {
+          "detail": "1/1 statements have an observable outcome",
+          "passed": true
+        }
+      },
+      "clarification_required": true,
+      "failed_checks": [
+        "consistency"
+      ],
+      "max_severity": "HIGH",
+      "reason": "clarification required: max ambiguity severity HIGH; failed checks: ['consistency']",
+      "reason_no_clarification": "",
+      "requirement_version": 1
+    },
+    "created_at": "2026-10-18 18:04:06.597908+00:00",
+    "derived_from": [
+      93
+    ],
+    "id": 94,
+    "invalidated": false,
+    "kind": "quality_check",
+    "policy_version": "1.0.0",
+    "run_id": "01a1502f681045c398f321de78",
+    "stage": "quality_check",
+    "version": 1
+  },
+  {
+    "content": {
+      "acceptance_criteria": [
+        {
+          "id": "AC-01",
+          "observable": "HTTP response status is 410",
+          "statement": "Links should expire after a while and be reusable. [resolved AMB-R1: 30 days after creation; AMB-R2: Codes are never reused; expired codes return 410]"
+        },
+        {
+          "id": "AC-C1",
+          "observable": "clarified behaviour is covered by a test",
+          "statement": "30 days after creation"
+        },
+        {
+          "id": "AC-C2",
+          "observable": "clarified behaviour is covered by a test",
+          "statement": "Codes are never reused; expired codes return 410"
+        }
+      ],
+      "classified_scope": "greenfield",
+      "constraints": [],
+      "functional_statements": [
+        "Links should expire after a while and be reusable. [resolved AMB-R1: 30 days after creation; AMB-R2: Codes are never reused; expired codes return 410]"
+      ],
+      "intent": "Links should expire after a while and be reusable.",
+      "resolved_ambiguities": [
+        {
+          "ambiguity": "AMB-R1",
+          "answer": "30 days after creation",
+          "answer_id": "ttl_30d",
+          "kind": "undefined_quantity",
+          "phrase": "a while",
+          "replaces": "Links should expire after a while and be reusable."
+        },
+        {
+          "ambiguity": "AMB-R2",
+          "answer": "Codes are never reused; expired codes return 410",
+          "answer_id": "reuse_never",
+          "kind": "conflict",
+          "phrase": "reusable",
+          "replaces": "Links should expire after a while and be reusable."
+        }
+      ],
+      "scope": "greenfield",
+      "scope_cues": [
+        "no scope cue found; defaulting to greenfield"
+      ],
+      "scope_source": "classified",
+      "source": "clarification",
+      "title": "SCN-C ambiguous: links expire 'after a while' and are 'reusable'",
+      "version": 2
+    },
+    "created_at": "2026-10-18 18:04:06.639663+00:00",
+    "derived_from": [],
+    "id": 95,
+    "invalidated": false,
+    "kind": "normalized_requirement",
+    "policy_version": "1.0.0",
+    "run_id": "01a1502f681045c398f321de78",
+    "stage": "requirement_revision",
+    "version": 2
+  },
+  {
+    "content": {
+      "checks": {
+        "boundaries": {
+          "detail": "within approved scope",
+          "passed": true
+        },
+        "completeness": {
+          "detail": "1 statements, 3 acceptance criteria derived",
+          "passed": true
+        },
+        "consistency": {
+          "detail": "no conflicts with approved requirements",
+          "passed": true
+        },
+        "testability": {
+          "detail": "1/1 statements have an observable outcome",
+          "passed": true
+        }
+      },
+      "remaining_high_ambiguities": [],
+      "requirement_version": 2,
+      "resolved": [
+        "AMB-R1",
+        "AMB-R2"
+      ]
+    },
+    "created_at": "2026-10-18 18:04:06.639663+00:00",
+    "derived_from": [],
+    "id": 96,
+    "invalidated": false,
+    "kind": "requirement_revision",
+    "policy_version": "1.0.0",
+    "run_id": "01a1502f681045c398f321de78",
+    "stage": "requirement_revision",
+    "version": 1
+  },
+  {
+    "content": {
+      "components": [
+        "domain/service.py",
+        "api/routers/redirect.py",
+        "errors.py",
+        "api/problems.py",
+        "domain/codes.py"
+      ],
+      "critical_path": [
+        "T90-docs",
+        "T99-verify"
+      ],
+      "parallel_tasks": [
+        "T01-test",
+        "T01-impl",
+        "T02-test",
+        "T02-impl",
+        "T03-test",
+        "T03-impl"
+      ],
+      "requirement_version": 2,
+      "tasks": [
+        {
+          "acceptance": "HTTP response status is 410",
+          "components": [
+            "tests for domain/service.py"
+          ],
+          "criterion": "AC-01",
+          "depends_on": [],
+          "id": "T01-test",
+          "kind": "test",
+          "objective": "Write a failing test for AC-01: Links should expire after a while and be reusable. [resolved AMB-R1: 30 days after creation; AMB-R2: Codes are never reused; expired codes return 410]",
+          "parallel": true,
+          "tdd": "red"
+        },
+        {
+          "acceptance": "T01-test passes; regression suite green",
+          "components": [
+            "domain/service.py"
+          ],
+          "criterion": "AC-01",
+          "depends_on": [
+            "T01-test"
+          ],
+          "id": "T01-impl",
+          "kind": "implement",
+          "objective": "Implement the smallest change satisfying AC-01",
+          "parallel": true,
+          "tdd": "green"
+        },
+        {
+          "acceptance": "clarified behaviour is covered by a test",
+          "components": [
+            "tests for api/routers/redirect.py"
+          ],
+          "criterion": "AC-C1",
+          "depends_on": [],
+          "id": "T02-test",
+          "kind": "test",
+          "objective": "Write a failing test for AC-C1: 30 days after creation",
+          "parallel": true,
+          "tdd": "red"
+        },
+        {
+          "acceptance": "T02-test passes; regression suite green",
+          "components": [
+            "api/routers/redirect.py"
+          ],
+          "criterion": "AC-C1",
+          "depends_on": [
+            "T02-test"
+          ],
+          "id": "T02-impl",
+          "kind": "implement",
+          "objective": "Implement the smallest change satisfying AC-C1",
+          "parallel": true,
+          "tdd": "green"
+        },
+        {
+          "acceptance": "clarified behaviour is covered by a test",
+          "components": [
+            "tests for errors.py"
+          ],
+          "criterion": "AC-C2",
+          "depends_on": [],
+          "id": "T03-test",
+          "kind": "test",
+          "objective": "Write a failing test for AC-C2: Codes are never reused; expired codes return 410",
+          "parallel": true,
+          "tdd": "red"
+        },
+        {
+          "acceptance": "T03-test passes; regression suite green",
+          "components": [
+            "errors.py"
+          ],
+          "criterion": "AC-C2",
+          "depends_on": [
+            "T03-test"
+          ],
+          "id": "T03-impl",
+          "kind": "implement",
+          "objective": "Implement the smallest change satisfying AC-C2",
+          "parallel": true,
+          "tdd": "green"
+        },
+        {
+          "acceptance": "contract drift check passes; docs describe new behaviour",
+          "components": [
+            "specs/contracts/openapi.yaml",
+            "README.md"
+          ],
+          "criterion": "ALL",
+          "depends_on": [
+            "T01-impl",
+            "T02-impl",
+            "T03-impl"
+          ],
+          "id": "T90-docs",
+          "kind": "docs",
+          "objective": "Update API documentation, contract and README for the change",
+          "parallel": false,
+          "tdd": "n/a"
+        },
+        {
+          "acceptance": "exit code 0",
+          "components": [
+            "tests/"
+          ],
+          "criterion": "ALL",
+          "depends_on": [
+            "T01-impl",
+            "T02-impl",
+            "T03-impl",
+            "T90-docs"
+          ],
+          "id": "T99-verify",
+          "kind": "verify",
+          "objective": "Run the regression suite and the impacted test targets",
+          "parallel": false,
+          "tdd": "refactor"
+        }
+      ]
+    },
+    "created_at": "2026-10-18 18:04:06.653471+00:00",
+    "derived_from": [],
+    "id": 97,
+    "invalidated": false,
+    "kind": "decomposition",
+    "policy_version": "1.0.0",
+    "run_id": "01a1502f681045c398f321de78",
+    "stage": "decompose",
+    "version": 1
+  },
+  {
+    "content": {
+      "api_changes": [
+        {
+          "change": "status-code",
+          "detail": "status 410: Links should expire after a while and be reusable. [resolved AMB-R1: 30 days after creation; AMB-R2: Codes are never reused; expired codes return 410]",
+          "path": "/r/{code}"
+        }
+      ],
+      "api_or_schema_impact": true,
+      "components": [
+        "domain/service.py",
+        "api/routers/redirect.py",
+        "errors.py",
+        "api/problems.py",
+        "domain/codes.py"
+      ],
+      "contract_version_impact": "breaking for consumers",
+      "decisions": [
+        "Keep the change inside existing module boundaries (ADR-001)",
+        "No new runtime dependency; stdlib + existing stack (ADR-002)",
+        "Contract exported and drift-checked before approval (CHG-002)"
+      ],
+      "new_dependencies": [],
+      "requirement_version": 2,
+      "risks": [
+        "Consumer breakage on contract changes",
+        "Regression in the shared not-found / gone handling"
+      ],
+      "schema_changes": [],
+      "trade_offs": [
+        "Smallest change that satisfies the acceptance criteria over a broader refactor",
+        "Backward compatibility is traded for correctness where a status code changes"
+      ],
+      "validation": "contract tests + impacted regression targets executed by verify"
+    },
+    "created_at": "2026-10-18 18:04:06.666541+00:00",
+    "derived_from": [
+      97
+    ],
+    "id": 98,
+    "invalidated": false,
+    "kind": "design",
+    "policy_version": "1.0.0",
+    "run_id": "01a1502f681045c398f321de78",
+    "stage": "design",
+    "version": 1
+  },
+  {
+    "content": {
+      "format": "markdown",
+      "text": "# SCN-C ambiguous: links expire 'after a while' and are 'reusable'\n\nRequirement version 2 (greenfield).\n\n## Behaviour\n- Links should expire after a while and be reusable. [resolved AMB-R1: 30 days after creation; AMB-R2: Codes are never reused; expired codes return 410]\n\n## Acceptance criteria\n- AC-01: Links should expire after a while and be reusable. [resolved AMB-R1: 30 days after creation; AMB-R2: Codes are never reused; expired codes return 410] \u2014 observable: HTTP response status is 410\n- AC-C1: 30 days after creation \u2014 observable: clarified behaviour is covered by a test\n- AC-C2: Codes are never reused; expired codes return 410 \u2014 observable: clarified behaviour is covered by a test\n\n## API impact\n- api_or_schema_impact: True\n- contract version impact: breaking for consumers\n\n## Clarifications applied\n- AMB-R1: 30 days after creation\n- AMB-R2: Codes are never reused; expired codes return 410\n"
+    },
+    "created_at": "2026-10-18 18:04:06.700416+00:00",
+    "derived_from": [],
+    "id": 99,
+    "invalidated": false,
+    "kind": "docs",
+    "policy_version": "1.0.0",
+    "run_id": "01a1502f681045c398f321de78",
+    "stage": "docs_draft",
+    "version": 1
+  },
+  {
+    "content": {
+      "cases": [
+        {
+          "criterion": "AC-01",
+          "given": "a valid precondition for the criterion",
+          "id": "TC-AC-01-pos",
+          "level": "contract",
+          "negative": false,
+          "then": "HTTP response status is 410"
+        },
+        {
+          "criterion": "AC-01",
+          "given": "the precondition is violated (unknown code, expired link, bad input)",
+          "id": "TC-AC-01-neg",
+          "level": "contract",
+          "negative": true,
+          "then": "structured problem response with the stated status; no partial effect"
+        },
+        {
+          "criterion": "AC-C1",
+          "given": "a valid precondition for the criterion",
+          "id": "TC-AC-C1-pos",
+          "level": "unit",
+          "negative": false,
+          "then": "clarified behaviour is covered by a test"
+        },
+        {
+          "criterion": "AC-C1",
+          "given": "the precondition is violated (unknown code, expired link, bad input)",
+          "id": "TC-AC-C1-neg",
+          "level": "unit",
+          "negative": true,
+          "then": "structured problem response with the stated status; no partial effect"
+        },
+        {
+          "criterion": "AC-C2",
+          "given": "a valid precondition for the criterion",
+          "id": "TC-AC-C2-pos",
+          "level": "contract",
+          "negative": false,
+          "then": "clarified behaviour is covered by a test"
+        },
+        {
+          "criterion": "AC-C2",
+          "given": "the precondition is violated (unknown code, expired link, bad input)",
+          "id": "TC-AC-C2-neg",
+          "level": "contract",
+          "negative": true,
+          "then": "structured problem response with the stated status; no partial effect"
+        },
+        {
+          "criterion": "ALL",
+          "given": "the full existing suite",
+          "id": "TC-REG",
+          "level": "regression",
+          "negative": false,
+          "then": "all existing tests remain green (executed by verify)"
+        }
+      ],
+      "levels": [
+        "contract",
+        "regression",
+        "unit"
+      ],
+      "requirement_version": 2,
+      "tdd": "each positive case is written red before its implementation task"
+    },
+    "created_at": "2026-10-18 18:04:06.705982+00:00",
+    "derived_from": [],
+    "id": 100,
+    "invalidated": false,
+    "kind": "test_plan",
+    "policy_version": "1.0.0",
+    "run_id": "01a1502f681045c398f321de78",
+    "stage": "test_plan",
+    "version": 1
+  },
+  {
+    "content": {
+      "changes": [
+        {
+          "action": "write",
+          "bytes": 843,
+          "path": "tests/test_ac_01.py"
+        },
+        {
+          "action": "write",
+          "bytes": 741,
+          "path": "tests/test_ac_c1.py"
+        },
+        {
+          "action": "write",
+          "bytes": 767,
+          "path": "tests/test_ac_c2.py"
+        },
+        {
+          "action": "write",
+          "bytes": 724,
+          "path": "CHANGESET.md"
+        }
+      ],
+      "description": "red tests + change plan for requirement v2",
+      "files": {
+        "CHANGESET.md": "# Change set for requirement v2: SCN-C ambiguous: links expire 'after a while' and are 'reusable'\n\nGenerated by the deterministic implement agent. Each red test below states one\nacceptance criterion; the implementation tasks are listed with their target\ncomponents. Promotion into the repository is a human act.\n\n| Task | Criterion | Components |\n|---|---|---|\n| T01-test | AC-01 | tests for domain/service.py |\n| T01-impl | AC-01 | domain/service.py |\n| T02-test | AC-C1 | tests for api/routers/redirect.py |\n| T02-impl | AC-C1 | api/routers/redirect.py |\n| T03-test | AC-C2 | tests for errors.py |\n| T03-impl | AC-C2 | errors.py |\n| T90-docs | ALL | specs/contracts/openapi.yaml, README.md |\n| T99-verify | ALL | tests/ |\n",
+        "tests/test_ac_01.py": "\"\"\"Generated by the implement stage for T01-test (requirement v2).\n\nAcceptance criterion AC-01: Links should expire after a while and be reusable. [resolved AMB-R1: 30 days after creation; AMB-R2: Codes are never reused; expired codes return 410]\nObservable: HTTP response status is 410\n\nThis is a red test scaffold: it states the expected behaviour as an executable\nassertion against the HTTP API and is meant to fail until the implementation\ntask T01-impl is done. It is promoted into the\nrepository only by a human (controlled-autonomy boundary, ADR-010).\n\"\"\"\n\nimport pytest\n\npytestmark = pytest.mark.req(\"AC-01\")\n\n\ndef test_ac_01(client) -> None:  # noqa: ANN001 - fixture from the target repo\n    # Arrange: see criterion statement above.\n    # Act / Assert: HTTP response status is 410\n    raise AssertionError(\"not implemented: AC-01\")\n",
+        "tests/test_ac_c1.py": "\"\"\"Generated by the implement stage for T02-test (requirement v2).\n\nAcceptance criterion AC-C1: 30 days after creation\nObservable: clarified behaviour is covered by a test\n\nThis is a red test scaffold: it states the expected behaviour as an executable\nassertion against the HTTP API and is meant to fail until the implementation\ntask T02-impl is done. It is promoted into the\nrepository only by a human (controlled-autonomy boundary, ADR-010).\n\"\"\"\n\nimport pytest\n\npytestmark = pytest.mark.req(\"AC-C1\")\n\n\ndef test_ac_c1(client) -> None:  # noqa: ANN001 - fixture from the target repo\n    # Arrange: see criterion statement above.\n    # Act / Assert: clarified behaviour is covered by a test\n    raise AssertionError(\"not implemented: AC-C1\")\n",
+        "tests/test_ac_c2.py": "\"\"\"Generated by the implement stage for T03-test (requirement v2).\n\nAcceptance criterion AC-C2: Codes are never reused; expired codes return 410\nObservable: clarified behaviour is covered by a test\n\nThis is a red test scaffold: it states the expected behaviour as an executable\nassertion against the HTTP API and is meant to fail until the implementation\ntask T03-impl is done. It is promoted into the\nrepository only by a human (controlled-autonomy boundary, ADR-010).\n\"\"\"\n\nimport pytest\n\npytestmark = pytest.mark.req(\"AC-C2\")\n\n\ndef test_ac_c2(client) -> None:  # noqa: ANN001 - fixture from the target repo\n    # Arrange: see criterion statement above.\n    # Act / Assert: clarified behaviour is covered by a test\n    raise AssertionError(\"not implemented: AC-C2\")\n"
+      },
+      "id": "cs-01a1502f-v2",
+      "receipt": {
+        "change_set": "cs-01a1502f-v2",
+        "files_changed": [
+          "tests/test_ac_01.py",
+          "tests/test_ac_c1.py",
+          "tests/test_ac_c2.py",
+          "CHANGESET.md"
+        ],
+        "inverse": {
+          "CHANGESET.md": null,
+          "tests/test_ac_01.py": null,
+          "tests/test_ac_c1.py": null,
+          "tests/test_ac_c2.py": null
+        }
+      },
+      "workspace": "/home/claude/agentic-sdlc-url-shortener/data/runs/01a1502f681045c398f321de78/workspace"
+    },
+    "created_at": "2026-10-18 18:04:06.711292+00:00",
+    "derived_from": [],
+    "id": 101,
+    "invalidated": false,
+    "kind": "change_set",
+    "policy_version": "1.0.0",
+    "run_id": "01a1502f681045c398f321de78",
+    "stage": "implement",
+    "version": 1
+  },
+  {
+    "content": {
+      "attempt": 1,
+      "command": "/home/claude/agentic-sdlc-url-shortener/.venv/bin/python3 -m pytest -q -p no:cacheprovider -x tests/unit tests/contract",
+      "cwd": "/home/claude/agentic-sdlc-url-shortener",
+      "duration_s": 5.161,
+      "executed": true,
+      "exit_code": 0,
+      "fault_injected_attempts": 0,
+      "mode": "pytest",
+      "output_tail": [
+        ".venv/lib/python3.13/site-packages/fastapi/testclient.py:1",
+        "  /home/claude/agentic-sdlc-url-shortener/.venv/lib/python3.13/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.",
+        "    from starlette.testclient import TestClient as TestClient  # noqa",
+        "",
+        "-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html"
+      ],
+      "targets": [
+        "tests/unit",
+        "tests/contract"
+      ]
+    },
+    "created_at": "2026-10-18 18:04:11.885505+00:00",
+    "derived_from": [
+      99,
+      100,
+      101
+    ],
+    "id": 102,
+    "invalidated": false,
+    "kind": "verification",
+    "policy_version": "1.0.0",
+    "run_id": "01a1502f681045c398f321de78",
+    "stage": "verify",
+    "version": 1
+  },
+  {
+    "content": {
+      "automated": false,
+      "checklist": [
+        "No secret material in the change set",
+        "domain/validation.py allow-list and blocked ranges untouched",
+        "New routes documented in the versioned OpenAPI contract",
+        "Problem responses contain no stack traces",
+        "No new dependency outside the licence allow-list"
+      ],
+      "files_to_review": [
+        "tests/test_ac_01.py",
+        "tests/test_ac_c1.py",
+        "tests/test_ac_c2.py",
+        "CHANGESET.md"
+      ],
+      "manual_review_required": true,
+      "residual_risk": "automated scanner did not run; a human must accept the residual risk through a policy exception (SEC-003) with a compensating control"
+    },
+    "created_at": "2026-10-18 18:04:11.902460+00:00",
+    "derived_from": [
+      102
+    ],
+    "id": 103,
+    "invalidated": false,
+    "kind": "security_review",
+    "policy_version": "1.0.0",
+    "run_id": "01a1502f681045c398f321de78",
+    "stage": "security_review",
+    "version": 1
+  },
+  {
+    "content": {
+      "blocking": [
+        "SEC-003"
+      ],
+      "evaluated": 9,
+      "evaluated_at": "2026-10-18T18:04:11.917918+00:00",
+      "exceptionable_blocking": [
+        "SEC-003"
+      ],
+      "forced_fail": null,
+      "non_exceptionable_blocking": [],
+      "outcomes": {
+        "AUD-001": {
+          "detail": "audit retention recorded: life of the local store",
+          "outcome": "PASS"
+        },
+        "CHG-001": {
+          "detail": "scope is greenfield; impact analysis is required for brownfield only",
+          "outcome": "NOT-APPLICABLE"
+        },
+        "CHG-002": {
+          "detail": "API/schema change acknowledged at design approval",
+          "outcome": "PASS"
+        },
+        "CMP-001": {
+          "detail": "11 executed stages and 2 gates fully recorded",
+          "outcome": "PASS"
+        },
+        "CMP-002": {
+          "detail": "44 audit events carry actor, action, timestamp and target",
+          "outcome": "PASS"
+        },
+        "DEP-001": {
+          "detail": "no new dependencies declared",
+          "outcome": "PASS"
+        },
+        "SEC-001": {
+          "detail": "change set does not touch URL validation",
+          "outcome": "PASS"
+        },
+        "SEC-002": {
+          "detail": "no secret patterns in 10 artifacts",
+          "outcome": "PASS"
+        },
+        "SEC-003": {
+          "detail": "automated security review fell back to manual review; a human must accept the residual risk with a compensating control",
+          "outcome": "EXCEPTION-REQUESTED"
+        }
+      },
+      "policy_version": "1.0.0"
+    },
+    "created_at": "2026-10-18 18:04:11.925823+00:00",
+    "derived_from": [
+      102,
+      103
+    ],
+    "id": 104,
+    "invalidated": false,
+    "kind": "compliance",
+    "policy_version": "1.0.0",
+    "run_id": "01a1502f681045c398f321de78",
+    "stage": "compliance_check",
+    "version": 1
+  },
+  {
+    "content": {
+      "artifacts": {
+        "change_set": {
+          "id": 101,
+          "kind": "change_set",
+          "stage": "implement",
+          "version": 1
+        },
+        "compliance": {
+          "id": 104,
+          "kind": "compliance",
+          "stage": "compliance_check",
+          "version": 1
+        },
+        "decomposition": {
+          "id": 97,
+          "kind": "decomposition",
+          "stage": "decompose",
+          "version": 1
+        },
+        "design": {
+          "id": 98,
+          "kind": "design",
+          "stage": "design",
+          "version": 1
+        },
+        "docs": {
+          "id": 99,
+          "kind": "docs",
+          "stage": "docs_draft",
+          "version": 1
+        },
+        "normalized_requirement": {
+          "id": 95,
+          "kind": "normalized_requirement",
+          "stage": "requirement_revision",
+          "version": 2
+        },
+        "quality_check": {
+          "id": 94,
+          "kind": "quality_check",
+          "stage": "quality_check",
+          "version": 1
+        },
+        "requirement_revision": {
+          "id": 96,
+          "kind": "requirement_revision",
+          "stage": "requirement_revision",
+          "version": 1
+        },
+        "security_review": {
+          "id": 103,
+          "kind": "security_review",
+          "stage": "security_review",
+          "version": 1
+        },
+        "test_plan": {
+          "id": 100,
+          "kind": "test_plan",
+          "stage": "test_plan",
+          "version": 1
+        },
+        "verification": {
+          "id": 102,
+          "kind": "verification",
+          "stage": "verify",
+          "version": 1
+        }
+      },
+      "assumptions": [],
+      "decisions": [
+        {
+          "actor": "hemant",
+          "decided_at": "2026-10-18T18:04:06.608439+00:00",
+          "decision": "clarify",
+          "gate": "clarification",
+          "payload": {
+            "answers": {
+              "AMB-R1": "ttl_30d",
+              "AMB-R2": "reuse_never"
+            }
+          },
+          "reason": "expire 30 days after creation; short codes are never reused (FR-U04 stands)",
+          "requirement_version": 1
+        },
+        {
+          "actor": "hemant",
+          "decided_at": "2026-10-18T18:04:06.676555+00:00",
+          "decision": "approve",
+          "gate": "design_approval",
+          "payload": {
+            "api_change_acknowledged": true
+          },
+          "reason": "design stays inside existing module boundaries; API/schema change acknowledged",
+          "requirement_version": 2
+        },
+        {
+          "actor": "hemant",
+          "decided_at": "2026-10-18T18:04:11.937946+00:00",
+          "decision": "approve",
+          "gate": "policy_exception",
+          "payload": {
+            "compensating_control": "manual security checklist reviewed and attached",
+            "scope": "this run only"
+          },
+          "reason": "manual security checklist completed; residual risk accepted for this run",
+          "requirement_version": 2
+        },
+        {
+          "actor": "hemant",
+          "decided_at": "2026-10-18T18:04:11.953856+00:00",
+          "decision": "approve",
+          "gate": "release_readiness",
+          "payload": {},
+          "reason": "verification executed, policies evaluated, evidence exported",
+          "requirement_version": 2
+        }
+      ],
+      "graph_version": 2,
+      "limitations": [
+        "deterministic agents: implementation output is a red-test scaffold plus change plan, promoted by a human (ADR-010)",
+        "measurements are demonstration data from a single local process"
+      ],
+      "measurement_type": "demonstration",
+      "plan_and_rationale": {
+        "acceptance_criteria": [
+          "AC-01",
+          "AC-C1",
+          "AC-C2"
+        ],
+        "clarifications": [
+          {
+            "actor": "hemant",
+            "answers": {
+              "AMB-R1": "ttl_30d",
+              "AMB-R2": "reuse_never"
+            },
+            "gate": "clarification",
+            "reason": "expire 30 days after creation; short codes are never reused (FR-U04 stands)"
+          }
+        ],
+        "decomposition_tasks": 8,
+        "design_api_impact": true,
+        "quality_reason": "clarification required: max ambiguity severity HIGH; failed checks: ['consistency']",
+        "statements": [
+          "Links should expire after a while and be reusable. [resolved AMB-R1: 30 days after creation; AMB-R2: Codes are never reused; expired codes return 410]"
+        ]
+      },
+      "policy_version": "1.0.0",
+      "release_decision": "READY WITH ACCEPTED LIMITATIONS",
+      "release_evidence": {
+        "accepted_exceptions": [
+          {
+            "approver": "hemant",
+            "compensating_control": "manual security checklist reviewed and attached",
+            "expires_at": "2026-11-17T18:04:11.937946+00:00",
+            "outcome": "EXCEPTION-REQUESTED",
+            "policy_id": "SEC-003"
+          }
+        ],
+        "blocking_policies": [],
+        "decision": "READY WITH ACCEPTED LIMITATIONS",
+        "evaluated_at": "2026-10-18T18:04:11.970295+00:00",
+        "fallback_stages": [
+          "security_review"
+        ],
+        "policy_outcomes": {
+          "AUD-001": "PASS",
+          "CHG-001": "NOT-APPLICABLE",
+          "CHG-002": "PASS",
+          "CMP-001": "PASS",
+          "CMP-002": "PASS",
+          "DEP-001": "PASS",
+          "SEC-001": "PASS",
+          "SEC-002": "PASS",
+          "SEC-003": "EXCEPTION-REQUESTED"
+        },
+        "reasons": []
+      },
+      "requirement_version": 2,
+      "risks_and_trade_offs": {
+        "accepted_exceptions": [
+          {
+            "approver": "hemant",
+            "compensating_control": "manual security checklist reviewed and attached",
+            "expires_at": "2026-11-17T18:04:11.937946+00:00",
+            "outcome": "EXCEPTION-REQUESTED",
+            "policy_id": "SEC-003"
+          }
+        ],
+        "manual_security_review": true,
+        "security_findings": []
+      },
+      "run_id": "01a1502f681045c398f321de78",
+      "scope": "greenfield",
+      "title": "SCN-C ambiguous: links expire 'after a while' and are 'reusable'",
+      "validation": {
+        "fallback_stages": [
+          "security_review"
+        ],
+        "retries": 0,
+        "verify_command": "/home/claude/agentic-sdlc-url-shortener/.venv/bin/python3 -m pytest -q -p no:cacheprovider -x tests/unit tests/contract",
+        "verify_executed": true,
+        "verify_exit_code": 0
+      }
+    },
+    "created_at": "2026-10-18 18:04:11.971930+00:00",
+    "derived_from": [],
+    "id": 105,
+    "invalidated": false,
+    "kind": "engineering_summary",
+    "policy_version": "1.0.0",
+    "run_id": "01a1502f681045c398f321de78",
+    "stage": "summary",
+    "version": 1
+  }
+]

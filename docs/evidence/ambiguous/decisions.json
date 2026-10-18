@@ -1,0 +1,56 @@
+[
+  {
+    "actor": "hemant",
+    "artifact_version": 1,
+    "decided_at": "2026-10-18 18:04:06.608439+00:00",
+    "decision": "clarify",
+    "gate": "clarification",
+    "id": 19,
+    "payload": {
+      "answers": {
+        "AMB-R1": "ttl_30d",
+        "AMB-R2": "reuse_never"
+      }
+    },
+    "reason": "expire 30 days after creation; short codes are never reused (FR-U04 stands)",
+    "run_id": "01a1502f681045c398f321de78"
+  },
+  {
+    "actor": "hemant",
+    "artifact_version": 2,
+    "decided_at": "2026-10-18 18:04:06.676555+00:00",
+    "decision": "approve",
+    "gate": "design_approval",
+    "id": 20,
+    "payload": {
+      "api_change_acknowledged": true
+    },
+    "reason": "design stays inside existing module boundaries; API/schema change acknowledged",
+    "run_id": "01a1502f681045c398f321de78"
+  },
+  {
+    "actor": "hemant",
+    "artifact_version": 2,
+    "decided_at": "2026-10-18 18:04:11.937946+00:00",
+    "decision": "approve",
+    "gate": "policy_exception",
+    "id": 21,
+    "payload": {
+      "compensating_control": "manual security checklist reviewed and attached",
+      "scope": "this run only"
+    },
+    "reason": "manual security checklist completed; residual risk accepted for this run",
+    "run_id": "01a1502f681045c398f321de78"
+  },
+  {
+    "actor": "hemant",
+    "artifact_version": 2,
+    "decided_at": "2026-10-18 18:04:11.953856+00:00",
+    "decision": "approve",
+    "gate": "release_readiness",
+    "id": 22,
+    "payload": {},
+    "reason": "verification executed, policies evaluated, evidence exported",
+    "run_id": "01a1502f681045c398f321de78"
+  }
+]

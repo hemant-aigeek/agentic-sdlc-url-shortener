@@ -1,0 +1,109 @@
+{
+  "evaluations": [
+    {
+      "at": "2026-10-18 18:04:11.917918+00:00",
+      "detail": "change set does not touch URL validation",
+      "id": 73,
+      "outcome": "PASS",
+      "policy_id": "SEC-001",
+      "policy_version": "1.0.0",
+      "run_id": "01a1502f681045c398f321de78",
+      "stage": "compliance_check"
+    },
+    {
+      "at": "2026-10-18 18:04:11.917918+00:00",
+      "detail": "no secret patterns in 10 artifacts",
+      "id": 74,
+      "outcome": "PASS",
+      "policy_id": "SEC-002",
+      "policy_version": "1.0.0",
+      "run_id": "01a1502f681045c398f321de78",
+      "stage": "compliance_check"
+    },
+    {
+      "at": "2026-10-18 18:04:11.917918+00:00",
+      "detail": "automated security review fell back to manual review; a human must accept the residual risk with a compensating control",
+      "id": 75,
+      "outcome": "EXCEPTION-REQUESTED",
+      "policy_id": "SEC-003",
+      "policy_version": "1.0.0",
+      "run_id": "01a1502f681045c398f321de78",
+      "stage": "compliance_check"
+    },
+    {
+      "at": "2026-10-18 18:04:11.917918+00:00",
+      "detail": "11 executed stages and 2 gates fully recorded",
+      "id": 76,
+      "outcome": "PASS",
+      "policy_id": "CMP-001",
+      "policy_version": "1.0.0",
+      "run_id": "01a1502f681045c398f321de78",
+      "stage": "compliance_check"
+    },
+    {
+      "at": "2026-10-18 18:04:11.917918+00:00",
+      "detail": "44 audit events carry actor, action, timestamp and target",
+      "id": 77,
+      "outcome": "PASS",
+      "policy_id": "CMP-002",
+      "policy_version": "1.0.0",
+      "run_id": "01a1502f681045c398f321de78",
+      "stage": "compliance_check"
+    },
+    {
+      "at": "2026-10-18 18:04:11.917918+00:00",
+      "detail": "scope is greenfield; impact analysis is required for brownfield only",
+      "id": 78,
+      "outcome": "NOT-APPLICABLE",
+      "policy_id": "CHG-001",
+      "policy_version": "1.0.0",
+      "run_id": "01a1502f681045c398f321de78",
+      "stage": "compliance_check"
+    },
+    {
+      "at": "2026-10-18 18:04:11.917918+00:00",
+      "detail": "API/schema change acknowledged at design approval",
+      "id": 79,
+      "outcome": "PASS",
+      "policy_id": "CHG-002",
+      "policy_version": "1.0.0",
+      "run_id": "01a1502f681045c398f321de78",
+      "stage": "compliance_check"
+    },
+    {
+      "at": "2026-10-18 18:04:11.917918+00:00",
+      "detail": "no new dependencies declared",
+      "id": 80,
+      "outcome": "PASS",
+      "policy_id": "DEP-001",
+      "policy_version": "1.0.0",
+      "run_id": "01a1502f681045c398f321de78",
+      "stage": "compliance_check"
+    },
+    {
+      "at": "2026-10-18 18:04:11.917918+00:00",
+      "detail": "audit retention recorded: life of the local store",
+      "id": 81,
+      "outcome": "PASS",
+      "policy_id": "AUD-001",
+      "policy_version": "1.0.0",
+      "run_id": "01a1502f681045c398f321de78",
+      "stage": "compliance_check"
+    }
+  ],
+  "exceptions": [
+    {
+      "approved_at": "2026-10-18 18:04:11.937946+00:00",
+      "approver": "hemant",
+      "compensating_control": "manual security checklist reviewed and attached",
+      "expires_at": "2026-11-17 18:04:11.937946+00:00",
+      "id": 3,
+      "policy_id": "SEC-003",
+      "reason": "manual security checklist completed; residual risk accepted for this run",
+      "run_id": "01a1502f681045c398f321de78",
+      "scope": "this run only",
+      "status": "approved"
+    }
+  ],
+  "policy_version": "1.0.0"
+}
