@@ -1,0 +1,85 @@
+{
+  "demo_faults": {
+    "demo_fault_security_permanent_failure": true
+  },
+  "description": "Two HIGH ambiguities are detected; the run blocks at the clarification gate; the recorded human answers produce requirement v2 and a replan; the automated security review hits an injected permanent fault and falls back to a manual checklist; SEC-003 requests an exception; a human accepts it with a compensating control; release is READY WITH ACCEPTED LIMITATIONS.",
+  "expected_terminal": "COMPLETED / READY WITH ACCEPTED LIMITATIONS",
+  "note": "Scripted decisions were recorded through Engine.decide by the named actor; demonstration faults are injected via Settings and labelled.",
+  "outcome": {
+    "release_decision": "READY WITH ACCEPTED LIMITATIONS",
+    "run_id": "01a1502f681045c398f321de78",
+    "scenario": "ambiguous",
+    "state": "COMPLETED",
+    "steps": [
+      {
+        "max_batches": null,
+        "state": "WAITING_CLARIFICATION",
+        "step": "run"
+      },
+      {
+        "actor": "hemant",
+        "decision": "clarify",
+        "gate": "clarification",
+        "payload": {
+          "answers": {
+            "AMB-R1": "ttl_30d",
+            "AMB-R2": "reuse_never"
+          }
+        },
+        "step": "decide"
+      },
+      {
+        "max_batches": null,
+        "state": "WAITING_APPROVAL",
+        "step": "run"
+      },
+      {
+        "actor": "hemant",
+        "decision": "approve",
+        "gate": "design_approval",
+        "payload": {
+          "api_change_acknowledged": true
+        },
+        "step": "decide"
+      },
+      {
+        "max_batches": null,
+        "state": "WAITING_APPROVAL",
+        "step": "run"
+      },
+      {
+        "actor": "hemant",
+        "decision": "approve",
+        "gate": "policy_exception",
+        "payload": {
+          "compensating_control": "manual security checklist reviewed and attached",
+          "scope": "this run only"
+        },
+        "step": "decide"
+      },
+      {
+        "max_batches": null,
+        "state": "WAITING_APPROVAL",
+        "step": "run"
+      },
+      {
+        "actor": "hemant",
+        "decision": "approve",
+        "gate": "release_readiness",
+        "payload": {},
+        "step": "decide"
+      },
+      {
+        "max_batches": null,
+        "state": "COMPLETED",
+        "step": "run"
+      }
+    ],
+    "stopped_at_gate": null,
+    "terminal_reason": null
+  },
+  "requirement": "Links should expire after a while and be reusable.",
+  "scenario": "ambiguous",
+  "scope": "auto",
+  "title": "SCN-C ambiguous: links expire 'after a while' and are 'reusable'"
+}

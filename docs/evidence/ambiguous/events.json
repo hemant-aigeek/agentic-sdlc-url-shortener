@@ -1,0 +1,1517 @@
+[
+  {
+    "actor_type": "system",
+    "at": "2026-10-18T18:04:06.567818+00:00",
+    "attempt": null,
+    "data": {
+      "graph": {
+        "edges": [
+          {
+            "from": "ingest",
+            "kind": "hard",
+            "to": "quality_check"
+          },
+          {
+            "from": "quality_check",
+            "kind": "conditional",
+            "to": "clarification"
+          },
+          {
+            "from": "clarification",
+            "kind": "conditional",
+            "to": "impact_analysis"
+          },
+          {
+            "from": "impact_analysis",
+            "kind": "hard",
+            "to": "decompose"
+          },
+          {
+            "from": "decompose",
+            "kind": "hard",
+            "to": "design"
+          },
+          {
+            "from": "design",
+            "kind": "hard",
+            "to": "design_approval"
+          },
+          {
+            "from": "design_approval",
+            "kind": "hard",
+            "to": "implement"
+          },
+          {
+            "from": "design_approval",
+            "kind": "hard",
+            "to": "test_plan"
+          },
+          {
+            "from": "design_approval",
+            "kind": "hard",
+            "to": "docs_draft"
+          },
+          {
+            "from": "implement",
+            "kind": "hard",
+            "to": "verify"
+          },
+          {
+            "from": "test_plan",
+            "kind": "hard",
+            "to": "verify"
+          },
+          {
+            "from": "docs_draft",
+            "kind": "hard",
+            "to": "verify"
+          },
+          {
+            "from": "verify",
+            "kind": "hard",
+            "to": "security_review"
+          },
+          {
+            "from": "verify",
+            "kind": "hard",
+            "to": "compliance_check"
+          },
+          {
+            "from": "security_review",
+            "kind": "hard",
+            "to": "compliance_check"
+          },
+          {
+            "from": "compliance_check",
+            "kind": "conditional",
+            "to": "policy_exception"
+          },
+          {
+            "from": "policy_exception",
+            "kind": "hard",
+            "to": "release_readiness"
+          },
+          {
+            "from": "release_readiness",
+            "kind": "hard",
+            "to": "summary"
+          }
+        ],
+        "stages": [
+          {
+            "agent": "ingest",
+            "compensable": false,
+            "condition": null,
+            "depends_on": [],
+            "emits": [
+              "normalized_requirement"
+            ],
+            "fallback": null,
+            "gate_kind": null,
+            "gate_timeout_s": null,
+            "name": "ingest",
+            "owner": "agent",
+            "parallel_group": null,
+            "purpose": "normalise the requirement and classify its scope",
+            "retry": {
+              "base_delay_s": 0.1,
+              "max_attempts": 1,
+              "max_delay_s": 2.0,
+              "multiplier": 2.0
+            },
+            "timeout_s": 5.0
+          },
+          {
+            "agent": "quality_check",
+            "compensable": false,
+            "condition": null,
+            "depends_on": [
+              "ingest"
+            ],
+            "emits": [
+              "quality_check"
+            ],
+            "fallback": null,
+            "gate_kind": null,
+            "gate_timeout_s": null,
+            "name": "quality_check",
+            "owner": "agent",
+            "parallel_group": null,
+            "purpose": "completeness/consistency/testability/boundary checks; ambiguity detection",
+            "retry": {
+              "base_delay_s": 0.1,
+              "max_attempts": 1,
+              "max_delay_s": 2.0,
+              "multiplier": 2.0
+            },
+            "timeout_s": 5.0
+          },
+          {
+            "agent": "human",
+            "compensable": false,
+            "condition": "quality_check.clarification_required",
+            "depends_on": [
+              "quality_check"
+            ],
+            "emits": [],
+            "fallback": null,
+            "gate_kind": "clarification",
+            "gate_timeout_s": null,
+            "name": "clarification",
+            "owner": "human",
+            "parallel_group": null,
+            "purpose": "human resolves material ambiguity before any design or implementation",
+            "retry": {
+              "base_delay_s": 0.1,
+              "max_attempts": 3,
+              "max_delay_s": 2.0,
+              "multiplier": 2.0
+            },
+            "timeout_s": 5.0
+          },
+          {
+            "agent": "impact_analysis",
+            "compensable": false,
+            "condition": "scope == brownfield",
+            "depends_on": [
+              "clarification"
+            ],
+            "emits": [
+              "impact_analysis"
+            ],
+            "fallback": null,
+            "gate_kind": null,
+            "gate_timeout_s": null,
+            "name": "impact_analysis",
+            "owner": "agent",
+            "parallel_group": null,
+            "purpose": "brownfield impact analysis before any change",
+            "retry": {
+              "base_delay_s": 0.1,
+              "max_attempts": 1,
+              "max_delay_s": 2.0,
+              "multiplier": 2.0
+            },
+            "timeout_s": 30.0
+          },
+          {
+            "agent": "decompose",
+            "compensable": false,
+            "condition": null,
+            "depends_on": [
+              "impact_analysis"
+            ],
+            "emits": [
+              "decomposition"
+            ],
+            "fallback": null,
+            "gate_kind": null,
+            "gate_timeout_s": null,
+            "name": "decompose",
+            "owner": "agent",
+            "parallel_group": null,
+            "purpose": "dependency-aware task decomposition",
+            "retry": {
+              "base_delay_s": 0.1,
+              "max_attempts": 1,
+              "max_delay_s": 2.0,
+              "multiplier": 2.0
+            },
+            "timeout_s": 5.0
+          },
+          {
+            "agent": "design",
+            "compensable": false,
+            "condition": null,
+            "depends_on": [
+              "decompose"
+            ],
+            "emits": [
+              "design"
+            ],
+            "fallback": null,
+            "gate_kind": null,
+            "gate_timeout_s": null,
+            "name": "design",
+            "owner": "agent",
+            "parallel_group": null,
+            "purpose": "components, API/schema impact, trade-offs, risks",
+            "retry": {
+              "base_delay_s": 0.1,
+              "max_attempts": 1,
+              "max_delay_s": 2.0,
+              "multiplier": 2.0
+            },
+            "timeout_s": 5.0
+          },
+          {
+            "agent": "human",
+            "compensable": false,
+            "condition": null,
+            "depends_on": [
+              "design"
+            ],
+            "emits": [],
+            "fallback": null,
+            "gate_kind": "approval",
+            "gate_timeout_s": null,
+            "name": "design_approval",
+            "owner": "human",
+            "parallel_group": null,
+            "purpose": "architecture approval; API/schema changes must be acknowledged (CHG-002)",
+            "retry": {
+              "base_delay_s": 0.1,
+              "max_attempts": 3,
+              "max_delay_s": 2.0,
+              "multiplier": 2.0
+            },
+            "timeout_s": 5.0
+          },
+          {
+            "agent": "docs_draft",
+            "compensable": false,
+            "condition": null,
+            "depends_on": [
+              "design_approval"
+            ],
+            "emits": [
+              "docs"
+            ],
+            "fallback": null,
+            "gate_kind": null,
+            "gate_timeout_s": null,
+            "name": "docs_draft",
+            "owner": "agent",
+            "parallel_group": "after:design_approval",
+            "purpose": "documentation draft for the change",
+            "retry": {
+              "base_delay_s": 0.1,
+              "max_attempts": 1,
+              "max_delay_s": 2.0,
+              "multiplier": 2.0
+            },
+            "timeout_s": 5.0
+          },
+          {
+            "agent": "implement",
+            "compensable": true,
+            "condition": null,
+            "depends_on": [
+              "design_approval"
+            ],
+            "emits": [
+              "change_set"
+            ],
+            "fallback": null,
+            "gate_kind": null,
+            "gate_timeout_s": null,
+            "name": "implement",
+            "owner": "agent",
+            "parallel_group": "after:design_approval",
+            "purpose": "apply the change set to the run workspace (reversible)",
+            "retry": {
+              "base_delay_s": 0.1,
+              "max_attempts": 1,
+              "max_delay_s": 2.0,
+              "multiplier": 2.0
+            },
+            "timeout_s": 5.0
+          },
+          {
+            "agent": "test_plan",
+            "compensable": false,
+            "condition": null,
+            "depends_on": [
+              "design_approval"
+            ],
+            "emits": [
+              "test_plan"
+            ],
+            "fallback": null,
+            "gate_kind": null,
+            "gate_timeout_s": null,
+            "name": "test_plan",
+            "owner": "agent",
+            "parallel_group": "after:design_approval",
+            "purpose": "test matrix with negative cases per acceptance criterion",
+            "retry": {
+              "base_delay_s": 0.1,
+              "max_attempts": 1,
+              "max_delay_s": 2.0,
+              "multiplier": 2.0
+            },
+            "timeout_s": 5.0
+          },
+          {
+            "agent": "verify",
+            "compensable": false,
+            "condition": null,
+            "depends_on": [
+              "implement",
+              "test_plan",
+              "docs_draft"
+            ],
+            "emits": [
+              "verification"
+            ],
+            "fallback": null,
+            "gate_kind": null,
+            "gate_timeout_s": null,
+            "name": "verify",
+            "owner": "agent",
+            "parallel_group": null,
+            "purpose": "execute the impacted regression targets / compile the change set",
+            "retry": {
+              "base_delay_s": 0.1,
+              "max_attempts": 3,
+              "max_delay_s": 2.0,
+              "multiplier": 2.0
+            },
+            "timeout_s": 125.0
+          },
+          {
+            "agent": "security_review",
+            "compensable": false,
+            "condition": null,
+            "depends_on": [
+              "verify"
+            ],
+            "emits": [
+              "security_review"
+            ],
+            "fallback": "manual_security_review",
+            "gate_kind": null,
+            "gate_timeout_s": null,
+            "name": "security_review",
+            "owner": "agent",
+            "parallel_group": null,
+            "purpose": "automated security review; falls back to a manual checklist",
+            "retry": {
+              "base_delay_s": 0.1,
+              "max_attempts": 1,
+              "max_delay_s": 2.0,
+              "multiplier": 2.0
+            },
+            "timeout_s": 5.0
+          },
+          {
+            "agent": "compliance_check",
+            "compensable": false,
+            "condition": null,
+            "depends_on": [
+              "verify",
+              "security_review"
+            ],
+            "emits": [
+              "compliance"
+            ],
+            "fallback": null,
+            "gate_kind": null,
+            "gate_timeout_s": null,
+            "name": "compliance_check",
+            "owner": "agent",
+            "parallel_group": null,
+            "purpose": "evaluate every versioned policy; block or raise an exception gate",
+            "retry": {
+              "base_delay_s": 0.1,
+              "max_attempts": 1,
+              "max_delay_s": 2.0,
+              "multiplier": 2.0
+            },
+            "timeout_s": 5.0
+          },
+          {
+            "agent": "human",
+            "compensable": false,
+            "condition": "compliance_check.blocking non-empty",
+            "depends_on": [
+              "compliance_check"
+            ],
+            "emits": [],
+            "fallback": null,
+            "gate_kind": "approval",
+            "gate_timeout_s": null,
+            "name": "policy_exception",
+            "owner": "human",
+            "parallel_group": null,
+            "purpose": "human accepts a scoped, expiring policy exception + compensating control",
+            "retry": {
+              "base_delay_s": 0.1,
+              "max_attempts": 3,
+              "max_delay_s": 2.0,
+              "multiplier": 2.0
+            },
+            "timeout_s": 5.0
+          },
+          {
+            "agent": "human",
+            "compensable": false,
+            "condition": null,
+            "depends_on": [
+              "policy_exception"
+            ],
+            "emits": [],
+            "fallback": null,
+            "gate_kind": "approval",
+            "gate_timeout_s": null,
+            "name": "release_readiness",
+            "owner": "human",
+            "parallel_group": null,
+            "purpose": "human release-readiness decision on the computed evidence",
+            "retry": {
+              "base_delay_s": 0.1,
+              "max_attempts": 3,
+              "max_delay_s": 2.0,
+              "multiplier": 2.0
+            },
+            "timeout_s": 5.0
+          },
+          {
+            "agent": "summary",
+            "compensable": false,
+            "condition": null,
+            "depends_on": [
+              "release_readiness"
+            ],
+            "emits": [
+              "engineering_summary"
+            ],
+            "fallback": null,
+            "gate_kind": null,
+            "gate_timeout_s": null,
+            "name": "summary",
+            "owner": "agent",
+            "parallel_group": null,
+            "purpose": "final engineering summary with release decision and evidence index",
+            "retry": {
+              "base_delay_s": 0.1,
+              "max_attempts": 1,
+              "max_delay_s": 2.0,
+              "multiplier": 2.0
+            },
+            "timeout_s": 5.0
+          }
+        ]
+      },
+      "policy_version": "1.0.0"
+    },
+    "kind": "run_created",
+    "reason": "scope=auto planner=sdlc",
+    "result": "CREATED",
+    "run_id": "01a1502f681045c398f321de78",
+    "seq": 1,
+    "stage": null,
+    "target": "run"
+  },
+  {
+    "actor_type": "system",
+    "at": "2026-10-18T18:04:06.573797+00:00",
+    "attempt": null,
+    "data": {},
+    "kind": "run_started",
+    "reason": null,
+    "result": "RUNNING",
+    "run_id": "01a1502f681045c398f321de78",
+    "seq": 2,
+    "stage": null,
+    "target": "run"
+  },
+  {
+    "actor_type": "system",
+    "at": "2026-10-18T18:04:06.577771+00:00",
+    "attempt": null,
+    "data": {},
+    "kind": "stage_ready",
+    "reason": null,
+    "result": "READY",
+    "run_id": "01a1502f681045c398f321de78",
+    "seq": 3,
+    "stage": "ingest",
+    "target": "stage:ingest"
+  },
+  {
+    "actor_type": "agent",
+    "at": "2026-10-18T18:04:06.580509+00:00",
+    "attempt": 1,
+    "data": {
+      "agent": "ingest"
+    },
+    "kind": "stage_started",
+    "reason": null,
+    "result": "RUNNING",
+    "run_id": "01a1502f681045c398f321de78",
+    "seq": 4,
+    "stage": "ingest",
+    "target": "stage:ingest"
+  },
+  {
+    "actor_type": "agent",
+    "at": "2026-10-18T18:04:06.587832+00:00",
+    "attempt": 1,
+    "data": {
+      "artifacts": [
+        "normalized_requirement"
+      ]
+    },
+    "kind": "stage_succeeded",
+    "reason": null,
+    "result": "SUCCEEDED",
+    "run_id": "01a1502f681045c398f321de78",
+    "seq": 5,
+    "stage": "ingest",
+    "target": "stage:ingest"
+  },
+  {
+    "actor_type": "system",
+    "at": "2026-10-18T18:04:06.591538+00:00",
+    "attempt": null,
+    "data": {},
+    "kind": "stage_ready",
+    "reason": null,
+    "result": "READY",
+    "run_id": "01a1502f681045c398f321de78",
+    "seq": 6,
+    "stage": "quality_check",
+    "target": "stage:quality_check"
+  },
+  {
+    "actor_type": "agent",
+    "at": "2026-10-18T18:04:06.595629+00:00",
+    "attempt": 1,
+    "data": {
+      "agent": "quality_check"
+    },
+    "kind": "stage_started",
+    "reason": null,
+    "result": "RUNNING",
+    "run_id": "01a1502f681045c398f321de78",
+    "seq": 7,
+    "stage": "quality_check",
+    "target": "stage:quality_check"
+  },
+  {
+    "actor_type": "agent",
+    "at": "2026-10-18T18:04:06.600897+00:00",
+    "attempt": 1,
+    "data": {
+      "artifacts": [
+        "quality_check"
+      ]
+    },
+    "kind": "stage_succeeded",
+    "reason": null,
+    "result": "SUCCEEDED",
+    "run_id": "01a1502f681045c398f321de78",
+    "seq": 8,
+    "stage": "quality_check",
+    "target": "stage:quality_check"
+  },
+  {
+    "actor_type": "system",
+    "at": "2026-10-18T18:04:06.604228+00:00",
+    "attempt": null,
+    "data": {
+      "gate_kind": "clarification",
+      "timeout_s": null,
+      "upstream_outputs": {
+        "quality_check": {
+          "ambiguities": [
+            {
+              "id": "AMB-R1",
+              "kind": "undefined_quantity",
+              "options": [
+                {
+                  "id": "ttl_30d",
+                  "impact": "default TTL field",
+                  "label": "30 days after creation"
+                },
+                {
+                  "id": "ttl_explicit",
+                  "impact": "no default; existing FR-U06 behaviour",
+                  "label": "Only when the client sets expires_at"
+                },
+                {
+                  "id": "ttl_config",
+                  "impact": "new setting + migration of existing rows",
+                  "label": "Configurable default TTL"
+                }
+              ],
+              "phrase": "a while",
+              "question": "How long after creation should a link expire?",
+              "severity": "HIGH",
+              "statement": "Links should expire after a while and be reusable."
+            },
+            {
+              "conflicts_with": "FR-U04",
+              "id": "AMB-R2",
+              "kind": "conflict",
+              "options": [
+                {
+                  "id": "reuse_never",
+                  "impact": "no change to FR-U04",
+                  "label": "Codes are never reused; expired codes return 410"
+                },
+                {
+                  "id": "reuse_after_expiry",
+                  "impact": "weakens FR-U04; needs grace-period rule, analytics split per assignment",
+                  "label": "Expired codes may be reassigned after a grace period"
+                },
+                {
+                  "id": "reuse_means_reactivate",
+                  "impact": "new PATCH endpoint; API/schema change",
+                  "label": "'Reusable' means the owner can extend expiry"
+                }
+              ],
+              "phrase": "reusable",
+              "question": "'reusable' conflicts with short-code uniqueness (FR-U04): a code is never reassigned \u2014 which interpretation applies?",
+              "severity": "HIGH",
+              "statement": "Links should expire after a while and be reusable."
+            }
+          ],
+          "checks": {
+            "boundaries": {
+              "detail": "within approved scope",
+              "passed": true
+            },
+            "completeness": {
+              "detail": "1 statements, 1 acceptance criteria derived",
+              "passed": true
+            },
+            "consistency": {
+              "detail": "'reusable' conflicts with short-code uniqueness (FR-U04): a code is never reassigned \u2014 which interpretation applies?",
+              "passed": false
+            },
+            "testability": {
+              "detail": "1/1 statements have an observable outcome",
+              "passed": true
+            }
+          },
+          "clarification_required": true,
+          "failed_checks": [
+            "consistency"
+          ],
+          "max_severity": "HIGH",
+          "reason": "clarification required: max ambiguity severity HIGH; failed checks: ['consistency']",
+          "reason_no_clarification": "",
+          "requirement_version": 1
+        }
+      }
+    },
+    "kind": "gate_opened",
+    "reason": "human resolves material ambiguity before any design or implementation",
+    "result": "WAITING",
+    "run_id": "01a1502f681045c398f321de78",
+    "seq": 9,
+    "stage": "clarification",
+    "target": "gate:clarification"
+  },
+  {
+    "actor_type": "human",
+    "at": "2026-10-18T18:04:06.610952+00:00",
+    "attempt": null,
+    "data": {
+      "actor": "hemant",
+      "payload": {
+        "answers": {
+          "AMB-R1": "ttl_30d",
+          "AMB-R2": "reuse_never"
+        }
+      }
+    },
+    "kind": "decision_recorded",
+    "reason": "expire 30 days after creation; short codes are never reused (FR-U04 stands)",
+    "result": "clarify",
+    "run_id": "01a1502f681045c398f321de78",
+    "seq": 10,
+    "stage": "clarification",
+    "target": "gate:clarification"
+  },
+  {
+    "actor_type": "system",
+    "at": "2026-10-18T18:04:06.629191+00:00",
+    "attempt": null,
+    "data": {
+      "diff": {
+        "added": [
+          "requirement_revision"
+        ],
+        "changed": [
+          "impact_analysis"
+        ],
+        "removed": []
+      },
+      "graph_version": 2,
+      "invalidated_artifacts": [],
+      "invalidated_stages": [
+        "compliance_check",
+        "decompose",
+        "design",
+        "design_approval",
+        "docs_draft",
+        "impact_analysis",
+        "implement",
+        "policy_exception",
+        "release_readiness",
+        "requirement_revision",
+        "security_review",
+        "summary",
+        "test_plan",
+        "verify"
+      ],
+      "requirement_version": 2,
+      "reset": [
+        "impact_analysis",
+        "decompose",
+        "design",
+        "design_approval",
+        "docs_draft",
+        "implement",
+        "test_plan",
+        "verify",
+        "security_review",
+        "compliance_check",
+        "policy_exception",
+        "release_readiness",
+        "summary",
+        "requirement_revision"
+      ]
+    },
+    "kind": "replan",
+    "reason": "clarification at clarification",
+    "result": "v2",
+    "run_id": "01a1502f681045c398f321de78",
+    "seq": 11,
+    "stage": null,
+    "target": "graph"
+  },
+  {
+    "actor_type": "system",
+    "at": "2026-10-18T18:04:06.634899+00:00",
+    "attempt": null,
+    "data": {},
+    "kind": "stage_ready",
+    "reason": null,
+    "result": "READY",
+    "run_id": "01a1502f681045c398f321de78",
+    "seq": 12,
+    "stage": "requirement_revision",
+    "target": "stage:requirement_revision"
+  },
+  {
+    "actor_type": "agent",
+    "at": "2026-10-18T18:04:06.637329+00:00",
+    "attempt": 1,
+    "data": {
+      "agent": "requirement_revision"
+    },
+    "kind": "stage_started",
+    "reason": null,
+    "result": "RUNNING",
+    "run_id": "01a1502f681045c398f321de78",
+    "seq": 13,
+    "stage": "requirement_revision",
+    "target": "stage:requirement_revision"
+  },
+  {
+    "actor_type": "agent",
+    "at": "2026-10-18T18:04:06.643433+00:00",
+    "attempt": 1,
+    "data": {
+      "artifacts": [
+        "normalized_requirement",
+        "requirement_revision"
+      ]
+    },
+    "kind": "stage_succeeded",
+    "reason": null,
+    "result": "SUCCEEDED",
+    "run_id": "01a1502f681045c398f321de78",
+    "seq": 14,
+    "stage": "requirement_revision",
+    "target": "stage:requirement_revision"
+  },
+  {
+    "actor_type": "system",
+    "at": "2026-10-18T18:04:06.645945+00:00",
+    "attempt": null,
+    "data": {},
+    "kind": "stage_skipped",
+    "reason": "condition 'scope == brownfield' is false",
+    "result": "SKIPPED",
+    "run_id": "01a1502f681045c398f321de78",
+    "seq": 15,
+    "stage": "impact_analysis",
+    "target": "stage:impact_analysis"
+  },
+  {
+    "actor_type": "system",
+    "at": "2026-10-18T18:04:06.647910+00:00",
+    "attempt": null,
+    "data": {},
+    "kind": "stage_ready",
+    "reason": null,
+    "result": "READY",
+    "run_id": "01a1502f681045c398f321de78",
+    "seq": 16,
+    "stage": "decompose",
+    "target": "stage:decompose"
+  },
+  {
+    "actor_type": "agent",
+    "at": "2026-10-18T18:04:06.650734+00:00",
+    "attempt": 1,
+    "data": {
+      "agent": "decompose"
+    },
+    "kind": "stage_started",
+    "reason": null,
+    "result": "RUNNING",
+    "run_id": "01a1502f681045c398f321de78",
+    "seq": 17,
+    "stage": "decompose",
+    "target": "stage:decompose"
+  },
+  {
+    "actor_type": "agent",
+    "at": "2026-10-18T18:04:06.657449+00:00",
+    "attempt": 1,
+    "data": {
+      "artifacts": [
+        "decomposition"
+      ]
+    },
+    "kind": "stage_succeeded",
+    "reason": null,
+    "result": "SUCCEEDED",
+    "run_id": "01a1502f681045c398f321de78",
+    "seq": 18,
+    "stage": "decompose",
+    "target": "stage:decompose"
+  },
+  {
+    "actor_type": "system",
+    "at": "2026-10-18T18:04:06.660874+00:00",
+    "attempt": null,
+    "data": {},
+    "kind": "stage_ready",
+    "reason": null,
+    "result": "READY",
+    "run_id": "01a1502f681045c398f321de78",
+    "seq": 19,
+    "stage": "design",
+    "target": "stage:design"
+  },
+  {
+    "actor_type": "agent",
+    "at": "2026-10-18T18:04:06.664096+00:00",
+    "attempt": 1,
+    "data": {
+      "agent": "design"
+    },
+    "kind": "stage_started",
+    "reason": null,
+    "result": "RUNNING",
+    "run_id": "01a1502f681045c398f321de78",
+    "seq": 20,
+    "stage": "design",
+    "target": "stage:design"
+  },
+  {
+    "actor_type": "agent",
+    "at": "2026-10-18T18:04:06.669763+00:00",
+    "attempt": 1,
+    "data": {
+      "artifacts": [
+        "design"
+      ]
+    },
+    "kind": "stage_succeeded",
+    "reason": null,
+    "result": "SUCCEEDED",
+    "run_id": "01a1502f681045c398f321de78",
+    "seq": 21,
+    "stage": "design",
+    "target": "stage:design"
+  },
+  {
+    "actor_type": "system",
+    "at": "2026-10-18T18:04:06.673004+00:00",
+    "attempt": null,
+    "data": {
+      "gate_kind": "approval",
+      "timeout_s": null,
+      "upstream_outputs": {
+        "design": {
+          "api_changes": 1,
+          "api_or_schema_impact": true,
+          "components": [
+            "domain/service.py",
+            "api/routers/redirect.py",
+            "errors.py",
+            "api/problems.py",
+            "domain/codes.py"
+          ],
+          "contract_version_impact": "breaking for consumers",
+          "schema_change": false
+        }
+      }
+    },
+    "kind": "gate_opened",
+    "reason": "architecture approval; API/schema changes must be acknowledged (CHG-002)",
+    "result": "WAITING",
+    "run_id": "01a1502f681045c398f321de78",
+    "seq": 22,
+    "stage": "design_approval",
+    "target": "gate:design_approval"
+  },
+  {
+    "actor_type": "human",
+    "at": "2026-10-18T18:04:06.677708+00:00",
+    "attempt": null,
+    "data": {
+      "actor": "hemant",
+      "payload": {
+        "api_change_acknowledged": true
+      }
+    },
+    "kind": "decision_recorded",
+    "reason": "design stays inside existing module boundaries; API/schema change acknowledged",
+    "result": "approve",
+    "run_id": "01a1502f681045c398f321de78",
+    "seq": 23,
+    "stage": "design_approval",
+    "target": "gate:design_approval"
+  },
+  {
+    "actor_type": "system",
+    "at": "2026-10-18T18:04:06.685014+00:00",
+    "attempt": null,
+    "data": {},
+    "kind": "stage_ready",
+    "reason": null,
+    "result": "READY",
+    "run_id": "01a1502f681045c398f321de78",
+    "seq": 24,
+    "stage": "docs_draft",
+    "target": "stage:docs_draft"
+  },
+  {
+    "actor_type": "system",
+    "at": "2026-10-18T18:04:06.687021+00:00",
+    "attempt": null,
+    "data": {},
+    "kind": "stage_ready",
+    "reason": null,
+    "result": "READY",
+    "run_id": "01a1502f681045c398f321de78",
+    "seq": 25,
+    "stage": "implement",
+    "target": "stage:implement"
+  },
+  {
+    "actor_type": "system",
+    "at": "2026-10-18T18:04:06.688972+00:00",
+    "attempt": null,
+    "data": {},
+    "kind": "stage_ready",
+    "reason": null,
+    "result": "READY",
+    "run_id": "01a1502f681045c398f321de78",
+    "seq": 26,
+    "stage": "test_plan",
+    "target": "stage:test_plan"
+  },
+  {
+    "actor_type": "agent",
+    "at": "2026-10-18T18:04:06.692709+00:00",
+    "attempt": 1,
+    "data": {
+      "agent": "docs_draft"
+    },
+    "kind": "stage_started",
+    "reason": null,
+    "result": "RUNNING",
+    "run_id": "01a1502f681045c398f321de78",
+    "seq": 27,
+    "stage": "docs_draft",
+    "target": "stage:docs_draft"
+  },
+  {
+    "actor_type": "agent",
+    "at": "2026-10-18T18:04:06.695232+00:00",
+    "attempt": 1,
+    "data": {
+      "agent": "implement"
+    },
+    "kind": "stage_started",
+    "reason": null,
+    "result": "RUNNING",
+    "run_id": "01a1502f681045c398f321de78",
+    "seq": 28,
+    "stage": "implement",
+    "target": "stage:implement"
+  },
+  {
+    "actor_type": "agent",
+    "at": "2026-10-18T18:04:06.698065+00:00",
+    "attempt": 1,
+    "data": {
+      "agent": "test_plan"
+    },
+    "kind": "stage_started",
+    "reason": null,
+    "result": "RUNNING",
+    "run_id": "01a1502f681045c398f321de78",
+    "seq": 29,
+    "stage": "test_plan",
+    "target": "stage:test_plan"
+  },
+  {
+    "actor_type": "agent",
+    "at": "2026-10-18T18:04:06.703871+00:00",
+    "attempt": 1,
+    "data": {
+      "artifacts": [
+        "docs"
+      ]
+    },
+    "kind": "stage_succeeded",
+    "reason": null,
+    "result": "SUCCEEDED",
+    "run_id": "01a1502f681045c398f321de78",
+    "seq": 30,
+    "stage": "docs_draft",
+    "target": "stage:docs_draft"
+  },
+  {
+    "actor_type": "agent",
+    "at": "2026-10-18T18:04:06.709145+00:00",
+    "attempt": 1,
+    "data": {
+      "artifacts": [
+        "test_plan"
+      ]
+    },
+    "kind": "stage_succeeded",
+    "reason": null,
+    "result": "SUCCEEDED",
+    "run_id": "01a1502f681045c398f321de78",
+    "seq": 31,
+    "stage": "test_plan",
+    "target": "stage:test_plan"
+  },
+  {
+    "actor_type": "agent",
+    "at": "2026-10-18T18:04:06.715058+00:00",
+    "attempt": 1,
+    "data": {
+      "artifacts": [
+        "change_set"
+      ]
+    },
+    "kind": "stage_succeeded",
+    "reason": null,
+    "result": "SUCCEEDED",
+    "run_id": "01a1502f681045c398f321de78",
+    "seq": 32,
+    "stage": "implement",
+    "target": "stage:implement"
+  },
+  {
+    "actor_type": "system",
+    "at": "2026-10-18T18:04:06.717972+00:00",
+    "attempt": null,
+    "data": {},
+    "kind": "stage_ready",
+    "reason": null,
+    "result": "READY",
+    "run_id": "01a1502f681045c398f321de78",
+    "seq": 33,
+    "stage": "verify",
+    "target": "stage:verify"
+  },
+  {
+    "actor_type": "agent",
+    "at": "2026-10-18T18:04:06.720411+00:00",
+    "attempt": 1,
+    "data": {
+      "agent": "verify"
+    },
+    "kind": "stage_started",
+    "reason": null,
+    "result": "RUNNING",
+    "run_id": "01a1502f681045c398f321de78",
+    "seq": 34,
+    "stage": "verify",
+    "target": "stage:verify"
+  },
+  {
+    "actor_type": "agent",
+    "at": "2026-10-18T18:04:11.888929+00:00",
+    "attempt": 1,
+    "data": {
+      "artifacts": [
+        "verification"
+      ]
+    },
+    "kind": "stage_succeeded",
+    "reason": null,
+    "result": "SUCCEEDED",
+    "run_id": "01a1502f681045c398f321de78",
+    "seq": 35,
+    "stage": "verify",
+    "target": "stage:verify"
+  },
+  {
+    "actor_type": "system",
+    "at": "2026-10-18T18:04:11.891729+00:00",
+    "attempt": null,
+    "data": {},
+    "kind": "stage_ready",
+    "reason": null,
+    "result": "READY",
+    "run_id": "01a1502f681045c398f321de78",
+    "seq": 36,
+    "stage": "security_review",
+    "target": "stage:security_review"
+  },
+  {
+    "actor_type": "agent",
+    "at": "2026-10-18T18:04:11.894341+00:00",
+    "attempt": 1,
+    "data": {
+      "agent": "security_review"
+    },
+    "kind": "stage_started",
+    "reason": null,
+    "result": "RUNNING",
+    "run_id": "01a1502f681045c398f321de78",
+    "seq": 37,
+    "stage": "security_review",
+    "target": "stage:security_review"
+  },
+  {
+    "actor_type": "system",
+    "at": "2026-10-18T18:04:11.896772+00:00",
+    "attempt": 1,
+    "data": {},
+    "kind": "failure_detected",
+    "reason": "injected permanent fault (demo): automated security scanner unavailable",
+    "result": "PERMANENT",
+    "run_id": "01a1502f681045c398f321de78",
+    "seq": 38,
+    "stage": "security_review",
+    "target": "stage:security_review"
+  },
+  {
+    "actor_type": "agent",
+    "at": "2026-10-18T18:04:11.899643+00:00",
+    "attempt": 1,
+    "data": {
+      "attempts": 1,
+      "failure_kind": "PERMANENT",
+      "retry_eligible": false
+    },
+    "kind": "stage_failed",
+    "reason": "injected permanent fault (demo): automated security scanner unavailable",
+    "result": "FAILED",
+    "run_id": "01a1502f681045c398f321de78",
+    "seq": 39,
+    "stage": "security_review",
+    "target": "stage:security_review"
+  },
+  {
+    "actor_type": "system",
+    "at": "2026-10-18T18:04:11.900648+00:00",
+    "attempt": 1,
+    "data": {
+      "fallback_agent": "manual_security_review",
+      "mechanism": "fallback"
+    },
+    "kind": "recovery_started",
+    "reason": null,
+    "result": null,
+    "run_id": "01a1502f681045c398f321de78",
+    "seq": 40,
+    "stage": "security_review",
+    "target": "stage:security_review"
+  },
+  {
+    "actor_type": "agent",
+    "at": "2026-10-18T18:04:11.905445+00:00",
+    "attempt": 1,
+    "data": {
+      "fallback_agent": "manual_security_review"
+    },
+    "kind": "fallback_used",
+    "reason": "primary failed: injected permanent fault (demo): automated security scanner unavailable",
+    "result": "FALLBACK",
+    "run_id": "01a1502f681045c398f321de78",
+    "seq": 41,
+    "stage": "security_review",
+    "target": "stage:security_review"
+  },
+  {
+    "actor_type": "system",
+    "at": "2026-10-18T18:04:11.906449+00:00",
+    "attempt": 1,
+    "data": {
+      "mechanism": "fallback"
+    },
+    "kind": "recovery_completed",
+    "reason": null,
+    "result": "RECOVERED",
+    "run_id": "01a1502f681045c398f321de78",
+    "seq": 42,
+    "stage": "security_review",
+    "target": "stage:security_review"
+  },
+  {
+    "actor_type": "system",
+    "at": "2026-10-18T18:04:11.908755+00:00",
+    "attempt": null,
+    "data": {},
+    "kind": "stage_ready",
+    "reason": null,
+    "result": "READY",
+    "run_id": "01a1502f681045c398f321de78",
+    "seq": 43,
+    "stage": "compliance_check",
+    "target": "stage:compliance_check"
+  },
+  {
+    "actor_type": "agent",
+    "at": "2026-10-18T18:04:11.911501+00:00",
+    "attempt": 1,
+    "data": {
+      "agent": "compliance_check"
+    },
+    "kind": "stage_started",
+    "reason": null,
+    "result": "RUNNING",
+    "run_id": "01a1502f681045c398f321de78",
+    "seq": 44,
+    "stage": "compliance_check",
+    "target": "stage:compliance_check"
+  },
+  {
+    "actor_type": "agent",
+    "at": "2026-10-18T18:04:11.929219+00:00",
+    "attempt": 1,
+    "data": {
+      "artifacts": [
+        "compliance"
+      ]
+    },
+    "kind": "stage_succeeded",
+    "reason": null,
+    "result": "SUCCEEDED",
+    "run_id": "01a1502f681045c398f321de78",
+    "seq": 45,
+    "stage": "compliance_check",
+    "target": "stage:compliance_check"
+  },
+  {
+    "actor_type": "system",
+    "at": "2026-10-18T18:04:11.932722+00:00",
+    "attempt": null,
+    "data": {
+      "gate_kind": "approval",
+      "timeout_s": null,
+      "upstream_outputs": {
+        "compliance_check": {
+          "blocking": [
+            "SEC-003"
+          ],
+          "evaluated": 9,
+          "evaluated_at": "2026-10-18T18:04:11.917918+00:00",
+          "exceptionable_blocking": [
+            "SEC-003"
+          ],
+          "forced_fail": null,
+          "non_exceptionable_blocking": [],
+          "outcomes": {
+            "AUD-001": {
+              "detail": "audit retention recorded: life of the local store",
+              "outcome": "PASS"
+            },
+            "CHG-001": {
+              "detail": "scope is greenfield; impact analysis is required for brownfield only",
+              "outcome": "NOT-APPLICABLE"
+            },
+            "CHG-002": {
+              "detail": "API/schema change acknowledged at design approval",
+              "outcome": "PASS"
+            },
+            "CMP-001": {
+              "detail": "11 executed stages and 2 gates fully recorded",
+              "outcome": "PASS"
+            },
+            "CMP-002": {
+              "detail": "44 audit events carry actor, action, timestamp and target",
+              "outcome": "PASS"
+            },
+            "DEP-001": {
+              "detail": "no new dependencies declared",
+              "outcome": "PASS"
+            },
+            "SEC-001": {
+              "detail": "change set does not touch URL validation",
+              "outcome": "PASS"
+            },
+            "SEC-002": {
+              "detail": "no secret patterns in 10 artifacts",
+              "outcome": "PASS"
+            },
+            "SEC-003": {
+              "detail": "automated security review fell back to manual review; a human must accept the residual risk with a compensating control",
+              "outcome": "EXCEPTION-REQUESTED"
+            }
+          },
+          "policy_version": "1.0.0"
+        }
+      }
+    },
+    "kind": "gate_opened",
+    "reason": "human accepts a scoped, expiring policy exception + compensating control",
+    "result": "WAITING",
+    "run_id": "01a1502f681045c398f321de78",
+    "seq": 46,
+    "stage": "policy_exception",
+    "target": "gate:policy_exception"
+  },
+  {
+    "actor_type": "human",
+    "at": "2026-10-18T18:04:11.939194+00:00",
+    "attempt": null,
+    "data": {
+      "actor": "hemant",
+      "payload": {
+        "compensating_control": "manual security checklist reviewed and attached",
+        "scope": "this run only"
+      }
+    },
+    "kind": "decision_recorded",
+    "reason": "manual security checklist completed; residual risk accepted for this run",
+    "result": "approve",
+    "run_id": "01a1502f681045c398f321de78",
+    "seq": 47,
+    "stage": "policy_exception",
+    "target": "gate:policy_exception"
+  },
+  {
+    "actor_type": "human",
+    "at": "2026-10-18T18:04:11.944292+00:00",
+    "attempt": null,
+    "data": {
+      "actor": "hemant",
+      "compensating_control": "manual security checklist reviewed and attached",
+      "expires_at": "2026-11-17T18:04:11.937946+00:00",
+      "scope": "this run only"
+    },
+    "kind": "exception_approved",
+    "reason": "manual security checklist completed; residual risk accepted for this run",
+    "result": "approved",
+    "run_id": "01a1502f681045c398f321de78",
+    "seq": 48,
+    "stage": "policy_exception",
+    "target": "policy:SEC-003"
+  },
+  {
+    "actor_type": "system",
+    "at": "2026-10-18T18:04:11.950222+00:00",
+    "attempt": null,
+    "data": {
+      "gate_kind": "approval",
+      "timeout_s": null,
+      "upstream_outputs": {
+        "policy_exception": {
+          "compensating_control": "manual security checklist reviewed and attached",
+          "decision": "approve",
+          "scope": "this run only"
+        }
+      }
+    },
+    "kind": "gate_opened",
+    "reason": "human release-readiness decision on the computed evidence",
+    "result": "WAITING",
+    "run_id": "01a1502f681045c398f321de78",
+    "seq": 49,
+    "stage": "release_readiness",
+    "target": "gate:release_readiness"
+  },
+  {
+    "actor_type": "human",
+    "at": "2026-10-18T18:04:11.954844+00:00",
+    "attempt": null,
+    "data": {
+      "actor": "hemant",
+      "payload": {}
+    },
+    "kind": "decision_recorded",
+    "reason": "verification executed, policies evaluated, evidence exported",
+    "result": "approve",
+    "run_id": "01a1502f681045c398f321de78",
+    "seq": 50,
+    "stage": "release_readiness",
+    "target": "gate:release_readiness"
+  },
+  {
+    "actor_type": "system",
+    "at": "2026-10-18T18:04:11.962651+00:00",
+    "attempt": null,
+    "data": {},
+    "kind": "stage_ready",
+    "reason": null,
+    "result": "READY",
+    "run_id": "01a1502f681045c398f321de78",
+    "seq": 51,
+    "stage": "summary",
+    "target": "stage:summary"
+  },
+  {
+    "actor_type": "agent",
+    "at": "2026-10-18T18:04:11.965472+00:00",
+    "attempt": 1,
+    "data": {
+      "agent": "summary"
+    },
+    "kind": "stage_started",
+    "reason": null,
+    "result": "RUNNING",
+    "run_id": "01a1502f681045c398f321de78",
+    "seq": 52,
+    "stage": "summary",
+    "target": "stage:summary"
+  },
+  {
+    "actor_type": "agent",
+    "at": "2026-10-18T18:04:11.975513+00:00",
+    "attempt": 1,
+    "data": {
+      "artifacts": [
+        "engineering_summary"
+      ]
+    },
+    "kind": "stage_succeeded",
+    "reason": null,
+    "result": "SUCCEEDED",
+    "run_id": "01a1502f681045c398f321de78",
+    "seq": 53,
+    "stage": "summary",
+    "target": "stage:summary"
+  },
+  {
+    "actor_type": "system",
+    "at": "2026-10-18T18:04:11.977878+00:00",
+    "attempt": null,
+    "data": {},
+    "kind": "run_completed",
+    "reason": "all stages done",
+    "result": "COMPLETED",
+    "run_id": "01a1502f681045c398f321de78",
+    "seq": 54,
+    "stage": null,
+    "target": "run"
+  }
+]
