@@ -25,9 +25,17 @@ def _dump(path: Path, data: Any) -> None:
     )
 
 
-def export_run(engine: Engine, store: WorkflowStore, run_id: str, out_dir: Path) -> dict[str, Any]:
+def export_run(
+    engine: Engine,
+    store: WorkflowStore,
+    run_id: str,
+    out_dir: Path,
+    *,
+    label: str | None = None,
+    extra: dict[str, Any] | None = None,
+) -> dict[str, Any]:
     run = engine.load(run_id)
-    out = out_dir / run_id
+    out = out_dir / (label or run_id)
     out.mkdir(parents=True, exist_ok=True)
 
     graph = engine.graph_view(run_id)
@@ -65,6 +73,8 @@ def export_run(engine: Engine, store: WorkflowStore, run_id: str, out_dir: Path)
     _dump(out / "replans.json", replans)
     _dump(out / "policy.json", policy)
     _dump(out / "metrics.json", metrics)
+    if extra:
+        _dump(out / "scenario.json", extra)
     (out / "README.md").write_text(
         _summary_markdown(run_doc, graph, events, decisions, replans, policy, metrics),
         encoding="utf-8",

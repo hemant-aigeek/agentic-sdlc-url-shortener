@@ -176,6 +176,10 @@ class Engine:
                 self._set_run_state(loaded, RunState.RUNNING, event=EventKind.RUN_STARTED)
             if loaded.run.state is RunState.SUSPENDED:
                 self._set_run_state(loaded, RunState.RUNNING, event=EventKind.RUN_RESUMED)
+            if loaded.run.state.is_waiting:
+                # a tick while waiting never advances the run; it only enforces the gate timeout
+                self._gate_timed_out(loaded)
+                return loaded.run
             batches = 0
             while loaded.run.state is RunState.RUNNING:
                 if self._gate_timed_out(loaded):
