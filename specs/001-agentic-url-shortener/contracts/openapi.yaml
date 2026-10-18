@@ -40,6 +40,274 @@ components:
       title: AnalyticsResponse
       type: object
       x-schema-version: 1.0.0
+    ArtifactView:
+      properties:
+        content:
+          additionalProperties: true
+          title: Content
+          type: object
+        created_at:
+          format: date-time
+          title: Created At
+          type: string
+        derived_from:
+          items:
+            type: integer
+          title: Derived From
+          type: array
+        id:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Id
+        invalidated:
+          title: Invalidated
+          type: boolean
+        kind:
+          title: Kind
+          type: string
+        policy_version:
+          title: Policy Version
+          type: string
+        stage:
+          title: Stage
+          type: string
+        version:
+          title: Version
+          type: integer
+      required:
+      - id
+      - stage
+      - kind
+      - version
+      - derived_from
+      - policy_version
+      - invalidated
+      - created_at
+      - content
+      title: ArtifactView
+      type: object
+      x-schema-version: 1.0.0
+    AuditEventView:
+      properties:
+        actor_type:
+          title: Actor Type
+          type: string
+        at:
+          format: date-time
+          title: At
+          type: string
+        attempt:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Attempt
+        data:
+          additionalProperties: true
+          title: Data
+          type: object
+        kind:
+          title: Kind
+          type: string
+        reason:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Reason
+        result:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Result
+        seq:
+          title: Seq
+          type: integer
+        stage:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Stage
+        target:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Target
+      required:
+      - seq
+      - kind
+      - actor_type
+      - at
+      - stage
+      - attempt
+      - target
+      - result
+      - reason
+      - data
+      title: AuditEventView
+      type: object
+      x-schema-version: 1.0.0
+    DecisionRequest:
+      properties:
+        decision:
+          enum:
+          - approve
+          - reject
+          - clarify
+          title: Decision
+          type: string
+        payload:
+          additionalProperties: true
+          title: Payload
+          type: object
+        reason:
+          maxLength: 2000
+          minLength: 1
+          title: Reason
+          type: string
+        run:
+          default: true
+          description: Advance after recording the decision
+          title: Run
+          type: boolean
+      required:
+      - decision
+      - reason
+      title: DecisionRequest
+      type: object
+      x-schema-version: 1.0.0
+    DecisionView:
+      properties:
+        actor:
+          title: Actor
+          type: string
+        artifact_version:
+          title: Artifact Version
+          type: integer
+        decided_at:
+          format: date-time
+          title: Decided At
+          type: string
+        decision:
+          title: Decision
+          type: string
+        gate:
+          title: Gate
+          type: string
+        id:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Id
+        payload:
+          additionalProperties: true
+          title: Payload
+          type: object
+        reason:
+          title: Reason
+          type: string
+      required:
+      - id
+      - gate
+      - actor
+      - decision
+      - reason
+      - payload
+      - artifact_version
+      - decided_at
+      title: DecisionView
+      type: object
+      x-schema-version: 1.0.0
+    EdgeView:
+      properties:
+        from:
+          title: From
+          type: string
+        kind:
+          title: Kind
+          type: string
+        to:
+          title: To
+          type: string
+      required:
+      - from
+      - to
+      - kind
+      title: EdgeView
+      type: object
+      x-schema-version: 1.0.0
+    GateView:
+      properties:
+        context:
+          additionalProperties: true
+          title: Context
+          type: object
+        gate:
+          title: Gate
+          type: string
+        kind:
+          title: Kind
+          type: string
+        opened_at:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Opened At
+        options:
+          items:
+            type: string
+          title: Options
+          type: array
+        purpose:
+          title: Purpose
+          type: string
+        timeout_s:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Timeout S
+      required:
+      - gate
+      - kind
+      - opened_at
+      - timeout_s
+      - purpose
+      - options
+      - context
+      title: GateView
+      type: object
+      x-schema-version: 1.0.0
+    GraphView:
+      properties:
+        edges:
+          items:
+            $ref: '#/components/schemas/EdgeView'
+          title: Edges
+          type: array
+        graph_version:
+          title: Graph Version
+          type: integer
+        open_gates:
+          items:
+            type: string
+          title: Open Gates
+          type: array
+        run_state:
+          title: Run State
+          type: string
+        stages:
+          items:
+            $ref: '#/components/schemas/StageView'
+          title: Stages
+          type: array
+      required:
+      - run_state
+      - graph_version
+      - open_gates
+      - stages
+      - edges
+      title: GraphView
+      type: object
+      x-schema-version: 1.0.0
     HTTPValidationError:
       properties:
         detail:
@@ -99,6 +367,99 @@ components:
       title: LinkResponse
       type: object
       x-schema-version: 1.0.0
+    StageView:
+      properties:
+        agent:
+          title: Agent
+          type: string
+        attempt:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Attempt
+        condition:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Condition
+        depends_on:
+          items:
+            type: string
+          title: Depends On
+          type: array
+        ended_at:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Ended At
+        failure_kind:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Failure Kind
+        fallback:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Fallback
+        fallback_used:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Fallback Used
+        gate_kind:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Gate Kind
+        name:
+          title: Name
+          type: string
+        owner:
+          title: Owner
+          type: string
+        parallel_group:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Parallel Group
+        purpose:
+          default: ''
+          title: Purpose
+          type: string
+        started_at:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Started At
+        state:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: State
+      required:
+      - name
+      - agent
+      - owner
+      - depends_on
+      - condition
+      - parallel_group
+      - fallback
+      title: StageView
+      type: object
+      x-schema-version: 1.0.0
+    StopRequest:
+      properties:
+        reason:
+          maxLength: 2000
+          minLength: 1
+          title: Reason
+          type: string
+      required:
+      - reason
+      title: StopRequest
+      type: object
+      x-schema-version: 1.0.0
     ValidationError:
       properties:
         ctx:
@@ -125,6 +486,106 @@ components:
       - type
       title: ValidationError
       type: object
+    WorkflowCreateRequest:
+      properties:
+        data:
+          additionalProperties: true
+          title: Data
+          type: object
+        planner:
+          default: sdlc
+          title: Planner
+          type: string
+        requirement:
+          maxLength: 20000
+          title: Requirement
+          type: string
+        run:
+          default: true
+          description: Advance immediately until a gate or terminal state
+          title: Run
+          type: boolean
+        scope:
+          default: auto
+          enum:
+          - greenfield
+          - brownfield
+          - ambiguous
+          - auto
+          title: Scope
+          type: string
+        title:
+          maxLength: 200
+          title: Title
+          type: string
+      required:
+      - title
+      - requirement
+      title: WorkflowCreateRequest
+      type: object
+      x-schema-version: 1.0.0
+    WorkflowRunView:
+      properties:
+        created_at:
+          format: date-time
+          title: Created At
+          type: string
+        graph_version:
+          title: Graph Version
+          type: integer
+        id:
+          title: Id
+          type: string
+        open_gates:
+          items:
+            type: string
+          title: Open Gates
+          type: array
+        policy_version:
+          title: Policy Version
+          type: string
+        requirement_version:
+          title: Requirement Version
+          type: integer
+        scope:
+          title: Scope
+          type: string
+        stage_states:
+          additionalProperties:
+            type: string
+          title: Stage States
+          type: object
+        state:
+          title: State
+          type: string
+        terminal_reason:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Terminal Reason
+        title:
+          title: Title
+          type: string
+        updated_at:
+          format: date-time
+          title: Updated At
+          type: string
+      required:
+      - id
+      - title
+      - scope
+      - state
+      - requirement_version
+      - graph_version
+      - policy_version
+      - created_at
+      - updated_at
+      - terminal_reason
+      - open_gates
+      - stage_states
+      title: WorkflowRunView
+      type: object
+      x-schema-version: 1.0.0
 info:
   description: 'Application plane: URL shortener API (v1). Control plane: governed,
     stateful SDLC workflow orchestration.'
@@ -249,6 +710,469 @@ paths:
       summary: Get Analytics
       tags:
       - links
+  /api/v1/workflows:
+    get:
+      operationId: list_workflows_api_v1_workflows_get
+      parameters:
+      - in: header
+        name: X-API-Key
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/WorkflowRunView'
+                title: Response List Workflows Api V1 Workflows Get
+                type: array
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      summary: List Workflows
+      tags:
+      - workflows
+    post:
+      operationId: create_workflow_api_v1_workflows_post
+      parameters:
+      - in: header
+        name: X-API-Key
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WorkflowCreateRequest'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkflowRunView'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      summary: Create Workflow
+      tags:
+      - workflows
+  /api/v1/workflows/{run_id}:
+    get:
+      operationId: get_workflow_api_v1_workflows__run_id__get
+      parameters:
+      - in: path
+        name: run_id
+        required: true
+        schema:
+          title: Run Id
+          type: string
+      - in: header
+        name: X-API-Key
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkflowRunView'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      summary: Get Workflow
+      tags:
+      - workflows
+  /api/v1/workflows/{run_id}/artifacts:
+    get:
+      operationId: get_artifacts_api_v1_workflows__run_id__artifacts_get
+      parameters:
+      - in: path
+        name: run_id
+        required: true
+        schema:
+          title: Run Id
+          type: string
+      - in: query
+        name: include_invalidated
+        required: false
+        schema:
+          default: false
+          title: Include Invalidated
+          type: boolean
+      - in: header
+        name: X-API-Key
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ArtifactView'
+                title: Response Get Artifacts Api V1 Workflows  Run Id  Artifacts
+                  Get
+                type: array
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      summary: Get Artifacts
+      tags:
+      - workflows
+  /api/v1/workflows/{run_id}/decisions:
+    get:
+      operationId: list_decisions_api_v1_workflows__run_id__decisions_get
+      parameters:
+      - in: path
+        name: run_id
+        required: true
+        schema:
+          title: Run Id
+          type: string
+      - in: header
+        name: X-API-Key
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/DecisionView'
+                title: Response List Decisions Api V1 Workflows  Run Id  Decisions
+                  Get
+                type: array
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      summary: List Decisions
+      tags:
+      - decisions
+  /api/v1/workflows/{run_id}/events:
+    get:
+      operationId: get_events_api_v1_workflows__run_id__events_get
+      parameters:
+      - in: path
+        name: run_id
+        required: true
+        schema:
+          title: Run Id
+          type: string
+      - in: header
+        name: X-API-Key
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/AuditEventView'
+                title: Response Get Events Api V1 Workflows  Run Id  Events Get
+                type: array
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      summary: Get Events
+      tags:
+      - workflows
+  /api/v1/workflows/{run_id}/gates:
+    get:
+      operationId: list_gates_api_v1_workflows__run_id__gates_get
+      parameters:
+      - in: path
+        name: run_id
+        required: true
+        schema:
+          title: Run Id
+          type: string
+      - in: header
+        name: X-API-Key
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/GateView'
+                title: Response List Gates Api V1 Workflows  Run Id  Gates Get
+                type: array
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      summary: List Gates
+      tags:
+      - decisions
+  /api/v1/workflows/{run_id}/gates/{gate}/decision:
+    post:
+      operationId: decide_api_v1_workflows__run_id__gates__gate__decision_post
+      parameters:
+      - in: path
+        name: run_id
+        required: true
+        schema:
+          title: Run Id
+          type: string
+      - in: path
+        name: gate
+        required: true
+        schema:
+          title: Gate
+          type: string
+      - in: header
+        name: X-Actor
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Actor
+      - in: header
+        name: X-API-Key
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DecisionRequest'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DecisionView'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      summary: Decide
+      tags:
+      - decisions
+  /api/v1/workflows/{run_id}/graph:
+    get:
+      operationId: get_graph_api_v1_workflows__run_id__graph_get
+      parameters:
+      - in: path
+        name: run_id
+        required: true
+        schema:
+          title: Run Id
+          type: string
+      - in: header
+        name: X-API-Key
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GraphView'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      summary: Get Graph
+      tags:
+      - workflows
+  /api/v1/workflows/{run_id}/lineage:
+    get:
+      description: Walk derived_from from every live artifact back to the requirement
+        (FR-O07).
+      operationId: get_lineage_api_v1_workflows__run_id__lineage_get
+      parameters:
+      - in: path
+        name: run_id
+        required: true
+        schema:
+          title: Run Id
+          type: string
+      - in: header
+        name: X-API-Key
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                additionalProperties: true
+                title: Response Get Lineage Api V1 Workflows  Run Id  Lineage Get
+                type: object
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      summary: Get Lineage
+      tags:
+      - workflows
+  /api/v1/workflows/{run_id}/resume:
+    post:
+      operationId: resume_workflow_api_v1_workflows__run_id__resume_post
+      parameters:
+      - in: path
+        name: run_id
+        required: true
+        schema:
+          title: Run Id
+          type: string
+      - in: header
+        name: X-API-Key
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkflowRunView'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      summary: Resume Workflow
+      tags:
+      - workflows
+  /api/v1/workflows/{run_id}/stop:
+    post:
+      operationId: stop_workflow_api_v1_workflows__run_id__stop_post
+      parameters:
+      - in: path
+        name: run_id
+        required: true
+        schema:
+          title: Run Id
+          type: string
+      - in: header
+        name: X-Actor
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Actor
+      - in: header
+        name: X-API-Key
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StopRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkflowRunView'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      summary: Stop Workflow
+      tags:
+      - workflows
   /health/live:
     get:
       operationId: live_health_live_get

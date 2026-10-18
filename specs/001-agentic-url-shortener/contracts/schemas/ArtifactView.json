@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "properties": {
+    "content": {
+      "additionalProperties": true,
+      "title": "Content",
+      "type": "object"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "derived_from": {
+      "items": {
+        "type": "integer"
+      },
+      "title": "Derived From",
+      "type": "array"
+    },
+    "id": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Id"
+    },
+    "invalidated": {
+      "title": "Invalidated",
+      "type": "boolean"
+    },
+    "kind": {
+      "title": "Kind",
+      "type": "string"
+    },
+    "policy_version": {
+      "title": "Policy Version",
+      "type": "string"
+    },
+    "stage": {
+      "title": "Stage",
+      "type": "string"
+    },
+    "version": {
+      "title": "Version",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "id",
+    "stage",
+    "kind",
+    "version",
+    "derived_from",
+    "policy_version",
+    "invalidated",
+    "created_at",
+    "content"
+  ],
+  "title": "ArtifactView",
+  "type": "object",
+  "x-schema-version": "1.0.0"
+}
