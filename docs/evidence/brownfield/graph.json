@@ -1,0 +1,588 @@
+{
+  "edges": [
+    {
+      "from": "ingest",
+      "kind": "hard",
+      "to": "quality_check"
+    },
+    {
+      "from": "quality_check",
+      "kind": "conditional",
+      "to": "clarification"
+    },
+    {
+      "from": "clarification",
+      "kind": "conditional",
+      "to": "impact_analysis"
+    },
+    {
+      "from": "impact_analysis",
+      "kind": "hard",
+      "to": "decompose"
+    },
+    {
+      "from": "decompose",
+      "kind": "hard",
+      "to": "design"
+    },
+    {
+      "from": "design",
+      "kind": "hard",
+      "to": "design_approval"
+    },
+    {
+      "from": "design_approval",
+      "kind": "hard",
+      "to": "implement"
+    },
+    {
+      "from": "design_approval",
+      "kind": "hard",
+      "to": "test_plan"
+    },
+    {
+      "from": "design_approval",
+      "kind": "hard",
+      "to": "docs_draft"
+    },
+    {
+      "from": "implement",
+      "kind": "hard",
+      "to": "verify"
+    },
+    {
+      "from": "test_plan",
+      "kind": "hard",
+      "to": "verify"
+    },
+    {
+      "from": "docs_draft",
+      "kind": "hard",
+      "to": "verify"
+    },
+    {
+      "from": "verify",
+      "kind": "hard",
+      "to": "security_review"
+    },
+    {
+      "from": "verify",
+      "kind": "hard",
+      "to": "compliance_check"
+    },
+    {
+      "from": "security_review",
+      "kind": "hard",
+      "to": "compliance_check"
+    },
+    {
+      "from": "compliance_check",
+      "kind": "conditional",
+      "to": "policy_exception"
+    },
+    {
+      "from": "policy_exception",
+      "kind": "hard",
+      "to": "release_readiness"
+    },
+    {
+      "from": "release_readiness",
+      "kind": "hard",
+      "to": "summary"
+    }
+  ],
+  "graph_version": 1,
+  "open_gates": [],
+  "run_state": "COMPLETED",
+  "stages": [
+    {
+      "agent": "ingest",
+      "attempt": 1,
+      "compensable": false,
+      "condition": null,
+      "depends_on": [],
+      "emits": [
+        "normalized_requirement"
+      ],
+      "ended_at": "2026-10-18T18:02:47.219694+00:00",
+      "failure_kind": null,
+      "fallback": null,
+      "fallback_used": false,
+      "gate_kind": null,
+      "gate_timeout_s": null,
+      "name": "ingest",
+      "owner": "agent",
+      "parallel_group": null,
+      "purpose": "normalise the requirement and classify its scope",
+      "retry": {
+        "base_delay_s": 0.1,
+        "max_attempts": 1,
+        "max_delay_s": 2.0,
+        "multiplier": 2.0
+      },
+      "started_at": "2026-10-18T18:02:47.213915+00:00",
+      "state": "SUCCEEDED",
+      "timeout_s": 5.0
+    },
+    {
+      "agent": "quality_check",
+      "attempt": 1,
+      "compensable": false,
+      "condition": null,
+      "depends_on": [
+        "ingest"
+      ],
+      "emits": [
+        "quality_check"
+      ],
+      "ended_at": "2026-10-18T18:02:47.234080+00:00",
+      "failure_kind": null,
+      "fallback": null,
+      "fallback_used": false,
+      "gate_kind": null,
+      "gate_timeout_s": null,
+      "name": "quality_check",
+      "owner": "agent",
+      "parallel_group": null,
+      "purpose": "completeness/consistency/testability/boundary checks; ambiguity detection",
+      "retry": {
+        "base_delay_s": 0.1,
+        "max_attempts": 1,
+        "max_delay_s": 2.0,
+        "multiplier": 2.0
+      },
+      "started_at": "2026-10-18T18:02:47.229881+00:00",
+      "state": "SUCCEEDED",
+      "timeout_s": 5.0
+    },
+    {
+      "agent": "human",
+      "attempt": 0,
+      "compensable": false,
+      "condition": "quality_check.clarification_required",
+      "depends_on": [
+        "quality_check"
+      ],
+      "emits": [],
+      "ended_at": null,
+      "failure_kind": null,
+      "fallback": null,
+      "fallback_used": false,
+      "gate_kind": "clarification",
+      "gate_timeout_s": null,
+      "name": "clarification",
+      "owner": "human",
+      "parallel_group": null,
+      "purpose": "human resolves material ambiguity before any design or implementation",
+      "retry": {
+        "base_delay_s": 0.1,
+        "max_attempts": 3,
+        "max_delay_s": 2.0,
+        "multiplier": 2.0
+      },
+      "started_at": null,
+      "state": "SKIPPED",
+      "timeout_s": 5.0
+    },
+    {
+      "agent": "impact_analysis",
+      "attempt": 1,
+      "compensable": false,
+      "condition": "scope == brownfield",
+      "depends_on": [
+        "clarification"
+      ],
+      "emits": [
+        "impact_analysis"
+      ],
+      "ended_at": "2026-10-18T18:02:47.290761+00:00",
+      "failure_kind": null,
+      "fallback": null,
+      "fallback_used": false,
+      "gate_kind": null,
+      "gate_timeout_s": null,
+      "name": "impact_analysis",
+      "owner": "agent",
+      "parallel_group": null,
+      "purpose": "brownfield impact analysis before any change",
+      "retry": {
+        "base_delay_s": 0.1,
+        "max_attempts": 1,
+        "max_delay_s": 2.0,
+        "multiplier": 2.0
+      },
+      "started_at": "2026-10-18T18:02:47.242912+00:00",
+      "state": "SUCCEEDED",
+      "timeout_s": 30.0
+    },
+    {
+      "agent": "decompose",
+      "attempt": 1,
+      "compensable": false,
+      "condition": null,
+      "depends_on": [
+        "impact_analysis"
+      ],
+      "emits": [
+        "decomposition"
+      ],
+      "ended_at": "2026-10-18T18:02:47.307725+00:00",
+      "failure_kind": null,
+      "fallback": null,
+      "fallback_used": false,
+      "gate_kind": null,
+      "gate_timeout_s": null,
+      "name": "decompose",
+      "owner": "agent",
+      "parallel_group": null,
+      "purpose": "dependency-aware task decomposition",
+      "retry": {
+        "base_delay_s": 0.1,
+        "max_attempts": 1,
+        "max_delay_s": 2.0,
+        "multiplier": 2.0
+      },
+      "started_at": "2026-10-18T18:02:47.302345+00:00",
+      "state": "SUCCEEDED",
+      "timeout_s": 5.0
+    },
+    {
+      "agent": "design",
+      "attempt": 1,
+      "compensable": false,
+      "condition": null,
+      "depends_on": [
+        "decompose"
+      ],
+      "emits": [
+        "design"
+      ],
+      "ended_at": "2026-10-18T18:02:47.321806+00:00",
+      "failure_kind": null,
+      "fallback": null,
+      "fallback_used": false,
+      "gate_kind": null,
+      "gate_timeout_s": null,
+      "name": "design",
+      "owner": "agent",
+      "parallel_group": null,
+      "purpose": "components, API/schema impact, trade-offs, risks",
+      "retry": {
+        "base_delay_s": 0.1,
+        "max_attempts": 1,
+        "max_delay_s": 2.0,
+        "multiplier": 2.0
+      },
+      "started_at": "2026-10-18T18:02:47.316762+00:00",
+      "state": "SUCCEEDED",
+      "timeout_s": 5.0
+    },
+    {
+      "agent": "human",
+      "attempt": 0,
+      "compensable": false,
+      "condition": null,
+      "depends_on": [
+        "design"
+      ],
+      "emits": [],
+      "ended_at": "2026-10-18T18:02:47.341992+00:00",
+      "failure_kind": null,
+      "fallback": null,
+      "fallback_used": false,
+      "gate_kind": "approval",
+      "gate_timeout_s": null,
+      "name": "design_approval",
+      "owner": "human",
+      "parallel_group": null,
+      "purpose": "architecture approval; API/schema changes must be acknowledged (CHG-002)",
+      "retry": {
+        "base_delay_s": 0.1,
+        "max_attempts": 3,
+        "max_delay_s": 2.0,
+        "multiplier": 2.0
+      },
+      "started_at": "2026-10-18T18:02:47.329108+00:00",
+      "state": "SUCCEEDED",
+      "timeout_s": 5.0
+    },
+    {
+      "agent": "docs_draft",
+      "attempt": 1,
+      "compensable": false,
+      "condition": null,
+      "depends_on": [
+        "design_approval"
+      ],
+      "emits": [
+        "docs"
+      ],
+      "ended_at": "2026-10-18T18:02:47.365182+00:00",
+      "failure_kind": null,
+      "fallback": null,
+      "fallback_used": false,
+      "gate_kind": null,
+      "gate_timeout_s": null,
+      "name": "docs_draft",
+      "owner": "agent",
+      "parallel_group": "after:design_approval",
+      "purpose": "documentation draft for the change",
+      "retry": {
+        "base_delay_s": 0.1,
+        "max_attempts": 1,
+        "max_delay_s": 2.0,
+        "multiplier": 2.0
+      },
+      "started_at": "2026-10-18T18:02:47.355181+00:00",
+      "state": "SUCCEEDED",
+      "timeout_s": 5.0
+    },
+    {
+      "agent": "implement",
+      "attempt": 1,
+      "compensable": true,
+      "condition": null,
+      "depends_on": [
+        "design_approval"
+      ],
+      "emits": [
+        "change_set"
+      ],
+      "ended_at": "2026-10-18T18:02:47.376982+00:00",
+      "failure_kind": null,
+      "fallback": null,
+      "fallback_used": false,
+      "gate_kind": null,
+      "gate_timeout_s": null,
+      "name": "implement",
+      "owner": "agent",
+      "parallel_group": "after:design_approval",
+      "purpose": "apply the change set to the run workspace (reversible)",
+      "retry": {
+        "base_delay_s": 0.1,
+        "max_attempts": 1,
+        "max_delay_s": 2.0,
+        "multiplier": 2.0
+      },
+      "started_at": "2026-10-18T18:02:47.358267+00:00",
+      "state": "SUCCEEDED",
+      "timeout_s": 5.0
+    },
+    {
+      "agent": "test_plan",
+      "attempt": 1,
+      "compensable": false,
+      "condition": null,
+      "depends_on": [
+        "design_approval"
+      ],
+      "emits": [
+        "test_plan"
+      ],
+      "ended_at": "2026-10-18T18:02:47.371777+00:00",
+      "failure_kind": null,
+      "fallback": null,
+      "fallback_used": false,
+      "gate_kind": null,
+      "gate_timeout_s": null,
+      "name": "test_plan",
+      "owner": "agent",
+      "parallel_group": "after:design_approval",
+      "purpose": "test matrix with negative cases per acceptance criterion",
+      "retry": {
+        "base_delay_s": 0.1,
+        "max_attempts": 1,
+        "max_delay_s": 2.0,
+        "multiplier": 2.0
+      },
+      "started_at": "2026-10-18T18:02:47.360598+00:00",
+      "state": "SUCCEEDED",
+      "timeout_s": 5.0
+    },
+    {
+      "agent": "verify",
+      "attempt": 1,
+      "compensable": false,
+      "condition": null,
+      "depends_on": [
+        "implement",
+        "test_plan",
+        "docs_draft"
+      ],
+      "emits": [
+        "verification"
+      ],
+      "ended_at": "2026-10-18T18:02:53.832941+00:00",
+      "failure_kind": null,
+      "fallback": null,
+      "fallback_used": false,
+      "gate_kind": null,
+      "gate_timeout_s": null,
+      "name": "verify",
+      "owner": "agent",
+      "parallel_group": null,
+      "purpose": "execute the impacted regression targets / compile the change set",
+      "retry": {
+        "base_delay_s": 0.1,
+        "max_attempts": 3,
+        "max_delay_s": 2.0,
+        "multiplier": 2.0
+      },
+      "started_at": "2026-10-18T18:02:47.384252+00:00",
+      "state": "SUCCEEDED",
+      "timeout_s": 125.0
+    },
+    {
+      "agent": "security_review",
+      "attempt": 1,
+      "compensable": false,
+      "condition": null,
+      "depends_on": [
+        "verify"
+      ],
+      "emits": [
+        "security_review"
+      ],
+      "ended_at": "2026-10-18T18:02:53.844648+00:00",
+      "failure_kind": null,
+      "fallback": "manual_security_review",
+      "fallback_used": false,
+      "gate_kind": null,
+      "gate_timeout_s": null,
+      "name": "security_review",
+      "owner": "agent",
+      "parallel_group": null,
+      "purpose": "automated security review; falls back to a manual checklist",
+      "retry": {
+        "base_delay_s": 0.1,
+        "max_attempts": 1,
+        "max_delay_s": 2.0,
+        "multiplier": 2.0
+      },
+      "started_at": "2026-10-18T18:02:53.840515+00:00",
+      "state": "SUCCEEDED",
+      "timeout_s": 5.0
+    },
+    {
+      "agent": "compliance_check",
+      "attempt": 1,
+      "compensable": false,
+      "condition": null,
+      "depends_on": [
+        "verify",
+        "security_review"
+      ],
+      "emits": [
+        "compliance"
+      ],
+      "ended_at": "2026-10-18T18:02:53.866422+00:00",
+      "failure_kind": null,
+      "fallback": null,
+      "fallback_used": false,
+      "gate_kind": null,
+      "gate_timeout_s": null,
+      "name": "compliance_check",
+      "owner": "agent",
+      "parallel_group": null,
+      "purpose": "evaluate every versioned policy; block or raise an exception gate",
+      "retry": {
+        "base_delay_s": 0.1,
+        "max_attempts": 1,
+        "max_delay_s": 2.0,
+        "multiplier": 2.0
+      },
+      "started_at": "2026-10-18T18:02:53.851089+00:00",
+      "state": "SUCCEEDED",
+      "timeout_s": 5.0
+    },
+    {
+      "agent": "human",
+      "attempt": 0,
+      "compensable": false,
+      "condition": "compliance_check.blocking non-empty",
+      "depends_on": [
+        "compliance_check"
+      ],
+      "emits": [],
+      "ended_at": null,
+      "failure_kind": null,
+      "fallback": null,
+      "fallback_used": false,
+      "gate_kind": "approval",
+      "gate_timeout_s": null,
+      "name": "policy_exception",
+      "owner": "human",
+      "parallel_group": null,
+      "purpose": "human accepts a scoped, expiring policy exception + compensating control",
+      "retry": {
+        "base_delay_s": 0.1,
+        "max_attempts": 3,
+        "max_delay_s": 2.0,
+        "multiplier": 2.0
+      },
+      "started_at": null,
+      "state": "SKIPPED",
+      "timeout_s": 5.0
+    },
+    {
+      "agent": "human",
+      "attempt": 0,
+      "compensable": false,
+      "condition": null,
+      "depends_on": [
+        "policy_exception"
+      ],
+      "emits": [],
+      "ended_at": "2026-10-18T18:02:53.881867+00:00",
+      "failure_kind": null,
+      "fallback": null,
+      "fallback_used": false,
+      "gate_kind": "approval",
+      "gate_timeout_s": null,
+      "name": "release_readiness",
+      "owner": "human",
+      "parallel_group": null,
+      "purpose": "human release-readiness decision on the computed evidence",
+      "retry": {
+        "base_delay_s": 0.1,
+        "max_attempts": 3,
+        "max_delay_s": 2.0,
+        "multiplier": 2.0
+      },
+      "started_at": "2026-10-18T18:02:53.873594+00:00",
+      "state": "SUCCEEDED",
+      "timeout_s": 5.0
+    },
+    {
+      "agent": "summary",
+      "attempt": 1,
+      "compensable": false,
+      "condition": null,
+      "depends_on": [
+        "release_readiness"
+      ],
+      "emits": [
+        "engineering_summary"
+      ],
+      "ended_at": "2026-10-18T18:02:53.894148+00:00",
+      "failure_kind": null,
+      "fallback": null,
+      "fallback_used": false,
+      "gate_kind": null,
+      "gate_timeout_s": null,
+      "name": "summary",
+      "owner": "agent",
+      "parallel_group": null,
+      "purpose": "final engineering summary with release decision and evidence index",
+      "retry": {
+        "base_delay_s": 0.1,
+        "max_attempts": 1,
+        "max_delay_s": 2.0,
+        "multiplier": 2.0
+      },
+      "started_at": "2026-10-18T18:02:53.887652+00:00",
+      "state": "SUCCEEDED",
+      "timeout_s": 5.0
+    }
+  ]
+}

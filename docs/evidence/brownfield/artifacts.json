@@ -1,0 +1,1022 @@
+[
+  {
+    "content": {
+      "acceptance_criteria": [
+        {
+          "id": "AC-01",
+          "observable": "HTTP response status is 410",
+          "statement": "Expired links must return 410 Gone instead of the current 404."
+        },
+        {
+          "id": "AC-02",
+          "observable": "an expired link is not redirected; its status is observable",
+          "statement": "analytics for expired links must remain readable."
+        }
+      ],
+      "classified_scope": "brownfield",
+      "constraints": [
+        "analytics for expired links must remain readable."
+      ],
+      "functional_statements": [
+        "Expired links must return 410 Gone instead of the current 404.",
+        "analytics for expired links must remain readable."
+      ],
+      "intent": "Expired links must return 410 Gone instead of the current 404.",
+      "scope": "brownfield",
+      "scope_cues": [
+        "instead of",
+        "current ",
+        "must remain"
+      ],
+      "scope_source": "explicit",
+      "source": "requirement_raw",
+      "title": "SCN-B brownfield: expired links return 410 instead of 404",
+      "version": 1
+    },
+    "created_at": "2026-10-18 18:02:47.219713+00:00",
+    "derived_from": [],
+    "id": 12,
+    "invalidated": false,
+    "kind": "normalized_requirement",
+    "policy_version": "1.0.0",
+    "run_id": "01a1502e31fc508fb3153c49e9",
+    "stage": "ingest",
+    "version": 1
+  },
+  {
+    "content": {
+      "ambiguities": [],
+      "checks": {
+        "boundaries": {
+          "detail": "within approved scope",
+          "passed": true
+        },
+        "completeness": {
+          "detail": "2 statements, 2 acceptance criteria derived",
+          "passed": true
+        },
+        "consistency": {
+          "detail": "no conflicts with approved requirements",
+          "passed": true
+        },
+        "testability": {
+          "detail": "2/2 statements have an observable outcome",
+          "passed": true
+        }
+      },
+      "clarification_required": false,
+      "failed_checks": [],
+      "max_severity": "NONE",
+      "reason": "no clarification needed: all requirement-quality checks passed (completeness, consistency, testability, boundaries); max ambiguity severity NONE",
+      "reason_no_clarification": "no clarification needed: all requirement-quality checks passed (completeness, consistency, testability, boundaries); max ambiguity severity NONE",
+      "requirement_version": 1
+    },
+    "created_at": "2026-10-18 18:02:47.234099+00:00",
+    "derived_from": [
+      12
+    ],
+    "id": 13,
+    "invalidated": false,
+    "kind": "quality_check",
+    "policy_version": "1.0.0",
+    "run_id": "01a1502e31fc508fb3153c49e9",
+    "stage": "quality_check",
+    "version": 1
+  },
+  {
+    "content": {
+      "applicable": true,
+      "data_compatibility": "no persistence schema change; stored rows remain valid",
+      "evidence": {
+        "files_matched": 45,
+        "files_scanned": 164,
+        "match_detail": {
+          ".claude/skills/speckit-specify/SKILL.md": [
+            "analytics"
+          ],
+          "BACKLOG.md": [
+            "analytics"
+          ],
+          "docs/adr/ADR-011-versioned-policy-registry.md": [
+            "expir"
+          ],
+          "docs/approvals/GATE-3-clarifications.md": [
+            "analytics",
+            "expir"
+          ],
+          "docs/evidence/greenfield/README.md": [
+            "analytics"
+          ],
+          "specs/001-agentic-url-shortener/contracts/openapi.yaml": [
+            "analytics",
+            "expir"
+          ],
+          "specs/001-agentic-url-shortener/data-model.md": [
+            "analytics",
+            "expir",
+            "redirect_event"
+          ],
+          "specs/001-agentic-url-shortener/plan.md": [
+            "404",
+            "410",
+            "RedirectEvent",
+            "analytics",
+            "expir",
+            "redirect_event"
+          ],
+          "specs/001-agentic-url-shortener/spec.md": [
+            "404",
+            "410",
+            "RedirectEvent",
+            "analytics",
+            "expir"
+          ],
+          "specs/001-agentic-url-shortener/tasks.md": [
+            "404",
+            "410",
+            "analytics",
+            "expir"
+          ],
+          "src/agentic_sdlc/api/deps.py": [
+            "analytics"
+          ],
+          "src/agentic_sdlc/api/problems.py": [
+            "404"
+          ],
+          "src/agentic_sdlc/api/routers/links.py": [
+            "analytics",
+            "expir"
+          ],
+          "src/agentic_sdlc/api/routers/redirect.py": [
+            "NotFoundError",
+            "analytics",
+            "expir"
+          ],
+          "src/agentic_sdlc/api/routers/workflows.py": [
+            "404"
+          ],
+          "src/agentic_sdlc/api/schemas.py": [
+            "analytics",
+            "expir"
+          ],
+          "src/agentic_sdlc/config.py": [
+            "expir"
+          ],
+          "src/agentic_sdlc/domain/models.py": [
+            "RedirectEvent",
+            "analytics",
+            "expir"
+          ],
+          "src/agentic_sdlc/domain/ports.py": [
+            "RedirectEvent",
+            "analytics",
+            "per_day"
+          ],
+          "src/agentic_sdlc/domain/service.py": [
+            "GoneError",
+            "NotFoundError",
+            "RedirectEvent",
+            "analytics",
+            "expir",
+            "per_day"
+          ],
+          "src/agentic_sdlc/errors.py": [
+            "404",
+            "410",
+            "GoneError",
+            "NotFoundError"
+          ],
+          "src/agentic_sdlc/orchestration/agents/analysis.py": [
+            "404",
+            "410",
+            "GoneError",
+            "NotFoundError",
+            "RedirectEvent",
+            "analytics",
+            "expir",
+            "per_day",
+            "redirect_event"
+          ],
+          "src/agentic_sdlc/orchestration/agents/delivery.py": [
+            "expir"
+          ],
+          "src/agentic_sdlc/orchestration/agents/requirements.py": [
+            "410",
+            "analytics",
+            "expir"
+          ],
+          "src/agentic_sdlc/orchestration/engine.py": [
+            "NotFoundError",
+            "expir"
+          ],
+          "src/agentic_sdlc/orchestration/evidence.py": [
+            "expir"
+          ],
+          "src/agentic_sdlc/orchestration/planner.py": [
+            "expir"
+          ],
+          "src/agentic_sdlc/orchestration/release.py": [
+            "expir"
+          ],
+          "src/agentic_sdlc/orchestration/store.py": [
+            "expir"
+          ],
+          "src/agentic_sdlc/persistence/db.py": [
+            "expir"
+          ],
+          "src/agentic_sdlc/persistence/link_repository.py": [
+            "RedirectEvent",
+            "analytics",
+            "expir",
+            "per_day",
+            "redirect_event"
+          ],
+          "src/agentic_sdlc/persistence/tables.py": [
+            "expir",
+            "redirect_event"
+          ],
+          "src/agentic_sdlc/persistence/workflow_store.py": [
+            "expir"
+          ],
+          "src/agentic_sdlc/policy/evaluator.py": [
+            "expir"
+          ],
+          "src/agentic_sdlc/policy/registry.py": [
+            "expir"
+          ],
+          "src/agentic_sdlc/scenarios/__init__.py": [
+            "404",
+            "410",
+            "analytics",
+            "expir"
+          ],
+          "tests/contract/test_links_api.py": [
+            "404",
+            "410",
+            "analytics",
+            "expir"
+          ],
+          "tests/contract/test_openapi_drift.py": [
+            "analytics"
+          ],
+          "tests/contract/test_workflow_api.py": [
+            "404"
+          ],
+          "tests/e2e/test_scenarios.py": [
+            "404",
+            "410",
+            "analytics",
+            "expir"
+          ],
+          "tests/integration/test_health.py": [
+            "404"
+          ],
+          "tests/integration/test_link_repository.py": [
+            "RedirectEvent",
+            "analytics",
+            "expir",
+            "per_day"
+          ],
+          "tests/unit/test_agents.py": [
+            "404",
+            "410",
+            "analytics",
+            "expir"
+          ],
+          "tests/unit/test_policy.py": [
+            "expir"
+          ],
+          "tests/unit/test_service.py": [
+            "GoneError",
+            "NotFoundError",
+            "RedirectEvent",
+            "analytics",
+            "expir",
+            "per_day"
+          ]
+        },
+        "repository_root": "/home/claude/agentic-sdlc-url-shortener"
+      },
+      "impacted_control_plane_modules": [
+        "src/agentic_sdlc/orchestration/agents/analysis.py",
+        "src/agentic_sdlc/orchestration/agents/delivery.py",
+        "src/agentic_sdlc/orchestration/agents/requirements.py",
+        "src/agentic_sdlc/orchestration/engine.py",
+        "src/agentic_sdlc/orchestration/evidence.py",
+        "src/agentic_sdlc/orchestration/planner.py",
+        "src/agentic_sdlc/orchestration/release.py",
+        "src/agentic_sdlc/orchestration/store.py",
+        "src/agentic_sdlc/policy/evaluator.py",
+        "src/agentic_sdlc/policy/registry.py"
+      ],
+      "impacted_data_flows": [
+        "src/agentic_sdlc/api/deps.py \u2192 src/agentic_sdlc/domain/models.py \u2192 src/agentic_sdlc/domain/ports.py \u2192 src/agentic_sdlc/domain/service.py \u2192 src/agentic_sdlc/persistence/db.py \u2192 src/agentic_sdlc/persistence/link_repository.py \u2192 src/agentic_sdlc/persistence/tables.py \u2192 src/agentic_sdlc/persistence/workflow_store.py \u2192 src/agentic_sdlc/config.py \u2192 src/agentic_sdlc/errors.py \u2192 src/agentic_sdlc/scenarios/__init__.py",
+        "src/agentic_sdlc/api/problems.py \u2192 src/agentic_sdlc/domain/models.py \u2192 src/agentic_sdlc/domain/ports.py \u2192 src/agentic_sdlc/domain/service.py \u2192 src/agentic_sdlc/persistence/db.py \u2192 src/agentic_sdlc/persistence/link_repository.py \u2192 src/agentic_sdlc/persistence/tables.py \u2192 src/agentic_sdlc/persistence/workflow_store.py \u2192 src/agentic_sdlc/config.py \u2192 src/agentic_sdlc/errors.py \u2192 src/agentic_sdlc/scenarios/__init__.py",
+        "src/agentic_sdlc/api/routers/links.py \u2192 src/agentic_sdlc/domain/models.py \u2192 src/agentic_sdlc/domain/ports.py \u2192 src/agentic_sdlc/domain/service.py \u2192 src/agentic_sdlc/persistence/db.py \u2192 src/agentic_sdlc/persistence/link_repository.py \u2192 src/agentic_sdlc/persistence/tables.py \u2192 src/agentic_sdlc/persistence/workflow_store.py \u2192 src/agentic_sdlc/config.py \u2192 src/agentic_sdlc/errors.py \u2192 src/agentic_sdlc/scenarios/__init__.py",
+        "src/agentic_sdlc/api/routers/redirect.py \u2192 src/agentic_sdlc/domain/models.py \u2192 src/agentic_sdlc/domain/ports.py \u2192 src/agentic_sdlc/domain/service.py \u2192 src/agentic_sdlc/persistence/db.py \u2192 src/agentic_sdlc/persistence/link_repository.py \u2192 src/agentic_sdlc/persistence/tables.py \u2192 src/agentic_sdlc/persistence/workflow_store.py \u2192 src/agentic_sdlc/config.py \u2192 src/agentic_sdlc/errors.py \u2192 src/agentic_sdlc/scenarios/__init__.py",
+        "src/agentic_sdlc/api/routers/workflows.py \u2192 src/agentic_sdlc/domain/models.py \u2192 src/agentic_sdlc/domain/ports.py \u2192 src/agentic_sdlc/domain/service.py \u2192 src/agentic_sdlc/persistence/db.py \u2192 src/agentic_sdlc/persistence/link_repository.py \u2192 src/agentic_sdlc/persistence/tables.py \u2192 src/agentic_sdlc/persistence/workflow_store.py \u2192 src/agentic_sdlc/config.py \u2192 src/agentic_sdlc/errors.py \u2192 src/agentic_sdlc/scenarios/__init__.py",
+        "src/agentic_sdlc/api/schemas.py \u2192 src/agentic_sdlc/domain/models.py \u2192 src/agentic_sdlc/domain/ports.py \u2192 src/agentic_sdlc/domain/service.py \u2192 src/agentic_sdlc/persistence/db.py \u2192 src/agentic_sdlc/persistence/link_repository.py \u2192 src/agentic_sdlc/persistence/tables.py \u2192 src/agentic_sdlc/persistence/workflow_store.py \u2192 src/agentic_sdlc/config.py \u2192 src/agentic_sdlc/errors.py \u2192 src/agentic_sdlc/scenarios/__init__.py"
+      ],
+      "impacted_docs": [
+        ".claude/skills/speckit-specify/SKILL.md",
+        "BACKLOG.md",
+        "docs/adr/ADR-011-versioned-policy-registry.md",
+        "docs/approvals/GATE-3-clarifications.md",
+        "docs/evidence/greenfield/README.md",
+        "specs/001-agentic-url-shortener/contracts/openapi.yaml",
+        "specs/001-agentic-url-shortener/data-model.md",
+        "specs/001-agentic-url-shortener/plan.md",
+        "specs/001-agentic-url-shortener/spec.md",
+        "specs/001-agentic-url-shortener/tasks.md"
+      ],
+      "impacted_interfaces": [
+        "/api/v1/links/{code}/analytics"
+      ],
+      "impacted_modules": [
+        "src/agentic_sdlc/api/deps.py",
+        "src/agentic_sdlc/api/problems.py",
+        "src/agentic_sdlc/api/routers/links.py",
+        "src/agentic_sdlc/api/routers/redirect.py",
+        "src/agentic_sdlc/api/routers/workflows.py",
+        "src/agentic_sdlc/api/schemas.py",
+        "src/agentic_sdlc/domain/models.py",
+        "src/agentic_sdlc/domain/ports.py",
+        "src/agentic_sdlc/domain/service.py",
+        "src/agentic_sdlc/persistence/db.py",
+        "src/agentic_sdlc/persistence/link_repository.py",
+        "src/agentic_sdlc/persistence/tables.py",
+        "src/agentic_sdlc/persistence/workflow_store.py",
+        "src/agentic_sdlc/config.py",
+        "src/agentic_sdlc/errors.py",
+        "src/agentic_sdlc/scenarios/__init__.py"
+      ],
+      "impacted_tests": [
+        "tests/contract/test_links_api.py",
+        "tests/contract/test_openapi_drift.py",
+        "tests/contract/test_workflow_api.py",
+        "tests/e2e/test_scenarios.py",
+        "tests/integration/test_health.py",
+        "tests/integration/test_link_repository.py",
+        "tests/unit/test_agents.py",
+        "tests/unit/test_policy.py",
+        "tests/unit/test_service.py"
+      ],
+      "regression_risks": [
+        "clients that branch on the expired-link status code or on expires_at semantics",
+        "not-found handling is shared by links, analytics and workflow routes",
+        "per-day grouping and best-effort recording (AMB-05) must keep their semantics",
+        "status-code contract change is visible to every redirect consumer"
+      ],
+      "requirement_version": 1,
+      "rollback_considerations": [
+        "change set is applied to the run workspace and is fully reversible (rollback)",
+        "an API status-code or shape change is backward-incompatible for consumers; announce via the versioned contract (CHG-002)",
+        "no data migration"
+      ],
+      "scope": "brownfield",
+      "search_needles": [
+        "404",
+        "410",
+        "GoneError",
+        "NotFoundError",
+        "RedirectEvent",
+        "analytics",
+        "expir",
+        "per_day",
+        "redirect_event"
+      ],
+      "terms": [
+        "expire",
+        "410",
+        "404",
+        "analytics"
+      ]
+    },
+    "created_at": "2026-10-18 18:02:47.290777+00:00",
+    "derived_from": [],
+    "id": 14,
+    "invalidated": false,
+    "kind": "impact_analysis",
+    "policy_version": "1.0.0",
+    "run_id": "01a1502e31fc508fb3153c49e9",
+    "stage": "impact_analysis",
+    "version": 1
+  },
+  {
+    "content": {
+      "components": [
+        "api/deps.py",
+        "api/problems.py",
+        "api/routers/links.py",
+        "api/routers/redirect.py",
+        "api/routers/workflows.py",
+        "api/schemas.py",
+        "domain/models.py",
+        "domain/ports.py",
+        "domain/service.py",
+        "persistence/db.py",
+        "persistence/link_repository.py",
+        "persistence/tables.py",
+        "persistence/workflow_store.py",
+        "config.py",
+        "errors.py",
+        "scenarios/__init__.py"
+      ],
+      "critical_path": [
+        "T90-docs",
+        "T99-verify"
+      ],
+      "parallel_tasks": [
+        "T01-test",
+        "T01-impl",
+        "T02-test",
+        "T02-impl"
+      ],
+      "requirement_version": 1,
+      "tasks": [
+        {
+          "acceptance": "HTTP response status is 410",
+          "components": [
+            "tests for api/deps.py"
+          ],
+          "criterion": "AC-01",
+          "depends_on": [],
+          "id": "T01-test",
+          "kind": "test",
+          "objective": "Write a failing test for AC-01: Expired links must return 410 Gone instead of the current 404.",
+          "parallel": true,
+          "tdd": "red"
+        },
+        {
+          "acceptance": "T01-test passes; regression suite green",
+          "components": [
+            "api/deps.py"
+          ],
+          "criterion": "AC-01",
+          "depends_on": [
+            "T01-test"
+          ],
+          "id": "T01-impl",
+          "kind": "implement",
+          "objective": "Implement the smallest change satisfying AC-01",
+          "parallel": true,
+          "tdd": "green"
+        },
+        {
+          "acceptance": "an expired link is not redirected; its status is observable",
+          "components": [
+            "tests for api/problems.py"
+          ],
+          "criterion": "AC-02",
+          "depends_on": [],
+          "id": "T02-test",
+          "kind": "test",
+          "objective": "Write a failing test for AC-02: analytics for expired links must remain readable.",
+          "parallel": true,
+          "tdd": "red"
+        },
+        {
+          "acceptance": "T02-test passes; regression suite green",
+          "components": [
+            "api/problems.py"
+          ],
+          "criterion": "AC-02",
+          "depends_on": [
+            "T02-test"
+          ],
+          "id": "T02-impl",
+          "kind": "implement",
+          "objective": "Implement the smallest change satisfying AC-02",
+          "parallel": true,
+          "tdd": "green"
+        },
+        {
+          "acceptance": "contract drift check passes; docs describe new behaviour",
+          "components": [
+            "specs/contracts/openapi.yaml",
+            "README.md"
+          ],
+          "criterion": "ALL",
+          "depends_on": [
+            "T01-impl",
+            "T02-impl"
+          ],
+          "id": "T90-docs",
+          "kind": "docs",
+          "objective": "Update API documentation, contract and README for the change",
+          "parallel": false,
+          "tdd": "n/a"
+        },
+        {
+          "acceptance": "exit code 0",
+          "components": [
+            "tests/"
+          ],
+          "criterion": "ALL",
+          "depends_on": [
+            "T01-impl",
+            "T02-impl",
+            "T90-docs"
+          ],
+          "id": "T99-verify",
+          "kind": "verify",
+          "objective": "Run the regression suite and the impacted test targets",
+          "parallel": false,
+          "tdd": "refactor"
+        }
+      ]
+    },
+    "created_at": "2026-10-18 18:02:47.307744+00:00",
+    "derived_from": [
+      14
+    ],
+    "id": 15,
+    "invalidated": false,
+    "kind": "decomposition",
+    "policy_version": "1.0.0",
+    "run_id": "01a1502e31fc508fb3153c49e9",
+    "stage": "decompose",
+    "version": 1
+  },
+  {
+    "content": {
+      "api_changes": [
+        {
+          "change": "status-code",
+          "detail": "status 410 / 404: Expired links must return 410 Gone instead of the current 404.",
+          "path": "/r/{code}"
+        }
+      ],
+      "api_or_schema_impact": true,
+      "components": [
+        "api/deps.py",
+        "api/problems.py",
+        "api/routers/links.py",
+        "api/routers/redirect.py",
+        "api/routers/workflows.py",
+        "api/schemas.py",
+        "domain/models.py",
+        "domain/ports.py",
+        "domain/service.py",
+        "persistence/db.py",
+        "persistence/link_repository.py",
+        "persistence/tables.py",
+        "persistence/workflow_store.py",
+        "config.py",
+        "errors.py",
+        "scenarios/__init__.py"
+      ],
+      "contract_version_impact": "breaking for consumers",
+      "decisions": [
+        "Keep the change inside existing module boundaries (ADR-001)",
+        "No new runtime dependency; stdlib + existing stack (ADR-002)",
+        "Contract exported and drift-checked before approval (CHG-002)"
+      ],
+      "new_dependencies": [],
+      "requirement_version": 1,
+      "risks": [
+        "Consumer breakage on contract changes",
+        "Regression in the shared not-found / gone handling"
+      ],
+      "schema_changes": [],
+      "trade_offs": [
+        "Smallest change that satisfies the acceptance criteria over a broader refactor",
+        "Backward compatibility is traded for correctness where a status code changes"
+      ],
+      "validation": "contract tests + impacted regression targets executed by verify"
+    },
+    "created_at": "2026-10-18 18:02:47.321821+00:00",
+    "derived_from": [
+      15
+    ],
+    "id": 16,
+    "invalidated": false,
+    "kind": "design",
+    "policy_version": "1.0.0",
+    "run_id": "01a1502e31fc508fb3153c49e9",
+    "stage": "design",
+    "version": 1
+  },
+  {
+    "content": {
+      "format": "markdown",
+      "text": "# SCN-B brownfield: expired links return 410 instead of 404\n\nRequirement version 1 (brownfield).\n\n## Behaviour\n- Expired links must return 410 Gone instead of the current 404.\n- analytics for expired links must remain readable.\n\n## Acceptance criteria\n- AC-01: Expired links must return 410 Gone instead of the current 404. \u2014 observable: HTTP response status is 410\n- AC-02: analytics for expired links must remain readable. \u2014 observable: an expired link is not redirected; its status is observable\n\n## API impact\n- api_or_schema_impact: True\n- contract version impact: breaking for consumers\n"
+    },
+    "created_at": "2026-10-18 18:02:47.365195+00:00",
+    "derived_from": [],
+    "id": 17,
+    "invalidated": false,
+    "kind": "docs",
+    "policy_version": "1.0.0",
+    "run_id": "01a1502e31fc508fb3153c49e9",
+    "stage": "docs_draft",
+    "version": 1
+  },
+  {
+    "content": {
+      "cases": [
+        {
+          "criterion": "AC-01",
+          "given": "a valid precondition for the criterion",
+          "id": "TC-AC-01-pos",
+          "level": "contract",
+          "negative": false,
+          "then": "HTTP response status is 410"
+        },
+        {
+          "criterion": "AC-01",
+          "given": "the precondition is violated (unknown code, expired link, bad input)",
+          "id": "TC-AC-01-neg",
+          "level": "contract",
+          "negative": true,
+          "then": "structured problem response with the stated status; no partial effect"
+        },
+        {
+          "criterion": "AC-02",
+          "given": "a valid precondition for the criterion",
+          "id": "TC-AC-02-pos",
+          "level": "unit",
+          "negative": false,
+          "then": "an expired link is not redirected; its status is observable"
+        },
+        {
+          "criterion": "AC-02",
+          "given": "the precondition is violated (unknown code, expired link, bad input)",
+          "id": "TC-AC-02-neg",
+          "level": "unit",
+          "negative": true,
+          "then": "structured problem response with the stated status; no partial effect"
+        },
+        {
+          "criterion": "ALL",
+          "given": "the full existing suite",
+          "id": "TC-REG",
+          "level": "regression",
+          "negative": false,
+          "then": "all existing tests remain green (executed by verify)"
+        }
+      ],
+      "levels": [
+        "contract",
+        "regression",
+        "unit"
+      ],
+      "requirement_version": 1,
+      "tdd": "each positive case is written red before its implementation task"
+    },
+    "created_at": "2026-10-18 18:02:47.371788+00:00",
+    "derived_from": [],
+    "id": 18,
+    "invalidated": false,
+    "kind": "test_plan",
+    "policy_version": "1.0.0",
+    "run_id": "01a1502e31fc508fb3153c49e9",
+    "stage": "test_plan",
+    "version": 1
+  },
+  {
+    "content": {
+      "changes": [
+        {
+          "action": "write",
+          "bytes": 755,
+          "path": "tests/test_ac_01.py"
+        },
+        {
+          "action": "write",
+          "bytes": 806,
+          "path": "tests/test_ac_02.py"
+        },
+        {
+          "action": "write",
+          "bytes": 613,
+          "path": "CHANGESET.md"
+        }
+      ],
+      "description": "red tests + change plan for requirement v1",
+      "files": {
+        "CHANGESET.md": "# Change set for requirement v1: SCN-B brownfield: expired links return 410 instead of 404\n\nGenerated by the deterministic implement agent. Each red test below states one\nacceptance criterion; the implementation tasks are listed with their target\ncomponents. Promotion into the repository is a human act.\n\n| Task | Criterion | Components |\n|---|---|---|\n| T01-test | AC-01 | tests for api/deps.py |\n| T01-impl | AC-01 | api/deps.py |\n| T02-test | AC-02 | tests for api/problems.py |\n| T02-impl | AC-02 | api/problems.py |\n| T90-docs | ALL | specs/contracts/openapi.yaml, README.md |\n| T99-verify | ALL | tests/ |\n",
+        "tests/test_ac_01.py": "\"\"\"Generated by the implement stage for T01-test (requirement v1).\n\nAcceptance criterion AC-01: Expired links must return 410 Gone instead of the current 404.\nObservable: HTTP response status is 410\n\nThis is a red test scaffold: it states the expected behaviour as an executable\nassertion against the HTTP API and is meant to fail until the implementation\ntask T01-impl is done. It is promoted into the\nrepository only by a human (controlled-autonomy boundary, ADR-010).\n\"\"\"\n\nimport pytest\n\npytestmark = pytest.mark.req(\"AC-01\")\n\n\ndef test_ac_01(client) -> None:  # noqa: ANN001 - fixture from the target repo\n    # Arrange: see criterion statement above.\n    # Act / Assert: HTTP response status is 410\n    raise AssertionError(\"not implemented: AC-01\")\n",
+        "tests/test_ac_02.py": "\"\"\"Generated by the implement stage for T02-test (requirement v1).\n\nAcceptance criterion AC-02: analytics for expired links must remain readable.\nObservable: an expired link is not redirected; its status is observable\n\nThis is a red test scaffold: it states the expected behaviour as an executable\nassertion against the HTTP API and is meant to fail until the implementation\ntask T02-impl is done. It is promoted into the\nrepository only by a human (controlled-autonomy boundary, ADR-010).\n\"\"\"\n\nimport pytest\n\npytestmark = pytest.mark.req(\"AC-02\")\n\n\ndef test_ac_02(client) -> None:  # noqa: ANN001 - fixture from the target repo\n    # Arrange: see criterion statement above.\n    # Act / Assert: an expired link is not redirected; its status is observable\n    raise AssertionError(\"not implemented: AC-02\")\n"
+      },
+      "id": "cs-01a1502e-v1",
+      "receipt": {
+        "change_set": "cs-01a1502e-v1",
+        "files_changed": [
+          "tests/test_ac_01.py",
+          "tests/test_ac_02.py",
+          "CHANGESET.md"
+        ],
+        "inverse": {
+          "CHANGESET.md": null,
+          "tests/test_ac_01.py": null,
+          "tests/test_ac_02.py": null
+        }
+      },
+      "workspace": "/home/claude/agentic-sdlc-url-shortener/data/runs/01a1502e31fc508fb3153c49e9/workspace"
+    },
+    "created_at": "2026-10-18 18:02:47.376993+00:00",
+    "derived_from": [],
+    "id": 19,
+    "invalidated": false,
+    "kind": "change_set",
+    "policy_version": "1.0.0",
+    "run_id": "01a1502e31fc508fb3153c49e9",
+    "stage": "implement",
+    "version": 1
+  },
+  {
+    "content": {
+      "attempt": 1,
+      "command": "/home/claude/agentic-sdlc-url-shortener/.venv/bin/python3 -m pytest -q -p no:cacheprovider -x tests/contract/test_links_api.py tests/contract/test_openapi_drift.py tests/contract/test_workflow_api.py tests/e2e/test_scenarios.py tests/integration/test_health.py tests/integration/test_link_repository.py tests/unit/test_agents.py tests/unit/test_policy.py tests/unit/test_service.py",
+      "cwd": "/home/claude/agentic-sdlc-url-shortener",
+      "duration_s": 6.444,
+      "executed": true,
+      "exit_code": 0,
+      "fault_injected_attempts": 0,
+      "mode": "pytest",
+      "output_tail": [
+        ".venv/lib/python3.13/site-packages/fastapi/testclient.py:1",
+        "  /home/claude/agentic-sdlc-url-shortener/.venv/lib/python3.13/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.",
+        "    from starlette.testclient import TestClient as TestClient  # noqa",
+        "",
+        "-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html"
+      ],
+      "targets": [
+        "tests/contract/test_links_api.py",
+        "tests/contract/test_openapi_drift.py",
+        "tests/contract/test_workflow_api.py",
+        "tests/e2e/test_scenarios.py",
+        "tests/integration/test_health.py",
+        "tests/integration/test_link_repository.py",
+        "tests/unit/test_agents.py",
+        "tests/unit/test_policy.py",
+        "tests/unit/test_service.py"
+      ]
+    },
+    "created_at": "2026-10-18 18:02:53.832957+00:00",
+    "derived_from": [
+      17,
+      18,
+      19
+    ],
+    "id": 20,
+    "invalidated": false,
+    "kind": "verification",
+    "policy_version": "1.0.0",
+    "run_id": "01a1502e31fc508fb3153c49e9",
+    "stage": "verify",
+    "version": 1
+  },
+  {
+    "content": {
+      "automated": true,
+      "change_set": "cs-01a1502e-v1",
+      "files_reviewed": [
+        "CHANGESET.md",
+        "tests/test_ac_01.py",
+        "tests/test_ac_02.py"
+      ],
+      "findings": [],
+      "high_findings": 0,
+      "threat_model_notes": [
+        "open redirect: targets are validated against scheme allow-list (FR-U02)",
+        "SSRF via redirector: loopback/private/metadata targets rejected (FR-U03)",
+        "approval spoofing: decisions require API key + actor header (AMB-06)"
+      ]
+    },
+    "created_at": "2026-10-18 18:02:53.844659+00:00",
+    "derived_from": [
+      20
+    ],
+    "id": 21,
+    "invalidated": false,
+    "kind": "security_review",
+    "policy_version": "1.0.0",
+    "run_id": "01a1502e31fc508fb3153c49e9",
+    "stage": "security_review",
+    "version": 1
+  },
+  {
+    "content": {
+      "blocking": [],
+      "evaluated": 9,
+      "evaluated_at": "2026-10-18T18:02:53.858261+00:00",
+      "exceptionable_blocking": [],
+      "forced_fail": null,
+      "non_exceptionable_blocking": [],
+      "outcomes": {
+        "AUD-001": {
+          "detail": "audit retention recorded: life of the local store",
+          "outcome": "PASS"
+        },
+        "CHG-001": {
+          "detail": "impact analysis recorded before implementation",
+          "outcome": "PASS"
+        },
+        "CHG-002": {
+          "detail": "API/schema change acknowledged at design approval",
+          "outcome": "PASS"
+        },
+        "CMP-001": {
+          "detail": "11 executed stages and 1 gates fully recorded",
+          "outcome": "PASS"
+        },
+        "CMP-002": {
+          "detail": "37 audit events carry actor, action, timestamp and target",
+          "outcome": "PASS"
+        },
+        "DEP-001": {
+          "detail": "no new dependencies declared",
+          "outcome": "PASS"
+        },
+        "SEC-001": {
+          "detail": "change set does not touch URL validation",
+          "outcome": "PASS"
+        },
+        "SEC-002": {
+          "detail": "no secret patterns in 10 artifacts",
+          "outcome": "PASS"
+        },
+        "SEC-003": {
+          "detail": "automated security review completed",
+          "outcome": "PASS"
+        }
+      },
+      "policy_version": "1.0.0"
+    },
+    "created_at": "2026-10-18 18:02:53.866436+00:00",
+    "derived_from": [
+      20,
+      21
+    ],
+    "id": 22,
+    "invalidated": false,
+    "kind": "compliance",
+    "policy_version": "1.0.0",
+    "run_id": "01a1502e31fc508fb3153c49e9",
+    "stage": "compliance_check",
+    "version": 1
+  },
+  {
+    "content": {
+      "artifacts": {
+        "change_set": {
+          "id": 19,
+          "kind": "change_set",
+          "stage": "implement",
+          "version": 1
+        },
+        "compliance": {
+          "id": 22,
+          "kind": "compliance",
+          "stage": "compliance_check",
+          "version": 1
+        },
+        "decomposition": {
+          "id": 15,
+          "kind": "decomposition",
+          "stage": "decompose",
+          "version": 1
+        },
+        "design": {
+          "id": 16,
+          "kind": "design",
+          "stage": "design",
+          "version": 1
+        },
+        "docs": {
+          "id": 17,
+          "kind": "docs",
+          "stage": "docs_draft",
+          "version": 1
+        },
+        "impact_analysis": {
+          "id": 14,
+          "kind": "impact_analysis",
+          "stage": "impact_analysis",
+          "version": 1
+        },
+        "normalized_requirement": {
+          "id": 12,
+          "kind": "normalized_requirement",
+          "stage": "ingest",
+          "version": 1
+        },
+        "quality_check": {
+          "id": 13,
+          "kind": "quality_check",
+          "stage": "quality_check",
+          "version": 1
+        },
+        "security_review": {
+          "id": 21,
+          "kind": "security_review",
+          "stage": "security_review",
+          "version": 1
+        },
+        "test_plan": {
+          "id": 18,
+          "kind": "test_plan",
+          "stage": "test_plan",
+          "version": 1
+        },
+        "verification": {
+          "id": 20,
+          "kind": "verification",
+          "stage": "verify",
+          "version": 1
+        }
+      },
+      "assumptions": [],
+      "decisions": [
+        {
+          "actor": "hemant",
+          "decided_at": "2026-10-18T18:02:47.335992+00:00",
+          "decision": "approve",
+          "gate": "design_approval",
+          "payload": {
+            "api_change_acknowledged": true
+          },
+          "reason": "design stays inside existing module boundaries; API/schema change acknowledged",
+          "requirement_version": 1
+        },
+        {
+          "actor": "hemant",
+          "decided_at": "2026-10-18T18:02:53.878432+00:00",
+          "decision": "approve",
+          "gate": "release_readiness",
+          "payload": {},
+          "reason": "verification executed, policies evaluated, evidence exported",
+          "requirement_version": 1
+        }
+      ],
+      "graph_version": 1,
+      "limitations": [
+        "deterministic agents: implementation output is a red-test scaffold plus change plan, promoted by a human (ADR-010)",
+        "measurements are demonstration data from a single local process"
+      ],
+      "measurement_type": "demonstration",
+      "plan_and_rationale": {
+        "acceptance_criteria": [
+          "AC-01",
+          "AC-02"
+        ],
+        "clarifications": [],
+        "decomposition_tasks": 6,
+        "design_api_impact": true,
+        "quality_reason": "no clarification needed: all requirement-quality checks passed (completeness, consistency, testability, boundaries); max ambiguity severity NONE",
+        "statements": [
+          "Expired links must return 410 Gone instead of the current 404.",
+          "analytics for expired links must remain readable."
+        ]
+      },
+      "policy_version": "1.0.0",
+      "release_decision": "READY",
+      "release_evidence": {
+        "accepted_exceptions": [],
+        "blocking_policies": [],
+        "decision": "READY",
+        "evaluated_at": "2026-10-18T18:02:53.892795+00:00",
+        "fallback_stages": [],
+        "policy_outcomes": {
+          "AUD-001": "PASS",
+          "CHG-001": "PASS",
+          "CHG-002": "PASS",
+          "CMP-001": "PASS",
+          "CMP-002": "PASS",
+          "DEP-001": "PASS",
+          "SEC-001": "PASS",
+          "SEC-002": "PASS",
+          "SEC-003": "PASS"
+        },
+        "reasons": []
+      },
+      "requirement_version": 1,
+      "risks_and_trade_offs": {
+        "accepted_exceptions": [],
+        "manual_security_review": false,
+        "security_findings": []
+      },
+      "run_id": "01a1502e31fc508fb3153c49e9",
+      "scope": "brownfield",
+      "title": "SCN-B brownfield: expired links return 410 instead of 404",
+      "validation": {
+        "fallback_stages": [],
+        "retries": 0,
+        "verify_command": "/home/claude/agentic-sdlc-url-shortener/.venv/bin/python3 -m pytest -q -p no:cacheprovider -x tests/contract/test_links_api.py tests/contract/test_openapi_drift.py tests/contract/test_workflow_api.py tests/e2e/test_scenarios.py tests/integration/test_health.py tests/integration/test_link_repository.py tests/unit/test_agents.py tests/unit/test_policy.py tests/unit/test_service.py",
+        "verify_executed": true,
+        "verify_exit_code": 0
+      }
+    },
+    "created_at": "2026-10-18 18:02:53.894158+00:00",
+    "derived_from": [],
+    "id": 23,
+    "invalidated": false,
+    "kind": "engineering_summary",
+    "policy_version": "1.0.0",
+    "run_id": "01a1502e31fc508fb3153c49e9",
+    "stage": "summary",
+    "version": 1
+  }
+]
