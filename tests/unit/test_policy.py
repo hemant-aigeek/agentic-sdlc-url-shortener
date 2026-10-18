@@ -13,6 +13,10 @@ from agentic_sdlc.policy.evaluator import PolicyInput, blocking, evaluate
 from agentic_sdlc.policy.model import Outcome
 from agentic_sdlc.policy.registry import POLICIES, POLICY_VERSION, describe, get_policy
 
+# Assembled at runtime so the repository secret scan (SEC-002) stays strict while
+# the policy test still exercises the AWS access-key pattern.
+FAKE_AWS_KEY = "AKIA" + "ABCDEFGHIJKLMNOP"
+
 pytestmark = pytest.mark.unit
 
 NOW = datetime(2026, 10, 18, 12, 0, tzinfo=UTC)
@@ -105,7 +109,7 @@ def test_sec_001_fails_when_a_change_set_weakens_url_validation() -> None:
 
 @pytest.mark.req("FR-G07")
 def test_sec_002_fails_on_secret_patterns_in_artifacts() -> None:
-    leaky = {"docs": {"text": "export AWS key AKIAABCDEFGHIJKLMNOP now"}}
+    leaky = {"docs": {"text": "export AWS key " + FAKE_AWS_KEY + " now"}}
     r = {
         x.policy_id: x
         for x in evaluate(PolicyInput(ctx=ctx(), artifacts=leaky, events=[], exceptions=[]))
@@ -198,7 +202,7 @@ def test_chg_002_requires_acknowledged_api_change_at_design_approval() -> None:
 def test_mandatory_fail_blocks_and_advisory_does_not() -> None:
     assert get_policy("SEC-002").mandatory and not get_policy("DEP-001").mandatory
     leaky = {
-        "docs": {"text": "AKIAABCDEFGHIJKLMNOP"},
+        "docs": {"text": FAKE_AWS_KEY},
         "design": {"new_dependencies": [{"name": "x", "license": "GPL-3.0"}]},
     }
     result = evaluate(PolicyInput(ctx=ctx(), artifacts=leaky, events=[], exceptions=[]))
