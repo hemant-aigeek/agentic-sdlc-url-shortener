@@ -1,0 +1,46 @@
+{
+  "demo_faults": {},
+  "description": "The release owner rejects; downstream stages never run; the implement stage's change set is rolled back from the recorded inverse (true rollback).",
+  "expected_terminal": "REJECTED",
+  "note": "Scripted decisions were recorded through Engine.decide by the named actor; demonstration faults are injected via Settings and labelled.",
+  "outcome": {
+    "release_decision": "NOT READY",
+    "run_id": "01a1502e7e828b519da9c898ae",
+    "scenario": "rejection",
+    "state": "REJECTED",
+    "steps": [
+      {
+        "max_batches": null,
+        "state": "WAITING_APPROVAL",
+        "step": "run"
+      },
+      {
+        "actor": "hemant",
+        "decision": "approve",
+        "gate": "design_approval",
+        "payload": {
+          "api_change_acknowledged": true
+        },
+        "step": "decide"
+      },
+      {
+        "max_batches": null,
+        "state": "WAITING_APPROVAL",
+        "step": "run"
+      },
+      {
+        "actor": "hemant",
+        "decision": "reject",
+        "gate": "release_readiness",
+        "payload": {},
+        "step": "decide"
+      }
+    ],
+    "stopped_at_gate": null,
+    "terminal_reason": "REJECTED at release_readiness: not this sprint; defer the endpoint"
+  },
+  "requirement": "Add a per-link analytics summary endpoint GET /api/v1/links/{code}/analytics/summary returning total redirects, first and last redirect time, and redirects per day. Unknown codes return 404. Expired links keep their analytics readable.",
+  "scenario": "rejection",
+  "scope": "greenfield",
+  "title": "Demo: release rejected -> change set rolled back"
+}

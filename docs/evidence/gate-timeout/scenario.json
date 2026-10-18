@@ -1,0 +1,36 @@
+{
+  "demo_faults": {
+    "gate_timeout_s": 1.0
+  },
+  "description": "With a 1-second gate timeout and no human decision, the next tick safe-stops the run with GATE_TIMEOUT instead of inferring approval.",
+  "expected_terminal": "SAFE_STOPPED / GATE_TIMEOUT",
+  "note": "Scripted decisions were recorded through Engine.decide by the named actor; demonstration faults are injected via Settings and labelled.",
+  "outcome": {
+    "release_decision": "NOT READY",
+    "run_id": "01a1502f975b0396cfa14096ea",
+    "scenario": "gate-timeout",
+    "state": "SAFE_STOPPED",
+    "steps": [
+      {
+        "max_batches": null,
+        "state": "WAITING_APPROVAL",
+        "step": "run"
+      },
+      {
+        "seconds": 1.2,
+        "step": "wait"
+      },
+      {
+        "max_batches": null,
+        "state": "SAFE_STOPPED",
+        "step": "run"
+      }
+    ],
+    "stopped_at_gate": null,
+    "terminal_reason": "GATE_TIMEOUT: design_approval received no decision within 1.0s"
+  },
+  "requirement": "Add a per-link analytics summary endpoint GET /api/v1/links/{code}/analytics/summary returning total redirects, first and last redirect time, and redirects per day. Unknown codes return 404. Expired links keep their analytics readable.",
+  "scenario": "gate-timeout",
+  "scope": "greenfield",
+  "title": "Demo: no decision within the gate timeout -> safe-stop"
+}

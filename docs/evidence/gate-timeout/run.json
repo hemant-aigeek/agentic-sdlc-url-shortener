@@ -1,0 +1,302 @@
+{
+  "context": {
+    "artifacts": {
+      "decomposition": {
+        "id": 117,
+        "kind": "decomposition",
+        "stage": "decompose",
+        "version": 1
+      },
+      "design": {
+        "id": 118,
+        "kind": "design",
+        "stage": "design",
+        "version": 1
+      },
+      "normalized_requirement": {
+        "id": 115,
+        "kind": "normalized_requirement",
+        "stage": "ingest",
+        "version": 1
+      },
+      "quality_check": {
+        "id": 116,
+        "kind": "quality_check",
+        "stage": "quality_check",
+        "version": 1
+      }
+    },
+    "assumptions": [],
+    "data": {
+      "api_or_schema_impact": true,
+      "audit_retention": "life of the local store",
+      "clarification_required": false,
+      "components": [
+        "domain/service.py",
+        "api/routers/redirect.py",
+        "errors.py",
+        "api/problems.py",
+        "persistence/link_repository.py",
+        "api/routers/links.py",
+        "api/schemas.py",
+        "domain/codes.py",
+        "api/app.py"
+      ],
+      "decomposition_tasks": [
+        {
+          "acceptance": "endpoint exists in the OpenAPI contract and returns the stated fields",
+          "components": [
+            "tests for domain/service.py"
+          ],
+          "criterion": "AC-01",
+          "depends_on": [],
+          "id": "T01-test",
+          "kind": "test",
+          "objective": "Write a failing test for AC-01: Add a per-link analytics summary endpoint GET /api/v1/links/{code}/analytics/summary returning total redirects, first and last redirect time, and redirects per day.",
+          "parallel": true,
+          "tdd": "red"
+        },
+        {
+          "acceptance": "T01-test passes; regression suite green",
+          "components": [
+            "domain/service.py"
+          ],
+          "criterion": "AC-01",
+          "depends_on": [
+            "T01-test"
+          ],
+          "id": "T01-impl",
+          "kind": "implement",
+          "objective": "Implement the smallest change satisfying AC-01",
+          "parallel": true,
+          "tdd": "green"
+        },
+        {
+          "acceptance": "HTTP response status is 404",
+          "components": [
+            "tests for api/routers/redirect.py"
+          ],
+          "criterion": "AC-02",
+          "depends_on": [],
+          "id": "T02-test",
+          "kind": "test",
+          "objective": "Write a failing test for AC-02: Unknown codes return 404.",
+          "parallel": true,
+          "tdd": "red"
+        },
+        {
+          "acceptance": "T02-test passes; regression suite green",
+          "components": [
+            "api/routers/redirect.py"
+          ],
+          "criterion": "AC-02",
+          "depends_on": [
+            "T02-test"
+          ],
+          "id": "T02-impl",
+          "kind": "implement",
+          "objective": "Implement the smallest change satisfying AC-02",
+          "parallel": true,
+          "tdd": "green"
+        },
+        {
+          "acceptance": "an expired link is not redirected; its status is observable",
+          "components": [
+            "tests for errors.py"
+          ],
+          "criterion": "AC-03",
+          "depends_on": [],
+          "id": "T03-test",
+          "kind": "test",
+          "objective": "Write a failing test for AC-03: Expired links keep their analytics readable.",
+          "parallel": true,
+          "tdd": "red"
+        },
+        {
+          "acceptance": "T03-test passes; regression suite green",
+          "components": [
+            "errors.py"
+          ],
+          "criterion": "AC-03",
+          "depends_on": [
+            "T03-test"
+          ],
+          "id": "T03-impl",
+          "kind": "implement",
+          "objective": "Implement the smallest change satisfying AC-03",
+          "parallel": true,
+          "tdd": "green"
+        },
+        {
+          "acceptance": "contract drift check passes; docs describe new behaviour",
+          "components": [
+            "specs/contracts/openapi.yaml",
+            "README.md"
+          ],
+          "criterion": "ALL",
+          "depends_on": [
+            "T01-impl",
+            "T02-impl",
+            "T03-impl"
+          ],
+          "id": "T90-docs",
+          "kind": "docs",
+          "objective": "Update API documentation, contract and README for the change",
+          "parallel": false,
+          "tdd": "n/a"
+        },
+        {
+          "acceptance": "exit code 0",
+          "components": [
+            "tests/"
+          ],
+          "criterion": "ALL",
+          "depends_on": [
+            "T01-impl",
+            "T02-impl",
+            "T03-impl",
+            "T90-docs"
+          ],
+          "id": "T99-verify",
+          "kind": "verify",
+          "objective": "Run the regression suite and the impacted test targets",
+          "parallel": false,
+          "tdd": "refactor"
+        }
+      ],
+      "normalized": {
+        "acceptance_criteria": [
+          {
+            "id": "AC-01",
+            "observable": "endpoint exists in the OpenAPI contract and returns the stated fields",
+            "statement": "Add a per-link analytics summary endpoint GET /api/v1/links/{code}/analytics/summary returning total redirects, first and last redirect time, and redirects per day."
+          },
+          {
+            "id": "AC-02",
+            "observable": "HTTP response status is 404",
+            "statement": "Unknown codes return 404."
+          },
+          {
+            "id": "AC-03",
+            "observable": "an expired link is not redirected; its status is observable",
+            "statement": "Expired links keep their analytics readable."
+          }
+        ],
+        "classified_scope": "greenfield",
+        "constraints": [],
+        "functional_statements": [
+          "Add a per-link analytics summary endpoint GET /api/v1/links/{code}/analytics/summary returning total redirects, first and last redirect time, and redirects per day.",
+          "Unknown codes return 404.",
+          "Expired links keep their analytics readable."
+        ],
+        "intent": "Add a per-link analytics summary endpoint GET /api/v1/links/{code}/analytics/summary returning total redirects, first and last redirect time, and redirects per day.",
+        "scope": "greenfield",
+        "scope_cues": [
+          "add "
+        ],
+        "scope_source": "explicit",
+        "source": "requirement_raw",
+        "title": "Demo: no decision within the gate timeout -> safe-stop",
+        "version": 1
+      },
+      "quality_reason": "no clarification needed: all requirement-quality checks passed (completeness, consistency, testability, boundaries); max ambiguity severity NONE",
+      "scope": "greenfield"
+    },
+    "decisions": [],
+    "graph_version": 1,
+    "outputs": {
+      "decompose": {
+        "components": [
+          "domain/service.py",
+          "api/routers/redirect.py",
+          "errors.py",
+          "api/problems.py",
+          "persistence/link_repository.py",
+          "api/routers/links.py",
+          "api/schemas.py",
+          "domain/codes.py",
+          "api/app.py"
+        ],
+        "parallel_tasks": [
+          "T01-test",
+          "T01-impl",
+          "T02-test",
+          "T02-impl",
+          "T03-test",
+          "T03-impl"
+        ],
+        "tasks": 8
+      },
+      "design": {
+        "api_changes": 2,
+        "api_or_schema_impact": true,
+        "components": [
+          "domain/service.py",
+          "api/routers/redirect.py",
+          "errors.py",
+          "api/problems.py",
+          "persistence/link_repository.py",
+          "api/routers/links.py",
+          "api/schemas.py",
+          "domain/codes.py",
+          "api/app.py"
+        ],
+        "contract_version_impact": "minor (additive)",
+        "schema_change": false
+      },
+      "ingest": {
+        "acceptance_criteria": 3,
+        "scope": "greenfield",
+        "scope_source": "explicit",
+        "statements": 3
+      },
+      "quality_check": {
+        "ambiguities": [],
+        "checks": {
+          "boundaries": {
+            "detail": "within approved scope",
+            "passed": true
+          },
+          "completeness": {
+            "detail": "3 statements, 3 acceptance criteria derived",
+            "passed": true
+          },
+          "consistency": {
+            "detail": "no conflicts with approved requirements",
+            "passed": true
+          },
+          "testability": {
+            "detail": "3/3 statements have an observable outcome",
+            "passed": true
+          }
+        },
+        "clarification_required": false,
+        "failed_checks": [],
+        "max_severity": "NONE",
+        "reason": "no clarification needed: all requirement-quality checks passed (completeness, consistency, testability, boundaries); max ambiguity severity NONE",
+        "reason_no_clarification": "no clarification needed: all requirement-quality checks passed (completeness, consistency, testability, boundaries); max ambiguity severity NONE",
+        "requirement_version": 1
+      }
+    },
+    "planner": "sdlc",
+    "policy_version": "1.0.0",
+    "requirement_raw": "Add a per-link analytics summary endpoint GET /api/v1/links/{code}/analytics/summary returning total redirects, first and last redirect time, and redirects per day. Unknown codes return 404. Expired links keep their analytics readable.",
+    "requirement_version": 1,
+    "run_id": "01a1502f975b0396cfa14096ea",
+    "scope": "greenfield",
+    "title": "Demo: no decision within the gate timeout -> safe-stop",
+    "workspace": "data/runs/01a1502f975b0396cfa14096ea/workspace"
+  },
+  "created_at": "2026-10-18 18:04:18.651429+00:00",
+  "evidence_type": "executed run export (demonstration data)",
+  "exported_at": "2026-10-18 18:04:19.963347+00:00",
+  "graph_version": 1,
+  "id": "01a1502f975b0396cfa14096ea",
+  "policy_version": "1.0.0",
+  "requirement_version": 1,
+  "scope": "greenfield",
+  "state": "SAFE_STOPPED",
+  "terminal_reason": "GATE_TIMEOUT: design_approval received no decision within 1.0s",
+  "title": "Demo: no decision within the gate timeout -> safe-stop",
+  "updated_at": "2026-10-18 18:04:19.946260+00:00"
+}

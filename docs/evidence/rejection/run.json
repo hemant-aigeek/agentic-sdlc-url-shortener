@@ -1,0 +1,498 @@
+{
+  "context": {
+    "artifacts": {
+      "change_set": {
+        "id": 51,
+        "kind": "change_set",
+        "stage": "implement",
+        "version": 1
+      },
+      "compliance": {
+        "id": 55,
+        "kind": "compliance",
+        "stage": "compliance_check",
+        "version": 1
+      },
+      "decomposition": {
+        "id": 48,
+        "kind": "decomposition",
+        "stage": "decompose",
+        "version": 1
+      },
+      "design": {
+        "id": 49,
+        "kind": "design",
+        "stage": "design",
+        "version": 1
+      },
+      "docs": {
+        "id": 50,
+        "kind": "docs",
+        "stage": "docs_draft",
+        "version": 1
+      },
+      "normalized_requirement": {
+        "id": 46,
+        "kind": "normalized_requirement",
+        "stage": "ingest",
+        "version": 1
+      },
+      "quality_check": {
+        "id": 47,
+        "kind": "quality_check",
+        "stage": "quality_check",
+        "version": 1
+      },
+      "security_review": {
+        "id": 54,
+        "kind": "security_review",
+        "stage": "security_review",
+        "version": 1
+      },
+      "test_plan": {
+        "id": 52,
+        "kind": "test_plan",
+        "stage": "test_plan",
+        "version": 1
+      },
+      "verification": {
+        "id": 53,
+        "kind": "verification",
+        "stage": "verify",
+        "version": 1
+      }
+    },
+    "assumptions": [],
+    "data": {
+      "api_or_schema_impact": true,
+      "audit_retention": "life of the local store",
+      "clarification_required": false,
+      "components": [
+        "domain/service.py",
+        "api/routers/redirect.py",
+        "errors.py",
+        "api/problems.py",
+        "persistence/link_repository.py",
+        "api/routers/links.py",
+        "api/schemas.py",
+        "domain/codes.py",
+        "api/app.py"
+      ],
+      "decomposition_tasks": [
+        {
+          "acceptance": "endpoint exists in the OpenAPI contract and returns the stated fields",
+          "components": [
+            "tests for domain/service.py"
+          ],
+          "criterion": "AC-01",
+          "depends_on": [],
+          "id": "T01-test",
+          "kind": "test",
+          "objective": "Write a failing test for AC-01: Add a per-link analytics summary endpoint GET /api/v1/links/{code}/analytics/summary returning total redirects, first and last redirect time, and redirects per day.",
+          "parallel": true,
+          "tdd": "red"
+        },
+        {
+          "acceptance": "T01-test passes; regression suite green",
+          "components": [
+            "domain/service.py"
+          ],
+          "criterion": "AC-01",
+          "depends_on": [
+            "T01-test"
+          ],
+          "id": "T01-impl",
+          "kind": "implement",
+          "objective": "Implement the smallest change satisfying AC-01",
+          "parallel": true,
+          "tdd": "green"
+        },
+        {
+          "acceptance": "HTTP response status is 404",
+          "components": [
+            "tests for api/routers/redirect.py"
+          ],
+          "criterion": "AC-02",
+          "depends_on": [],
+          "id": "T02-test",
+          "kind": "test",
+          "objective": "Write a failing test for AC-02: Unknown codes return 404.",
+          "parallel": true,
+          "tdd": "red"
+        },
+        {
+          "acceptance": "T02-test passes; regression suite green",
+          "components": [
+            "api/routers/redirect.py"
+          ],
+          "criterion": "AC-02",
+          "depends_on": [
+            "T02-test"
+          ],
+          "id": "T02-impl",
+          "kind": "implement",
+          "objective": "Implement the smallest change satisfying AC-02",
+          "parallel": true,
+          "tdd": "green"
+        },
+        {
+          "acceptance": "an expired link is not redirected; its status is observable",
+          "components": [
+            "tests for errors.py"
+          ],
+          "criterion": "AC-03",
+          "depends_on": [],
+          "id": "T03-test",
+          "kind": "test",
+          "objective": "Write a failing test for AC-03: Expired links keep their analytics readable.",
+          "parallel": true,
+          "tdd": "red"
+        },
+        {
+          "acceptance": "T03-test passes; regression suite green",
+          "components": [
+            "errors.py"
+          ],
+          "criterion": "AC-03",
+          "depends_on": [
+            "T03-test"
+          ],
+          "id": "T03-impl",
+          "kind": "implement",
+          "objective": "Implement the smallest change satisfying AC-03",
+          "parallel": true,
+          "tdd": "green"
+        },
+        {
+          "acceptance": "contract drift check passes; docs describe new behaviour",
+          "components": [
+            "specs/contracts/openapi.yaml",
+            "README.md"
+          ],
+          "criterion": "ALL",
+          "depends_on": [
+            "T01-impl",
+            "T02-impl",
+            "T03-impl"
+          ],
+          "id": "T90-docs",
+          "kind": "docs",
+          "objective": "Update API documentation, contract and README for the change",
+          "parallel": false,
+          "tdd": "n/a"
+        },
+        {
+          "acceptance": "exit code 0",
+          "components": [
+            "tests/"
+          ],
+          "criterion": "ALL",
+          "depends_on": [
+            "T01-impl",
+            "T02-impl",
+            "T03-impl",
+            "T90-docs"
+          ],
+          "id": "T99-verify",
+          "kind": "verify",
+          "objective": "Run the regression suite and the impacted test targets",
+          "parallel": false,
+          "tdd": "refactor"
+        }
+      ],
+      "implement_receipt": {
+        "change_set": "cs-01a1502e-v1",
+        "files_changed": [
+          "tests/test_ac_01.py",
+          "tests/test_ac_02.py",
+          "tests/test_ac_03.py",
+          "CHANGESET.md"
+        ],
+        "inverse": {
+          "CHANGESET.md": null,
+          "tests/test_ac_01.py": null,
+          "tests/test_ac_02.py": null,
+          "tests/test_ac_03.py": null
+        }
+      },
+      "normalized": {
+        "acceptance_criteria": [
+          {
+            "id": "AC-01",
+            "observable": "endpoint exists in the OpenAPI contract and returns the stated fields",
+            "statement": "Add a per-link analytics summary endpoint GET /api/v1/links/{code}/analytics/summary returning total redirects, first and last redirect time, and redirects per day."
+          },
+          {
+            "id": "AC-02",
+            "observable": "HTTP response status is 404",
+            "statement": "Unknown codes return 404."
+          },
+          {
+            "id": "AC-03",
+            "observable": "an expired link is not redirected; its status is observable",
+            "statement": "Expired links keep their analytics readable."
+          }
+        ],
+        "classified_scope": "greenfield",
+        "constraints": [],
+        "functional_statements": [
+          "Add a per-link analytics summary endpoint GET /api/v1/links/{code}/analytics/summary returning total redirects, first and last redirect time, and redirects per day.",
+          "Unknown codes return 404.",
+          "Expired links keep their analytics readable."
+        ],
+        "intent": "Add a per-link analytics summary endpoint GET /api/v1/links/{code}/analytics/summary returning total redirects, first and last redirect time, and redirects per day.",
+        "scope": "greenfield",
+        "scope_cues": [
+          "add "
+        ],
+        "scope_source": "explicit",
+        "source": "requirement_raw",
+        "title": "Demo: release rejected -> change set rolled back",
+        "version": 1
+      },
+      "policy_blocking": [],
+      "policy_outcomes": {
+        "AUD-001": "PASS",
+        "CHG-001": "NOT-APPLICABLE",
+        "CHG-002": "PASS",
+        "CMP-001": "PASS",
+        "CMP-002": "PASS",
+        "DEP-001": "PASS",
+        "SEC-001": "PASS",
+        "SEC-002": "PASS",
+        "SEC-003": "PASS"
+      },
+      "quality_reason": "no clarification needed: all requirement-quality checks passed (completeness, consistency, testability, boundaries); max ambiguity severity NONE",
+      "scope": "greenfield"
+    },
+    "decisions": [
+      {
+        "actor": "hemant",
+        "decided_at": "2026-10-18T18:03:06.852442+00:00",
+        "decision": "approve",
+        "gate": "design_approval",
+        "payload": {
+          "api_change_acknowledged": true
+        },
+        "reason": "design stays inside existing module boundaries; API/schema change acknowledged",
+        "requirement_version": 1
+      },
+      {
+        "actor": "hemant",
+        "decided_at": "2026-10-18T18:03:12.239228+00:00",
+        "decision": "reject",
+        "gate": "release_readiness",
+        "payload": {},
+        "reason": "not this sprint; defer the endpoint",
+        "requirement_version": 1
+      }
+    ],
+    "graph_version": 1,
+    "outputs": {
+      "compliance_check": {
+        "blocking": [],
+        "evaluated": 9,
+        "evaluated_at": "2026-10-18T18:03:12.216821+00:00",
+        "exceptionable_blocking": [],
+        "forced_fail": null,
+        "non_exceptionable_blocking": [],
+        "outcomes": {
+          "AUD-001": {
+            "detail": "audit retention recorded: life of the local store",
+            "outcome": "PASS"
+          },
+          "CHG-001": {
+            "detail": "scope is greenfield; impact analysis is required for brownfield only",
+            "outcome": "NOT-APPLICABLE"
+          },
+          "CHG-002": {
+            "detail": "API/schema change acknowledged at design approval",
+            "outcome": "PASS"
+          },
+          "CMP-001": {
+            "detail": "10 executed stages and 1 gates fully recorded",
+            "outcome": "PASS"
+          },
+          "CMP-002": {
+            "detail": "34 audit events carry actor, action, timestamp and target",
+            "outcome": "PASS"
+          },
+          "DEP-001": {
+            "detail": "no new dependencies declared",
+            "outcome": "PASS"
+          },
+          "SEC-001": {
+            "detail": "change set does not touch URL validation",
+            "outcome": "PASS"
+          },
+          "SEC-002": {
+            "detail": "no secret patterns in 9 artifacts",
+            "outcome": "PASS"
+          },
+          "SEC-003": {
+            "detail": "automated security review completed",
+            "outcome": "PASS"
+          }
+        },
+        "policy_version": "1.0.0"
+      },
+      "decompose": {
+        "components": [
+          "domain/service.py",
+          "api/routers/redirect.py",
+          "errors.py",
+          "api/problems.py",
+          "persistence/link_repository.py",
+          "api/routers/links.py",
+          "api/schemas.py",
+          "domain/codes.py",
+          "api/app.py"
+        ],
+        "parallel_tasks": [
+          "T01-test",
+          "T01-impl",
+          "T02-test",
+          "T02-impl",
+          "T03-test",
+          "T03-impl"
+        ],
+        "tasks": 8
+      },
+      "design": {
+        "api_changes": 2,
+        "api_or_schema_impact": true,
+        "components": [
+          "domain/service.py",
+          "api/routers/redirect.py",
+          "errors.py",
+          "api/problems.py",
+          "persistence/link_repository.py",
+          "api/routers/links.py",
+          "api/schemas.py",
+          "domain/codes.py",
+          "api/app.py"
+        ],
+        "contract_version_impact": "minor (additive)",
+        "schema_change": false
+      },
+      "design_approval": {
+        "api_change_acknowledged": true,
+        "decision": "approve"
+      },
+      "docs_draft": {
+        "chars": 919,
+        "sections": 4
+      },
+      "implement": {
+        "change_set": "cs-01a1502e-v1",
+        "files_changed": [
+          "tests/test_ac_01.py",
+          "tests/test_ac_02.py",
+          "tests/test_ac_03.py",
+          "CHANGESET.md"
+        ],
+        "reversible": true,
+        "workspace": "/home/claude/agentic-sdlc-url-shortener/data/runs/01a1502e7e828b519da9c898ae/workspace"
+      },
+      "ingest": {
+        "acceptance_criteria": 3,
+        "scope": "greenfield",
+        "scope_source": "explicit",
+        "statements": 3
+      },
+      "quality_check": {
+        "ambiguities": [],
+        "checks": {
+          "boundaries": {
+            "detail": "within approved scope",
+            "passed": true
+          },
+          "completeness": {
+            "detail": "3 statements, 3 acceptance criteria derived",
+            "passed": true
+          },
+          "consistency": {
+            "detail": "no conflicts with approved requirements",
+            "passed": true
+          },
+          "testability": {
+            "detail": "3/3 statements have an observable outcome",
+            "passed": true
+          }
+        },
+        "clarification_required": false,
+        "failed_checks": [],
+        "max_severity": "NONE",
+        "reason": "no clarification needed: all requirement-quality checks passed (completeness, consistency, testability, boundaries); max ambiguity severity NONE",
+        "reason_no_clarification": "no clarification needed: all requirement-quality checks passed (completeness, consistency, testability, boundaries); max ambiguity severity NONE",
+        "requirement_version": 1
+      },
+      "security_review": {
+        "automated": true,
+        "change_set": "cs-01a1502e-v1",
+        "files_reviewed": [
+          "CHANGESET.md",
+          "tests/test_ac_01.py",
+          "tests/test_ac_02.py",
+          "tests/test_ac_03.py"
+        ],
+        "findings": [],
+        "high_findings": 0,
+        "threat_model_notes": [
+          "open redirect: targets are validated against scheme allow-list (FR-U02)",
+          "SSRF via redirector: loopback/private/metadata targets rejected (FR-U03)",
+          "approval spoofing: decisions require API key + actor header (AMB-06)"
+        ]
+      },
+      "test_plan": {
+        "cases": 7,
+        "levels": [
+          "contract",
+          "regression",
+          "unit"
+        ]
+      },
+      "verify": {
+        "attempt": 1,
+        "command": "/home/claude/agentic-sdlc-url-shortener/.venv/bin/python3 -m pytest -q -p no:cacheprovider -x tests/unit tests/contract",
+        "cwd": "/home/claude/agentic-sdlc-url-shortener",
+        "duration_s": 5.244,
+        "executed": true,
+        "exit_code": 0,
+        "fault_injected_attempts": 0,
+        "mode": "pytest",
+        "output_tail": [
+          ".venv/lib/python3.13/site-packages/fastapi/testclient.py:1",
+          "  /home/claude/agentic-sdlc-url-shortener/.venv/lib/python3.13/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.",
+          "    from starlette.testclient import TestClient as TestClient  # noqa",
+          "",
+          "-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html"
+        ],
+        "targets": [
+          "tests/unit",
+          "tests/contract"
+        ]
+      }
+    },
+    "planner": "sdlc",
+    "policy_version": "1.0.0",
+    "requirement_raw": "Add a per-link analytics summary endpoint GET /api/v1/links/{code}/analytics/summary returning total redirects, first and last redirect time, and redirects per day. Unknown codes return 404. Expired links keep their analytics readable.",
+    "requirement_version": 1,
+    "run_id": "01a1502e7e828b519da9c898ae",
+    "scope": "greenfield",
+    "title": "Demo: release rejected -> change set rolled back",
+    "workspace": "data/runs/01a1502e7e828b519da9c898ae/workspace"
+  },
+  "created_at": "2026-10-18 18:03:06.754175+00:00",
+  "evidence_type": "executed run export (demonstration data)",
+  "exported_at": "2026-10-18 18:03:12.266869+00:00",
+  "graph_version": 1,
+  "id": "01a1502e7e828b519da9c898ae",
+  "policy_version": "1.0.0",
+  "requirement_version": 1,
+  "scope": "greenfield",
+  "state": "REJECTED",
+  "terminal_reason": "REJECTED at release_readiness: not this sprint; defer the endpoint",
+  "title": "Demo: release rejected -> change set rolled back",
+  "updated_at": "2026-10-18 18:03:12.255107+00:00"
+}
