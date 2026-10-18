@@ -42,6 +42,7 @@ from agentic_sdlc.orchestration.agents.base import AgentRegistry, StageResult
 from agentic_sdlc.orchestration.context import ArtifactRef, RunContext
 from agentic_sdlc.orchestration.events import ActorType, AuditEvent, EventKind
 from agentic_sdlc.orchestration.graph import StageSpec, WorkflowGraph
+from agentic_sdlc.orchestration.metrics import compute_run_metrics
 from agentic_sdlc.orchestration.states import (
     RunState,
     StageState,
@@ -52,6 +53,7 @@ from agentic_sdlc.orchestration.store import (
     ArtifactRecord,
     DecisionRecord,
     EdgeRecord,
+    MetricsSnapshot,
     ReplanRecord,
     RunRecord,
     StageRecord,
@@ -511,6 +513,8 @@ class Engine:
                     result=new.value,
                     reason=reason,
                 )
+            if new.is_terminal:
+                self._snapshot_metrics(loaded)
 
     def _set_stage_state(
         self,
@@ -557,6 +561,18 @@ class Engine:
                 data=data or {},
             )
             log.warning("safe_stop", reason=reason)
+            self._snapshot_metrics(loaded)
+
+    def _snapshot_metrics(self, loaded: _Loaded) -> None:
+        metrics = compute_run_metrics(self._store.list_events(loaded.run.id))
+        self._store.save_metrics(
+            MetricsSnapshot(
+                run_id=loaded.run.id,
+                snapshot=metrics,
+                e2e_latency_s=metrics["latency"]["end_to_end_s"],
+                at=self._clock(),
+            )
+        )
 
     def _gate_timed_out(self, loaded: _Loaded) -> bool:
         if not loaded.run.state.is_waiting:

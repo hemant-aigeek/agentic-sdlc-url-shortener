@@ -710,6 +710,66 @@ paths:
       summary: Get Analytics
       tags:
       - links
+  /api/v1/metrics:
+    get:
+      operationId: all_metrics_api_v1_metrics_get
+      parameters:
+      - in: header
+        name: X-API-Key
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                additionalProperties: true
+                title: Response All Metrics Api V1 Metrics Get
+                type: object
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      summary: All Metrics
+      tags:
+      - metrics
+  /api/v1/policies:
+    get:
+      operationId: policies_api_v1_policies_get
+      parameters:
+      - in: header
+        name: X-API-Key
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                additionalProperties: true
+                title: Response Policies Api V1 Policies Get
+                type: object
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      summary: Policies
+      tags:
+      - metrics
   /api/v1/workflows:
     get:
       operationId: list_workflows_api_v1_workflows_get
@@ -1091,6 +1151,42 @@ paths:
       summary: Get Lineage
       tags:
       - workflows
+  /api/v1/workflows/{run_id}/metrics:
+    get:
+      operationId: run_metrics_api_v1_workflows__run_id__metrics_get
+      parameters:
+      - in: path
+        name: run_id
+        required: true
+        schema:
+          title: Run Id
+          type: string
+      - in: header
+        name: X-API-Key
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Api-Key
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                additionalProperties: true
+                title: Response Run Metrics Api V1 Workflows  Run Id  Metrics Get
+                type: object
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      summary: Run Metrics
+      tags:
+      - metrics
   /api/v1/workflows/{run_id}/resume:
     post:
       operationId: resume_workflow_api_v1_workflows__run_id__resume_post
