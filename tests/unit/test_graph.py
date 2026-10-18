@@ -1,4 +1,4 @@
-"""FR-O02..O04, FR-O14 / ADR-005, ADR-009: the dependency graph is an explicit, inspectable model."""
+"""FR-O02..O04, FR-O14 / ADR-005, ADR-009: the dependency graph is explicit and inspectable."""
 
 from __future__ import annotations
 
