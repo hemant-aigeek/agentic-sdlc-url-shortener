@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "properties": {
+    "detail": {
+      "title": "Detail",
+      "type": "string"
+    },
+    "errors": {
+      "anyOf": [
+        {
+          "items": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Errors"
+    },
+    "instance": {
+      "title": "Instance",
+      "type": "string"
+    },
+    "status": {
+      "title": "Status",
+      "type": "integer"
+    },
+    "title": {
+      "title": "Title",
+      "type": "string"
+    },
+    "type": {
+      "title": "Type",
+      "type": "string"
+    }
+  },
+  "required": [
+    "type",
+    "title",
+    "status",
+    "detail",
+    "instance"
+  ],
+  "title": "Problem",
+  "type": "object",
+  "x-schema-version": "1.0.0"
+}
