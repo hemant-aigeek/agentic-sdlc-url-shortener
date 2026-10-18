@@ -1,0 +1,48 @@
+{
+  "compensations": 0,
+  "decisions": 2,
+  "events": 50,
+  "fallbacks": 0,
+  "latency": {
+    "active_s": 5.405873,
+    "end_to_end_s": 5.416517,
+    "human_wait_s": 0.010644,
+    "terminal_state": "COMPLETED"
+  },
+  "measurement_note": "Demonstration measurement from a local single-process run with deterministic agents and injected faults; not production statistics.",
+  "measurement_type": "demonstration",
+  "recovery": {
+    "definition": "MTTR = total recovery duration across recovered failure events / number of recovered failure events; unrecovered failures are excluded from the denominator",
+    "mechanisms": {
+      "retry": 1
+    },
+    "mttr_s": 5.219199,
+    "population": "stages with a failure_detected event in this run",
+    "recovered_failures": 1,
+    "recovery_durations_s": {
+      "verify": 5.219199
+    },
+    "timestamps": "failure_detected -> recovery_completed (recovery_started recorded per attempt)",
+    "total_recovery_duration_s": 5.219199,
+    "unrecovered": [],
+    "unrecovered_failures": 0
+  },
+  "replans": 0,
+  "retries": {
+    "count": 2,
+    "frequency_per_stage": 0.15384615384615385,
+    "timeouts": 0
+  },
+  "rollbacks": 0,
+  "safe_stops": 0,
+  "stages": {
+    "compensated": 0,
+    "failed": 0,
+    "failure_rate": 0.0,
+    "fallback": 0,
+    "skipped": 2,
+    "started": 11,
+    "succeeded": 13,
+    "success_rate": 1.0
+  }
+}
