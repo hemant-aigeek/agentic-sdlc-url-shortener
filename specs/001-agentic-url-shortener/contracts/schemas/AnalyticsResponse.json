@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "properties": {
+    "code": {
+      "title": "Code",
+      "type": "string"
+    },
+    "consistency": {
+      "default": "eventual",
+      "description": "Redirect events are recorded best-effort after the redirect (AMB-05).",
+      "title": "Consistency",
+      "type": "string"
+    },
+    "first_redirect_at": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "First Redirect At"
+    },
+    "last_redirect_at": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Last Redirect At"
+    },
+    "redirects_by_day": {
+      "additionalProperties": {
+        "type": "integer"
+      },
+      "title": "Redirects By Day",
+      "type": "object"
+    },
+    "total_redirects": {
+      "title": "Total Redirects",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "code",
+    "total_redirects",
+    "first_redirect_at",
+    "last_redirect_at",
+    "redirects_by_day"
+  ],
+  "title": "AnalyticsResponse",
+  "type": "object",
+  "x-schema-version": "1.0.0"
+}

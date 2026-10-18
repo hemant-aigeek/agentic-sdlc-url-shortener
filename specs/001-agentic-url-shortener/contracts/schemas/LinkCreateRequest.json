@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "properties": {
+    "expires_at": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "UTC; must be in the future",
+      "title": "Expires At"
+    },
+    "target_url": {
+      "examples": [
+        "https://example.com/docs"
+      ],
+      "maxLength": 4096,
+      "title": "Target Url",
+      "type": "string"
+    }
+  },
+  "required": [
+    "target_url"
+  ],
+  "title": "LinkCreateRequest",
+  "type": "object",
+  "x-schema-version": "1.0.0"
+}

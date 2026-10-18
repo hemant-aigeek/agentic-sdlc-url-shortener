@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "properties": {
+    "code": {
+      "title": "Code",
+      "type": "string"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "expires_at": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Expires At"
+    },
+    "short_url": {
+      "title": "Short Url",
+      "type": "string"
+    },
+    "target_url": {
+      "title": "Target Url",
+      "type": "string"
+    }
+  },
+  "required": [
+    "code",
+    "short_url",
+    "target_url",
+    "created_at",
+    "expires_at"
+  ],
+  "title": "LinkResponse",
+  "type": "object",
+  "x-schema-version": "1.0.0"
+}
