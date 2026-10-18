@@ -65,7 +65,7 @@ def _internal_imports(path: Path) -> set[str]:
 
 
 @pytest.mark.architecture
-@pytest.mark.req("NFR-08")
+@pytest.mark.req("NFR-08", "NFR-07")
 def test_import_direction_is_respected() -> None:
     violations: list[str] = []
     for path in SRC.rglob("*.py"):

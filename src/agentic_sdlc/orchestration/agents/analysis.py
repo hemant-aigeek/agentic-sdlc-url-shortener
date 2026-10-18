@@ -353,7 +353,7 @@ class DecomposeAgent(Agent):
 
 
 _STATUS = re.compile(r"\b([2-5]\d\d)\b")
-_PATH = re.compile(r"(/api/v1/\S+|/\{code\}|/r/\S+)")
+_PATH = re.compile(r"(/api/v1/\S+|/\{code\})")
 
 
 @dataclass
@@ -389,7 +389,7 @@ class DesignAgent(Agent):
             elif codes and any(w in lower for w in ("return", "respond", "status")):
                 api_changes.append(
                     {
-                        "path": "/r/{code}"
+                        "path": "/{code}"
                         if "redirect" in lower or "link" in lower
                         else "(affected route)",
                         "change": "status-code",
