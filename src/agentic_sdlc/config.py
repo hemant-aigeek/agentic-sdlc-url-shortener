@@ -39,6 +39,11 @@ class Settings(BaseSettings):
     gate_timeout_s: float | None = None  # None = wait indefinitely (interactive use)
     max_parallel_stages: int = 4
     audit_retention_days: int | None = None  # None = retain for the life of the store
+    repository_root: Path = Path(".")  # what impact analysis and verify read (never write)
+    # "pytest": run the impacted regression targets; "compile": only compile the change set
+    verify_mode: str = "pytest"
+    verify_timeout_s: float = 120.0
+    exception_default_days: int = 30  # default expiry for an approved policy exception
 
     # --- demonstration faults (off by default; used by scenario runs and tests) ---
     demo_fault_verify_transient_failures: int = 0

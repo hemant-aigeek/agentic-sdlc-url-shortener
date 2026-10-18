@@ -35,6 +35,7 @@ from agentic_sdlc.errors import (
     FailureKind,
     GateRequiredError,
     IllegalTransitionError,
+    PolicyBlockedError,
     StageError,
     WorkflowNotFoundError,
 )
@@ -54,6 +55,7 @@ from agentic_sdlc.orchestration.store import (
     DecisionRecord,
     EdgeRecord,
     MetricsSnapshot,
+    PolicyExceptionRecord,
     ReplanRecord,
     RunRecord,
     StageRecord,
@@ -261,6 +263,23 @@ class Engine:
             if decision == "approve":
                 self._finish_stage(
                     loaded, gate, StageState.SUCCEEDED, output={"decision": "approve", **payload}
+                )
+                if payload.get("compensating_control"):
+                    self._record_exceptions(loaded, gate, actor, reason, payload, now)
+                self._set_run_state(loaded, RunState.RUNNING)
+            elif decision == "reject" and payload.get("return_to") in loaded.graph.names():
+                # governed rework: send the run back to an upstream stage instead of ending it
+                target = str(payload["return_to"])
+                self._finish_stage(
+                    loaded, gate, StageState.FAILED, failure_kind="REJECTED", error=reason
+                )
+                self._compensate(loaded, reason=f"rejected at {gate}, returning to {target}")
+                self._set_run_state(loaded, RunState.REPLANNING)
+                self._replan(
+                    loaded,
+                    trigger=f"rejection at {gate}: {reason} (return_to={target})",
+                    from_stages=set(),
+                    reset_stages={target},
                 )
                 self._set_run_state(loaded, RunState.RUNNING)
             elif decision == "reject":
@@ -731,6 +750,29 @@ class Engine:
                         result="TIMEOUT",
                         reason=error,
                     )
+                except PolicyBlockedError as exc:
+                    self._record_failure(loaded, name, attempt, exc.kind, exc.detail)
+                    rec = self._set_stage_state(
+                        loaded,
+                        name,
+                        StageState.FAILED,
+                        failure_kind=exc.kind.value,
+                        error=exc.detail,
+                    )
+                    rec.ended_at = self._clock()
+                    with self._lock:
+                        self._store.save_stage(rec)
+                    self._emit(
+                        run_id,
+                        EventKind.STAGE_FAILED,
+                        ActorType.AGENT,
+                        stage=name,
+                        attempt=attempt,
+                        result=StageState.FAILED.value,
+                        reason=exc.detail,
+                        data={"failure_kind": exc.kind.value, "policies": exc.policies},
+                    )
+                    return _Outcome(name, StageState.FAILED, f"POLICY_BLOCKED: {exc.detail}")
                 except StageError as exc:
                     kind, error = exc.kind, exc.detail
                 except (
@@ -995,6 +1037,62 @@ class Engine:
             loaded.ctx.outputs[name] = output
         self._store.save_stage(rec)
 
+    # --- policy exceptions (FR-G09) ------------------------------------------------
+
+    def _record_exceptions(
+        self,
+        loaded: _Loaded,
+        gate: str,
+        actor: str,
+        reason: str,
+        payload: dict[str, Any],
+        now: datetime,
+    ) -> None:
+        """An approval carrying a compensating control grants a scoped, expiring exception
+        for every exceptionable policy currently blocking the run."""
+        ctx = loaded.ctx
+        policies = list(payload.get("policies") or ctx.data.get("policy_blocking") or [])
+        if not policies:
+            return
+        expires_raw = payload.get("expires_at")
+        expires_at = (
+            datetime.fromisoformat(str(expires_raw))
+            if expires_raw
+            else now + timedelta(days=self._settings.exception_default_days)
+        )
+        granted: list[dict[str, Any]] = []
+        for policy_id in policies:
+            record = PolicyExceptionRecord(
+                run_id=loaded.run.id,
+                policy_id=policy_id,
+                scope=str(payload.get("scope") or f"run {loaded.run.id}"),
+                reason=reason,
+                approver=actor,
+                compensating_control=str(payload["compensating_control"]),
+                approved_at=now,
+                expires_at=expires_at,
+                status="approved",
+            )
+            self._store.save_policy_exception(record)
+            granted.append({"policy_id": policy_id, "expires_at": expires_at.isoformat()})
+            self._emit(
+                loaded.run.id,
+                EventKind.EXCEPTION_APPROVED,
+                ActorType.HUMAN,
+                stage=gate,
+                target=f"policy:{policy_id}",
+                result="approved",
+                reason=reason,
+                data={
+                    "actor": actor,
+                    "scope": record.scope,
+                    "compensating_control": record.compensating_control,
+                    "expires_at": expires_at.isoformat(),
+                },
+            )
+        ctx.data["policy_exceptions"] = ctx.data.get("policy_exceptions", []) + granted
+        ctx.data["policy_blocking"] = []
+
     # --- compensation (FR-O11) ---------------------------------------------------
 
     def _compensate(self, loaded: _Loaded, *, reason: str) -> list[str]:
@@ -1033,8 +1131,20 @@ class Engine:
 
     # --- replanning (FR-O14, ADR-009) ---------------------------------------------
 
-    def _replan(self, loaded: _Loaded, *, trigger: str, from_stages: set[str]) -> ReplanRecord:
-        """Caller holds the lock and has put the run in REPLANNING."""
+    def _replan(
+        self,
+        loaded: _Loaded,
+        *,
+        trigger: str,
+        from_stages: set[str],
+        reset_stages: set[str] | None = None,
+    ) -> ReplanRecord:
+        """Caller holds the lock and has put the run in REPLANNING.
+
+        ``from_stages``: decided gates whose downstream closure is invalidated (the gate
+        itself keeps its decision). ``reset_stages``: stages that are themselves re-run,
+        together with their downstream closure (rework after a rejection).
+        """
         run, ctx, old = loaded.run, loaded.ctx, loaded.graph
         before = old.to_dict()
         new = self._build_graph(ctx)
@@ -1044,6 +1154,9 @@ class Engine:
         invalid |= old.downstream({n for n in touched if n in old.names()})
         invalid |= new.downstream({n for n in touched if n in new.names()})
         invalid |= new.downstream(from_stages)
+        for name in reset_stages or set():
+            invalid.add(name)
+            invalid |= new.downstream({name})
         invalid -= {n for n in from_stages}  # the gate itself keeps its decision
         invalid &= set(new.names()) | set(old.names())
 

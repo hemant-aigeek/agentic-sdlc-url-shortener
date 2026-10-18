@@ -149,9 +149,7 @@ def test_revision_applies_clarification_answers_and_clears_ambiguity(tmp_path: P
     out = RequirementRevisionAgent(s).execute(c, "requirement_revision", 1)
     norm = out.data_updates["normalized"]
     assert norm["version"] == 2
-    assert norm["resolved_ambiguities"] and all(
-        r["answer"] for r in norm["resolved_ambiguities"]
-    )
+    assert norm["resolved_ambiguities"] and all(r["answer"] for r in norm["resolved_ambiguities"])
     assert out.output["remaining_high_ambiguities"] == []
     assert out.data_updates["clarification_required"] is False
 
