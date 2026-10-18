@@ -2,7 +2,7 @@
 
 **Feature**: `001-agentic-url-shortener`
 **Created**: 2026-10-15
-**Status**: Draft — pending Human Gate 2 (requirements approval)
+**Status**: Approved — Gate 2 (2026-10-18); clarifications approved — Gate 3 (2026-10-18). See `docs/approvals/`.
 **Input**: Interview assignment "Build an Agentic Software Engineering System — URL Shortener" (Schwab, Agentic-Proficient Software Engineer), sections 1–7.
 
 This specification is implementation-independent. It does not choose a
@@ -288,9 +288,13 @@ validation target (assumption)** and is marked `AS-` for approval at Gate 3.
 
 ---
 
-## 9. Ambiguities Requiring Clarification (for `/speckit.clarify`)
+## 9. Ambiguities — RESOLVED at Gate 3 (2026-10-18)
 
-| ID | Question | Options and impact | Proposed default |
+All items below were decided by the candidate; the "Proposed default" column
+is the accepted decision. Decision rationale is in
+`docs/approvals/GATE-3-clarifications.md`.
+
+| ID | Question | Options and impact | Decision (accepted) |
 |---|---|---|---|
 | AMB-01 | Duplicate target URL: should the same URL always map to the same short code? | (a) Always new code — simplest, supports per-campaign links. (b) Dedupe per URL — needs lookup index, changes idempotency semantics. | (a), with idempotency key for explicit dedupe (FR-U09). |
 | AMB-02 | Short code format and length. | (a) 7-char base62 random — ~3.5 trillion space, low collision. (b) Sequential encoded ID — predictable. (c) Hash-based — deterministic, enables dedupe. | (a). |
@@ -305,7 +309,7 @@ validation target (assumption)** and is marked `AS-` for approval at Gate 3.
 | AMB-11 | Audit retention. | Forever (demo) vs. N days. | Retain for the life of the local store; retention policy documented. |
 | AMB-12 | Deployment target. | Local only vs. container. | Local process + optional Dockerfile; no cloud. |
 
-## 10. Assumptions (proposed, require Gate 3 approval)
+## 10. Assumptions (APPROVED at Gate 3 as validation targets)
 
 - AS-01 Default retry policy: 3 attempts, exponential backoff starting 100 ms, per-attempt timeout 5 s (tests use shorter values).
 - AS-02 Performance targets are demonstration measurements on a developer machine.
