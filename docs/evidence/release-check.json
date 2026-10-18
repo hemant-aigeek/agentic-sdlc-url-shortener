@@ -1,0 +1,91 @@
+{
+  "checked_at": "2026-10-18T18:06:53.099667+00:00",
+  "checks": {
+    "dependency_audit": {
+      "command": "pip-audit --progress-spinner off --skip-editable",
+      "duration_s": 0.92,
+      "exit_code": 0,
+      "output_tail": [
+        "Name         Skip Reason",
+        "------------ -------------------------------",
+        "agentic-sdlc distribution marked as editable",
+        "No known vulnerabilities found"
+      ],
+      "status": "PASS"
+    },
+    "quality_gate": {
+      "command": "bash scripts/check.sh",
+      "duration_s": 13.57,
+      "exit_code": 0,
+      "output_tail": [
+        "",
+        "\u001b[1;34m== secrets: pattern scan\u001b[0m",
+        "no secret patterns found",
+        "",
+        "\u001b[1;34m== licences: allow-list\u001b[0m",
+        "77 distributions checked; all licences allow-listed",
+        "",
+        "\u001b[1;32mALL CHECKS PASSED\u001b[0m"
+      ],
+      "status": "PASS"
+    },
+    "scenario_evidence": {
+      "missing": [],
+      "scenarios": {
+        "ambiguous": {
+          "state": "COMPLETED",
+          "terminal_reason": null
+        },
+        "brownfield": {
+          "state": "COMPLETED",
+          "terminal_reason": null
+        },
+        "greenfield": {
+          "state": "COMPLETED",
+          "terminal_reason": null
+        },
+        "policy-fail": {
+          "state": "SAFE_STOPPED",
+          "terminal_reason": "POLICY_BLOCKED: mandatory policy failed with no admissible exception: SEC-002: injected demonstration fault (settings.demo_fault_policy_fail)"
+        },
+        "rejection": {
+          "state": "REJECTED",
+          "terminal_reason": "REJECTED at release_readiness: not this sprint; defer the endpoint"
+        },
+        "resume": {
+          "state": "COMPLETED",
+          "terminal_reason": null
+        }
+      },
+      "status": "PASS"
+    }
+  },
+  "decision": "READY",
+  "limitations": [],
+  "mandatory_failed": [],
+  "measurement_type": "demonstration",
+  "policies": {
+    "advisory": [
+      "DEP-001",
+      "AUD-001"
+    ],
+    "exceptionable": [
+      "SEC-003",
+      "CHG-001",
+      "CHG-002",
+      "DEP-001",
+      "AUD-001"
+    ],
+    "mandatory": [
+      "SEC-001",
+      "SEC-002",
+      "SEC-003",
+      "CMP-001",
+      "CMP-002",
+      "CHG-001",
+      "CHG-002"
+    ],
+    "policy_version": "1.0.0"
+  },
+  "python": "3.13.16"
+}
