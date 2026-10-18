@@ -56,8 +56,8 @@ def create_app(settings: Settings | None = None) -> FastAPI:
 
         return Engine(
             store=app.state.workflow_store,
-            agents=agents or default_agents(settings),
-            planners=planners or default_planners(),
+            agents=agents or default_agents(settings, app.state.workflow_store),
+            planners=planners or default_planners(settings),
             settings=settings,
             policy_version=POLICY_VERSION,
         )

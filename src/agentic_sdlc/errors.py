@@ -88,6 +88,14 @@ class TransientStageError(StageError):
         super().__init__(detail, FailureKind.TRANSIENT)
 
 
+class PolicyBlockedError(StageError):
+    """A mandatory policy failed with no admissible exception: the run must safe-stop."""
+
+    def __init__(self, detail: str, policies: list[str]) -> None:
+        super().__init__(detail, FailureKind.PERMANENT)
+        self.policies = policies
+
+
 class IllegalTransitionError(AgenticError):
     status_code = 409
     title = "Illegal state transition"

@@ -38,8 +38,8 @@ def _system(settings: Settings | None = None) -> tuple[Settings, Engine, SqlWork
     store = SqlWorkflowStore(db)
     engine = Engine(
         store=store,
-        agents=default_agents(settings),
-        planners=default_planners(),
+        agents=default_agents(settings, store),
+        planners=default_planners(settings),
         settings=settings,
         policy_version=POLICY_VERSION,
     )
