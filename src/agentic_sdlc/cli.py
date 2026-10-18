@@ -20,14 +20,28 @@ from agentic_sdlc.orchestration.evidence import export_run
 from agentic_sdlc.orchestration.metrics import aggregate, compute_run_metrics
 from agentic_sdlc.persistence.db import Database
 from agentic_sdlc.persistence.workflow_store import SqlWorkflowStore
-from agentic_sdlc.policy.registry import POLICY_VERSION
+from agentic_sdlc.policy.registry import POLICY_VERSION, describe
+from agentic_sdlc.scenarios import SCENARIOS
+from agentic_sdlc.scenarios.runner import release_for, run_scenario
 from agentic_sdlc.telemetry.logging import configure_logging
 
 app = typer.Typer(
     help="Agentic SDLC orchestration demonstrated on a URL shortener.", no_args_is_help=True
 )
 workflow = typer.Typer(help="Control plane: start, inspect and govern workflow runs.")
+scenario = typer.Typer(help="Replay the assessment scenarios through the real engine.")
 app.add_typer(workflow, name="workflow")
+app.add_typer(scenario, name="scenario")
+
+
+def _engine(settings: Settings, store: SqlWorkflowStore) -> Engine:
+    return Engine(
+        store=store,
+        agents=default_agents(settings, store),
+        planners=default_planners(settings),
+        settings=settings,
+        policy_version=POLICY_VERSION,
+    )
 
 
 def _system(settings: Settings | None = None) -> tuple[Settings, Engine, SqlWorkflowStore]:
@@ -36,14 +50,7 @@ def _system(settings: Settings | None = None) -> tuple[Settings, Engine, SqlWork
     db = Database(settings.database_url)
     db.create_all()
     store = SqlWorkflowStore(db)
-    engine = Engine(
-        store=store,
-        agents=default_agents(settings, store),
-        planners=default_planners(settings),
-        settings=settings,
-        policy_version=POLICY_VERSION,
-    )
-    return settings, engine, store
+    return settings, _engine(settings, store), store
 
 
 def _echo(data: Any) -> None:
@@ -222,6 +229,89 @@ def workflow_metrics(run_id: str | None = typer.Argument(None)) -> None:
     else:
         per_run = [compute_run_metrics(store.list_events(r.id)) for r in store.list_runs()]
         _echo(aggregate(per_run))
+
+
+@workflow.command("release")
+def workflow_release(run_id: str) -> None:
+    """Release-readiness determination from persisted policy results and state."""
+    _, engine, store = _system()
+    engine.load(run_id)
+    _echo(release_for(store, run_id))
+
+
+@workflow.command("policies")
+def workflow_policies() -> None:
+    """List the versioned policies the compliance stage evaluates."""
+    _echo({"policy_version": POLICY_VERSION, "policies": describe()})
+
+
+# --- scenarios -------------------------------------------------------------------
+
+
+@scenario.command("list")
+def scenario_list() -> None:
+    _echo(
+        [
+            {
+                "name": s.name,
+                "title": s.title,
+                "scope": s.scope,
+                "expected_terminal": s.expected_terminal,
+                "demo_faults": s.settings,
+            }
+            for s in SCENARIOS.values()
+        ]
+    )
+
+
+@scenario.command("run")
+def scenario_run(
+    name: str = typer.Argument(..., help="greenfield | brownfield | ambiguous | policy-fail | ..."),
+    actor: str = typer.Option(..., "--actor", "-a", help="Who makes the scripted decisions"),
+    decide: bool = typer.Option(
+        True, help="Apply the scripted human decisions; --no-decide stops at the first gate"
+    ),
+    export: str | None = typer.Option(
+        None, help="Export evidence into this directory under <name>/ (e.g. docs/evidence)"
+    ),
+) -> None:
+    """Run a scenario end-to-end through the real engine with recorded human decisions."""
+    try:
+        chosen = SCENARIOS[name]
+    except KeyError as exc:
+        raise typer.BadParameter(f"unknown scenario {name!r}; see `scenario list`") from exc
+    settings, _, store = _system()
+    outcome = run_scenario(
+        chosen,
+        store=store,
+        engine_factory=lambda s: _engine(s, store),
+        base_settings=settings,
+        actor=actor,
+        decide=decide,
+    )
+    result = outcome.to_dict()
+    if export:
+        engine = _engine(settings, store)
+        result["export"] = export_run(
+            engine,
+            store,
+            outcome.run_id,
+            Path(export),
+            label=name,
+            extra={
+                "scenario": chosen.name,
+                "title": chosen.title,
+                "description": chosen.description,
+                "requirement": chosen.requirement,
+                "scope": chosen.scope,
+                "demo_faults": chosen.settings,
+                "expected_terminal": chosen.expected_terminal,
+                "outcome": {k: v for k, v in result.items() if k != "export"},
+                "note": "Scripted decisions were recorded through Engine.decide by the named "
+                "actor; demonstration faults are injected via Settings and labelled.",
+            },
+        )
+    _echo(result)
 
 
 @workflow.command("export-evidence")
