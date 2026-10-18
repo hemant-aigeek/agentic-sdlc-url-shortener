@@ -1,7 +1,7 @@
 # ADR-002: Python 3.12+ with FastAPI and Pydantic v2
 
 ## Status
-Proposed (Gate 4 pending) — technology choice made by the candidate at Gate 3.
+Accepted — 2026-10-18 (Gate 4, docs/approvals/GATE-4-architecture.md)
 
 ## Context
 A language and web framework were deliberately left open in the

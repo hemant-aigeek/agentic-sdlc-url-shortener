@@ -1,7 +1,7 @@
 # ADR-007: Human gates as graph nodes; decisions as first-class records
 
 ## Status
-Proposed (Gate 4 pending) — resolves AMB-06, AMB-09.
+Accepted — 2026-10-18 (Gate 4, docs/approvals/GATE-4-architecture.md)
 
 ## Context
 Mandatory approval gates must be impossible to skip, silence must never

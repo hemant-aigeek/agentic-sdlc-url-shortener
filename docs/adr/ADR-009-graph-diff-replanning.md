@@ -1,7 +1,7 @@
 # ADR-009: Dynamic replanning by graph rebuild, diff and downstream invalidation
 
 ## Status
-Proposed (Gate 4 pending)
+Accepted — 2026-10-18 (Gate 4, docs/approvals/GATE-4-architecture.md)
 
 ## Context
 FR-O14 requires re-planning when upstream outputs change without re-running

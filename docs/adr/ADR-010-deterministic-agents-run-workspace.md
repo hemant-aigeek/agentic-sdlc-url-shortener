@@ -1,7 +1,7 @@
 # ADR-010: Deterministic agents behind an Agent protocol; implementation in an isolated run workspace
 
 ## Status
-Proposed (Gate 4 pending) — resolves AMB-08 (Gate 3).
+Accepted — 2026-10-18 (Gate 4, docs/approvals/GATE-4-architecture.md)
 
 ## Context
 "Agents" could be LLM calls or deterministic executors. The reviewer must be

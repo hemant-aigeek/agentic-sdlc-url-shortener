@@ -13,3 +13,4 @@ new file rather than editing the old one.
 | 1 | Engineering constitution v1.0.0 | Approved | 2026-10-18 |
 | 2 | Feature specification 001 | Approved | 2026-10-18 |
 | 3 | Clarifications AMB-01..12, assumptions AS-01..05 | Approved as proposed | 2026-10-18 |
+| 4 | Technical plan and ADR-001..011 | Approved — all Accepted | 2026-10-18 |
