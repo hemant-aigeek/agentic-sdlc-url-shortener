@@ -20,7 +20,7 @@ A working, locally runnable prototype of a governed, stateful, non-linear
 agentic SDLC orchestrator, demonstrated on a production-disciplined URL
 shortener. The repository-level release check
 (`python scripts/release_check.py` → `docs/evidence/release-check.json`) is
-**READY**: quality gate PASS (290 tests), dependency audit PASS (no known
+**READY**: quality gate PASS (298 tests), dependency audit PASS (no known
 vulnerabilities), licences allow-listed, six scenario exports present with
 their expected terminal states.
 
@@ -295,7 +295,7 @@ ACCEPTED LIMITATIONS`. Test:
 
 ## 17. Test strategy, executed validation, and actual results
 
-`docs/testing.md`. 290 tests across unit (173), contract (28), integration
+`docs/testing.md`. 298 tests across unit (173), contract (28), integration
 (12), orchestration (49), security (18), e2e (7), architecture (3); property
 tests with Hypothesis for short-code generation; mypy `--strict` on 60 source
 files; ruff lint/format; OpenAPI drift; secret scan; licence allow-list.
@@ -332,7 +332,7 @@ Deferred enhancements: `BACKLOG.md`.
 expected result → requirement id). Minimum verification path:
 
 ```bash
-pip install -e ".[dev]" && ./scripts/check.sh                 # ALL CHECKS PASSED, 290 tests
+pip install -e ".[dev]" && ./scripts/check.sh                 # ALL CHECKS PASSED, 298 tests
 agentic-sdlc scenario run ambiguous --actor you --no-decide    # blocks at the clarification gate
 agentic-sdlc workflow gates <run_id>                           # ambiguities + options
 agentic-sdlc workflow decide <run_id> clarification clarify --actor you --reason "..." \

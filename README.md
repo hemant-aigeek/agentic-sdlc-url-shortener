@@ -74,7 +74,7 @@ git clone https://github.com/hemant-aigeek/agentic-sdlc-url-shortener.git
 cd agentic-sdlc-url-shortener
 python -m venv .venv && source .venv/bin/activate   # Windows: .venv\Scripts\activate
 pip install -e ".[dev]"
-./scripts/check.sh          # ruff, mypy --strict, 290 tests, contract drift, secret scan, licences
+./scripts/check.sh          # ruff, mypy --strict, 298 tests, contract drift, secret scan, licences
 agentic-sdlc serve          # API + interactive docs at http://127.0.0.1:8000/docs
 ```
 
@@ -102,7 +102,7 @@ safe for local use.
 | `src/agentic_sdlc/policy/` | Versioned policy registry and evaluator |
 | `src/agentic_sdlc/api/routers/{workflows,decisions,metrics}.py` | Control-plane HTTP API |
 | `src/agentic_sdlc/cli.py`, `scenarios/` | CLI and replayable scenario definitions |
-| `tests/` | unit · contract · integration · orchestration · security · e2e · architecture (290 tests) |
+| `tests/` | unit · contract · integration · orchestration · security · e2e · architecture (298 tests) |
 | `specs/001-agentic-url-shortener/` | Specification, clarifications, plan, research, data model, contracts, tasks |
 | `.specify/memory/constitution.md` | Engineering constitution the work was held to |
 | `docs/adr/` | Eleven accepted architecture decision records |

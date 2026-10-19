@@ -25,7 +25,7 @@ git clone https://github.com/hemant-aigeek/agentic-sdlc-url-shortener.git
 cd agentic-sdlc-url-shortener
 python -m venv .venv && source .venv/bin/activate      # Windows: .venv\Scripts\activate
 pip install -e ".[dev]"
-./scripts/check.sh                                      # expected: "ALL CHECKS PASSED", 290 tests
+./scripts/check.sh                                      # expected: "ALL CHECKS PASSED", 298 tests
 agentic-sdlc serve                                      # http://127.0.0.1:8000/docs
 ```
 

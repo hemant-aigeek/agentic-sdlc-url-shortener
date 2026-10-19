@@ -28,14 +28,14 @@ check inside the suite so the matrix cannot drift.
 
 | Level | Dir | Tests | What it proves | Representative tests |
 |---|---|---|---|---|
-| Unit — domain | `tests/unit` | 173 | URL validation incl. SSRF ranges (45, parametrised over every blocked range), short-code entropy and collision bounds (12, property-based with Hypothesis), service rules (20), state-machine transition table (40), graph construction and cycle/ready/join semantics (16), policy evaluation (11), release rule (8), metrics incl. MTTR formula (7), deterministic agents (14) | `test_validation.py::test_rejects_loopback_private_linklocal_metadata`, `test_states.py` (every allowed/refused transition) |
+| Unit — domain | `tests/unit` | 180 | URL validation incl. SSRF ranges (52, parametrised over every blocked range), short-code entropy and collision bounds (12, property-based with Hypothesis), service rules (20), state-machine transition table (40), graph construction and cycle/ready/join semantics (16), policy evaluation (11), release rule (8), metrics incl. MTTR formula (7), deterministic agents (14) | `test_validation.py::test_rejects_loopback_private_linklocal_metadata`, `test_states.py` (every allowed/refused transition) |
 | Contract | `tests/contract` | 28 | HTTP contract of both planes; the committed OpenAPI + JSON schemas equal what the app serves (drift test) | `test_links_api.py`, `test_workflow_api.py`, `test_openapi_drift.py` |
 | Integration | `tests/integration` | 12 | SQLite repositories, health/readiness against a broken DB, redirect p95 benchmark (demo target, AS-02) | `test_link_repository.py`, `test_performance.py::test_redirect_p95_under_target_locally` |
-| Orchestration | `tests/orchestration` | 49 | engine against a real SQLite store: dependency order, parallel fan-out (asserted by overlapping timestamps), join, conditional skip, lineage, event completeness; gates (no decision → no progress, attributable decisions, rejection compensates in reverse order, gate timeout → safe-stop, forged stage rows cannot move a run); reliability (bounded retry with backoff, permanent never retried, timeout counted as transient, fallback flagged, fallback failure → safe-stop, illegal transition → safe-stop, crash resume, suspend/resume with a fresh engine); workspace rollback; event-log reconstruction | `test_reliability.py`, `test_gates.py`, `test_store.py::test_stage_states_can_be_reconstructed_from_events_alone` |
+| Orchestration | `tests/orchestration` | 50 | engine against a real SQLite store: dependency order, parallel fan-out (asserted by overlapping timestamps), join, conditional skip, lineage, event completeness; gates (no decision → no progress, attributable decisions, rejection compensates in reverse order, gate timeout → safe-stop, forged stage rows cannot move a run); reliability (bounded retry with backoff, permanent never retried, timeout counted as transient, fallback flagged, fallback failure → safe-stop, illegal transition → safe-stop, crash resume, suspend/resume with a fresh engine, concurrent callers on one run execute each stage once); workspace rollback; event-log reconstruction | `test_reliability.py`, `test_gates.py`, `test_store.py::test_stage_states_can_be_reconstructed_from_events_alone` |
 | Security | `tests/security` | 18 | redirector abuse targets rejected, no tracebacks in problem responses, decisions require an actor, API key redacted from logs, bounded URL length | `test_security.py` |
 | End-to-end | `tests/e2e` | 7 | the three scenarios plus rejection-rollback, restart-resume, policy-fail → NOT READY, design rejection with return-to, driven through the scenario runner against the real engine | `test_scenarios.py` |
 | Architecture | `tests/architecture` | 3 | import-direction rule between planes (ADR-001); traceability has no orphans | `test_import_rules.py`, `test_traceability.py` |
-| **Total** | | **290** | runs in ≈13 s locally (NFR-09 target < 2 min) | |
+| **Total** | | **298** | runs in ≈13 s locally (NFR-09 target < 2 min) | |
 
 ### 1.4 What is deliberately not mocked
 The engine tests use the real SQLAlchemy workflow store on an in-memory SQLite
@@ -74,8 +74,9 @@ one the orchestrator uses (READY / READY WITH ACCEPTED LIMITATIONS / NOT READY).
   extension point; the scenarios would need re-recording (and lose
   reproducibility) with a model behind it. This was a deliberate Gate 3
   decision (AMB-08).
-- **Single process.** Parallelism is a thread pool inside one process; there
-  is no lease/claim column, so two engine processes on one database would
+- **Single process.** Parallelism is a thread pool inside one process. Run-moving
+  operations are serialised per run id inside the process; there is no
+  lease/claim column, so two engine *processes* on one database could still
   double-execute ready stages. The scaling path is documented in
   [`architecture.md`](architecture.md) §8, not built.
 - **SQLite.** Adequate for the prototype; concurrent writers serialise on the
