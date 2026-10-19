@@ -6,7 +6,7 @@ cd agentic-sdlc-url-shortener
 python -m venv .venv && source .venv/bin/activate   # Windows: .venv\Scripts\activate
 pip install -e ".[dev]"
 
-# quality gate (lint, types, tests, contract drift, licences, secret scan)
+# quality gate (lint, types, tests, contract drift, secret scan, licences)
 ./scripts/check.sh
 
 # run the API
@@ -17,11 +17,16 @@ curl -s -X POST localhost:8000/api/v1/links -H 'X-API-Key: dev-key' \
      -H 'content-type: application/json' -d '{"target_url":"https://example.com/a"}'
 curl -i localhost:8000/<code>
 
-# run the three scenarios through the orchestrator and export evidence
-agentic-sdlc run-scenario greenfield
-agentic-sdlc run-scenario brownfield
-agentic-sdlc run-scenario ambiguous     # pauses at clarification; follow the printed decide command
-agentic-sdlc export-evidence <run_id>   # writes docs/evidence/<run_id>/
+# run the three scenarios through the orchestrator (scripted decisions under your name)
+agentic-sdlc scenario run greenfield  --actor you --export /tmp/evidence
+agentic-sdlc scenario run brownfield  --actor you --export /tmp/evidence
+agentic-sdlc scenario run ambiguous   --actor you --no-decide   # stops at the clarification gate; prints the decide command
+
+# govern a run by hand
+agentic-sdlc workflow gates <run_id>
+agentic-sdlc workflow decide <run_id> <gate> approve --actor you --reason "..."
+agentic-sdlc workflow events <run_id>
+agentic-sdlc workflow export-evidence <run_id> --out /tmp/evidence
 ```
 
 Full reviewer navigation: `docs/reviewer-guide.md`.
