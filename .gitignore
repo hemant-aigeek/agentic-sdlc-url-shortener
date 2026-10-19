@@ -30,3 +30,6 @@ data/*.db-shm
 Thumbs.db
 .idea/
 .vscode/
+
+# Orchestration run workspaces (runtime; scenario evidence is exported to docs/evidence)
+data/runs/
