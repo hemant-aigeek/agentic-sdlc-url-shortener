@@ -39,7 +39,7 @@ ingest → quality_check ─(clarification_required = false → SKIPPED)→ deco
 | MTTR captured from timestamps | `metrics.json`: one recovered failure, recovery duration 5.22 s, zero unrecovered; formula stated in `README.md` |
 | Human gates actually waited | seq 16/17 and 45/46: `gate_opened WAITING` precedes every `decision_recorded`; no stage downstream of a gate starts before the decision |
 | Policy version recorded | `run.json` → `policy_version: 1.0.0`; every row in `policy.json` carries it |
-| Release-readiness decision | `scenario.json` → `release_decision: READY`; 8 × `PASS`, 1 × `NOT-APPLICABLE` (CHG-001, greenfield) |
+| Release-readiness decision | `scenario.json` → `outcome.release_decision: READY`; 8 × `PASS`, 1 × `NOT-APPLICABLE` (CHG-001, greenfield) |
 | Terminal outcome | seq 50 `run_completed COMPLETED` |
 
 ## 4. Re-running it

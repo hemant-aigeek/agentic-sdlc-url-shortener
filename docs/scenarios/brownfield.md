@@ -38,7 +38,7 @@ than the other way round.
 | Decomposition inherits the impact map | `artifacts.json` → kind `decomposition` → `components` list equals the impacted modules; tasks are red/green pairs per acceptance criterion |
 | Change-control policy enforced | `policy.json` → `CHG-001 PASS — impact analysis recorded before implementation` (it is `NOT-APPLICABLE` in Scenario A, which is how the policy proves it is scope-aware) |
 | API contract impact acknowledged by a human | `decisions.json` → `design_approval` payload `api_change_acknowledged: true`; `CHG-002 PASS` |
-| Terminal outcome | seq 45 `run_completed COMPLETED`; `scenario.json` → `READY` |
+| Terminal outcome | seq 45 `run_completed COMPLETED`; `scenario.json` → `outcome.release_decision: READY` |
 
 ## 4. The brownfield change itself
 
