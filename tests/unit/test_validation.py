@@ -94,6 +94,12 @@ def test_rejects_over_length() -> None:
         "http://2130706433/",
         "http://0x7f000001/",
         "http://017700000001/",
+        # abbreviated numeric forms that curl/browsers expand to 127.0.0.1 (found in review)
+        "http://127.1/",
+        "http://127.0.1/",
+        "http://0x7f.1/",
+        "http://0177.0.0.1/",
+        "http://10.1/",
     ],
 )
 def test_rejects_loopback_private_linklocal_metadata(url: str) -> None:
@@ -112,6 +118,9 @@ def test_rejects_loopback_private_linklocal_metadata(url: str) -> None:
         "http://db.internal/",
         "http://printer.local/",
         "http://metadata.google.internal/computeMetadata/v1/",
+        # fully-qualified (trailing-dot) spellings of the same names (found in review)
+        "http://localhost./",
+        "http://metadata.google.internal./",
     ],
 )
 def test_rejects_blocked_hostnames(url: str) -> None:
