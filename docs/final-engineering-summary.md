@@ -3,7 +3,7 @@
 **Project**: Agentic Software Engineering System — URL Shortener
 **Repository**: https://github.com/hemant-aigeek/agentic-sdlc-url-shortener
 **Author / decision owner**: Hemant Gupta
-**Date**: 2026-10-19 · **Tag**: `assessment-submission-v1.0`
+**Date**: 2026-10-19 · **Tag**: `assessment-submission-v1.0` (applied at Gate 5)
 
 Every material claim below cites a repository path and, where applicable, a
 command and the observable result. Vocabulary: *confirmed requirement* (from
@@ -197,7 +197,10 @@ decisions; API key redacted from structured logs; in-process token-bucket
 rate limit with a 429 contract; secret scan of the repository and of workflow
 artifacts (SEC-002); `pip-audit` and licence allow-list in the release check.
 
-Findings: none open from the automated checks. Residual risks (accepted,
+Findings: the pre-submission review (`docs/reviews/final-assessment.md`)
+found one SSRF bypass — abbreviated numeric hosts such as `http://127.1/` and
+trailing-dot spellings such as `localhost.` passed validation — fixed
+test-first (`706812a` → `f597286`). No findings open. Residual risks (accepted,
 recorded): no DNS-resolving SSRF check (AMB-03); static API key is not an
 identity provider (AMB-06); rate limiting is per process and per key.
 
@@ -212,7 +215,10 @@ rejection; true rollback of workspace writes via recorded inverse operations
 (`orchestration/workspace.py`, `tests/orchestration/test_workspace.py`);
 safe-stop as a deterministic terminal state with reason (retries exhausted,
 gate timeout, policy blocked, illegal transition, operator stop); resume
-without re-executing succeeded stages. Demonstrated in
+without re-executing succeeded stages. The review found that concurrent
+callers advancing one run executed stages more than once; run-moving
+operations are now serialised per run id (`16e7f5d`), with cross-process
+leasing recorded as a limitation. Demonstrated in
 `docs/evidence/{greenfield,ambiguous,rejection,policy-fail,resume,gate-timeout}`.
 
 ## 12. MTTR definition, measurement population, calculation, exclusions, and unrecovered failures
@@ -352,8 +358,10 @@ trade-off was depth in the control plane over breadth in the shortener and
 determinism over LLM realism; both are recorded decisions with the seam to
 reverse them.
 
-**Unresolved blockers**: none. Mandatory findings from the independent
-assessment (`docs/reviews/final-assessment.md`) were dispositioned in
+**Unresolved blockers**: none. The independent assessment
+(`docs/reviews/final-assessment.md`) raised two mandatory findings (SSRF
+bypass; duplicate execution under concurrency); both were fixed test-first
+before the release decision recorded in
 `docs/approvals/GATE-5-release-readiness.md`.
 
 **Recommended next actions** (in order): (1) LLM agent adapter behind the
