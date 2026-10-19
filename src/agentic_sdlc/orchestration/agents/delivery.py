@@ -283,9 +283,7 @@ class VerifyAgent(Agent):
             )
             targets = files
         else:
-            targets = [
-                t for t in ctx.data.get("impact", {}).get("tests", []) if (root / t).exists()
-            ]
+            targets = [t for t in ctx.data.get("impact", {}).get("tests", []) if _inside(root, t)]
             if not targets:
                 targets = ["tests/unit", "tests/contract"]
             command = [
@@ -329,3 +327,15 @@ class VerifyAgent(Agent):
         if proc.returncode != 0:
             raise StageError(f"verify failed with exit code {proc.returncode}: {' | '.join(tail)}")
         return StageResult(output=output, artifacts=[("verification", output)])
+
+
+def _inside(root: Path, target: object) -> bool:
+    """A verify target must be an existing relative path under the repository root.
+
+    Absolute paths, ``..`` segments and option-like strings are refused, so run data can
+    never make verify execute a file outside the repository or inject pytest flags.
+    """
+    if not isinstance(target, str) or not target or target.startswith(("-", "/", "\\")):
+        return False
+    candidate = (root / target).resolve()
+    return candidate.is_relative_to(root) and candidate.exists()

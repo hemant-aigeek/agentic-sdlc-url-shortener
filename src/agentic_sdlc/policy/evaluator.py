@@ -74,5 +74,6 @@ def blocking(
         for ev in evaluations
         if ev.mandatory
         and ev.outcome in {Outcome.FAIL, Outcome.EXCEPTION_REQUESTED}
-        and ev.policy_id not in active
+        # an exception only ever waives an *exceptionable* policy
+        and not (ev.exceptionable and ev.policy_id in active)
     ]

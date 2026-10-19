@@ -87,6 +87,10 @@ class ShortenerService:
     def create(self, cmd: CreateLinkCommand) -> ShortLink:
         now = self._clock()
         target = validate_target_url(cmd.target_url, self._policy)
+        if cmd.expires_at is not None and cmd.expires_at.tzinfo is None:
+            raise ValidationError(
+                "expires_at must include a timezone offset (e.g. 'Z')", field="expires_at"
+            )
         if cmd.expires_at is not None and cmd.expires_at <= now:
             raise ValidationError("expires_at must be in the future", field="expires_at")
 
