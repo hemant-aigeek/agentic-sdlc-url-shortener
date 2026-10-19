@@ -114,6 +114,20 @@ class Engine:
         self._sleep = sleep
         self._max_workers = max_workers or settings.max_parallel_stages
         self._lock = threading.RLock()
+        # one re-entrant lock per run id: every public operation that can move a run
+        # (run / decide / resume / stop / replan) is serialised per run, so two callers
+        # advancing the same run cannot both see a stage as READY and execute it twice
+        # (duplicate-execution protection, FR-O08). This covers one process; a lease
+        # column would be needed for multi-process execution (documented limitation).
+        self._run_locks: dict[str, threading.RLock] = {}
+        self._run_locks_guard = threading.Lock()
+
+    def _run_lock(self, run_id: str) -> threading.RLock:
+        with self._run_locks_guard:
+            lock = self._run_locks.get(run_id)
+            if lock is None:
+                lock = self._run_locks[run_id] = threading.RLock()
+            return lock
 
     # ------------------------------------------------------------------ public
 
@@ -167,7 +181,45 @@ class Engine:
         log.info("run_created", run_id=run_id, scope=scope, stages=graph.names())
         return run_id
 
+    # --- public operations, serialised per run -----------------------------------
+
     def run(self, run_id: str, *, max_batches: int | None = None) -> RunRecord:
+        """Advance the run until it waits for a human, terminates, or ``max_batches`` elapse."""
+        with self._run_lock(run_id):
+            return self._run_unlocked(run_id, max_batches=max_batches)
+
+    def decide(
+        self,
+        run_id: str,
+        *,
+        gate: str,
+        actor: str,
+        decision: str,
+        reason: str,
+        payload: dict[str, Any] | None = None,
+    ) -> RunRecord:
+        with self._run_lock(run_id):
+            return self._decide_unlocked(
+                run_id, gate=gate, actor=actor, decision=decision, reason=reason, payload=payload
+            )
+
+    def resume(self, run_id: str) -> RunRecord:
+        """Continue a run after interruption from persisted state (FR-O13)."""
+        with self._run_lock(run_id):
+            return self._resume_unlocked(run_id)
+
+    def stop(self, run_id: str, *, actor: str, reason: str) -> RunRecord:
+        with self._run_lock(run_id):
+            return self._stop_unlocked(run_id, actor=actor, reason=reason)
+
+    def replan(
+        self, run_id: str, *, trigger: str, data_updates: dict[str, Any] | None = None
+    ) -> RunRecord:
+        """Governed replanning on an explicit upstream change (FR-O14)."""
+        with self._run_lock(run_id):
+            return self._replan_unlocked(run_id, trigger=trigger, data_updates=data_updates)
+
+    def _run_unlocked(self, run_id: str, *, max_batches: int | None = None) -> RunRecord:
         """Advance the run until it waits for a human, terminates, or ``max_batches`` elapse."""
         loaded = self._load(run_id)
         bind(run_id=run_id)
@@ -203,7 +255,7 @@ class Engine:
         finally:
             unbind("run_id")
 
-    def decide(
+    def _decide_unlocked(
         self,
         run_id: str,
         *,
@@ -314,7 +366,7 @@ class Engine:
             self._save_run(loaded)
         return loaded.run
 
-    def resume(self, run_id: str) -> RunRecord:
+    def _resume_unlocked(self, run_id: str) -> RunRecord:
         """Continue a run after interruption from persisted state (FR-O13)."""
         loaded = self._load(run_id)
         run = loaded.run
@@ -359,7 +411,7 @@ class Engine:
                 self._set_run_state(loaded, RunState.RUNNING)
         return self.run(run_id)
 
-    def stop(self, run_id: str, *, actor: str, reason: str) -> RunRecord:
+    def _stop_unlocked(self, run_id: str, *, actor: str, reason: str) -> RunRecord:
         loaded = self._load(run_id)
         if loaded.run.state.is_terminal:
             return loaded.run
@@ -369,7 +421,7 @@ class Engine:
             )
         return loaded.run
 
-    def replan(
+    def _replan_unlocked(
         self, run_id: str, *, trigger: str, data_updates: dict[str, Any] | None = None
     ) -> RunRecord:
         """Governed replanning on an explicit upstream change (FR-O14)."""
