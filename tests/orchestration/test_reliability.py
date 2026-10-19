@@ -233,7 +233,7 @@ def test_concurrent_run_calls_on_one_run_execute_each_stage_once(
     def advance() -> None:
         try:
             engine.run(run_id)
-        except BaseException as exc:  # noqa: BLE001 - we want every failure recorded
+        except BaseException as exc:  # every failure must be recorded, not swallowed
             errors.append(exc)
 
     threads = [threading.Thread(target=advance) for _ in range(3)]
