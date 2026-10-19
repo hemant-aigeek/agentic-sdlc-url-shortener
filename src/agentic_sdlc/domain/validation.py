@@ -42,6 +42,9 @@ _BLOCKED_NETWORKS = [
 
 _HOST_RE = re.compile(r"^[A-Za-z0-9.-]+$")
 _NUMERIC_HOST_RE = re.compile(r"^(0x[0-9a-fA-F]+|0[0-7]+|\d+)$")
+# every label numeric (decimal / octal / hex) but not a canonical dotted quad:
+# "127.1", "0x7f.1", "0177.0.0.1" — expanded to an IPv4 address by libcurl and browsers
+_ABBREVIATED_IPV4_RE = re.compile(r"^(?:(?:0x[0-9a-fA-F]+|\d+)\.){1,3}(?:0x[0-9a-fA-F]+|\d+)$")
 
 
 @dataclass(frozen=True)
@@ -70,7 +73,7 @@ def validate_target_url(raw: str, policy: UrlPolicy) -> str:
     if parts.username is not None or parts.password is not None:
         raise ValidationError("credentials in target_url are not allowed", field="target_url")
 
-    host = (parts.hostname or "").lower()
+    host = (parts.hostname or "").lower().rstrip(".")  # "localhost." is the FQDN form of localhost
     if not host:
         raise ValidationError("target_url must include a host", field="target_url")
     if " " in parts.netloc:
@@ -105,6 +108,11 @@ def _reject_blocked_host(host: str, policy: UrlPolicy) -> None:
 
     if not _HOST_RE.match(host):
         raise ValidationError("target_url host contains invalid characters", field="target_url")
+    if _ABBREVIATED_IPV4_RE.match(host):
+        raise ValidationError(
+            "target_url host is an abbreviated numeric address, not allowed",
+            field="target_url",
+        )
     if host in policy.blocked_hostnames or host.endswith(policy.blocked_hostname_suffixes):
         raise ValidationError(
             "target_url host is on the blocked hostname list, not allowed", field="target_url"
