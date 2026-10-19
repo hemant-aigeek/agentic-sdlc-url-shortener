@@ -39,8 +39,8 @@ check inside the suite so the matrix cannot drift.
 
 ### 1.4 What is deliberately not mocked
 The engine tests use the real SQLAlchemy workflow store on an in-memory SQLite
-database (and a file-backed one for the restart/resume tests), not a hand-written
-fake, so that event ordering, reconstruction and resume are tested against the
+database (the restart/resume tests build a fresh `Engine` over the same store),
+not a hand-written fake, so that event ordering, reconstruction and resume are tested against the
 same persistence code the API uses. The only fakes are the
 `Agent` implementations in `tests/orchestration/conftest.py` (scripted
 success/failure/sleep) and the clock/sleep injected into the retry policy so
