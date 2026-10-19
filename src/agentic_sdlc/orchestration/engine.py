@@ -37,6 +37,7 @@ from agentic_sdlc.errors import (
     IllegalTransitionError,
     PolicyBlockedError,
     StageError,
+    ValidationError,
     WorkflowNotFoundError,
 )
 from agentic_sdlc.orchestration.agents.base import AgentRegistry, StageResult
@@ -61,7 +62,46 @@ from agentic_sdlc.orchestration.store import (
     StageRecord,
     WorkflowStore,
 )
+from agentic_sdlc.policy.registry import POLICIES
 from agentic_sdlc.telemetry.logging import bind, get_logger, unbind
+
+# Keys in ``RunContext.data`` that agents and the engine own. A caller may seed a
+# run with free-form data and a clarification may carry ``data_updates``, but
+# neither may overwrite these: they steer what verify executes (``impact``),
+# what gets released (``policy_*``) and what the audit trail says happened.
+RESERVED_DATA_KEYS = frozenset(
+    {
+        "normalized",
+        "scope",
+        "audit_retention",
+        "clarification_required",
+        "quality_reason",
+        "clarifications",
+        "impact",
+        "components",
+        "decomposition_tasks",
+        "api_or_schema_impact",
+        "implement_receipt",
+        "policy_blocking",
+        "policy_outcomes",
+        "policy_exceptions",
+        "release_decision",
+    }
+)
+MAX_EXCEPTION_DAYS = 90
+_EXCEPTIONABLE = frozenset(p.id for p in POLICIES if p.exceptionable)
+
+
+def _check_caller_data(data: object, where: str) -> dict[str, Any]:
+    if not isinstance(data, dict):
+        raise ValidationError(f"{where} must be an object", field=where)
+    reserved = sorted(set(data) & RESERVED_DATA_KEYS)
+    if reserved:
+        raise ValidationError(
+            f"{where} may not set engine-owned keys: {', '.join(reserved)}", field=where
+        )
+    return data
+
 
 Planner = Callable[[RunContext], WorkflowGraph]
 log = get_logger(__name__)
@@ -150,7 +190,7 @@ class Engine:
             policy_version=self._policy_version,
             planner=planner,
             workspace=str(self._settings.runs_dir / run_id / "workspace"),
-            data=dict(data or {}),
+            data=dict(_check_caller_data(data or {}, "data")),
         )
         graph = self._build_graph(ctx)
         run = RunRecord(
@@ -281,8 +321,13 @@ class Engine:
             raise GateRequiredError("decision must be approve, reject or clarify")
         if decision == "clarify" and spec.gate_kind != "clarification":
             raise GateRequiredError(f"gate {gate!r} does not accept clarifications")
+        if decision == "clarify":
+            _check_caller_data(payload.get("data_updates", {}), "data_updates")
 
         now = self._clock()
+        if decision == "approve" and payload.get("compensating_control"):
+            # validate before anything is recorded, so a refused exception leaves no trace
+            self._exception_terms(ctx, payload, now)
         with self._lock:
             record = DecisionRecord(
                 run_id=run_id,
@@ -1109,15 +1154,9 @@ class Engine:
         """An approval carrying a compensating control grants a scoped, expiring exception
         for every exceptionable policy currently blocking the run."""
         ctx = loaded.ctx
-        policies = list(payload.get("policies") or ctx.data.get("policy_blocking") or [])
+        policies, expires_at = self._exception_terms(ctx, payload, now)
         if not policies:
             return
-        expires_raw = payload.get("expires_at")
-        expires_at = (
-            datetime.fromisoformat(str(expires_raw))
-            if expires_raw
-            else now + timedelta(days=self._settings.exception_default_days)
-        )
         granted: list[dict[str, Any]] = []
         for policy_id in policies:
             record = PolicyExceptionRecord(
@@ -1150,6 +1189,33 @@ class Engine:
             )
         ctx.data["policy_exceptions"] = ctx.data.get("policy_exceptions", []) + granted
         ctx.data["policy_blocking"] = []
+
+    def _exception_terms(
+        self, ctx: RunContext, payload: dict[str, Any], now: datetime
+    ) -> tuple[list[str], datetime]:
+        """Only exceptionable policies, only a bounded future expiry (FR-G09)."""
+        policies = [
+            str(p) for p in (payload.get("policies") or ctx.data.get("policy_blocking") or [])
+        ]
+        refused = sorted(set(policies) - _EXCEPTIONABLE)
+        if refused:
+            raise GateRequiredError(
+                f"policies {', '.join(refused)} are not exceptionable; no exception can be granted"
+            )
+        expires_raw = payload.get("expires_at")
+        if not expires_raw:
+            return policies, now + timedelta(days=self._settings.exception_default_days)
+        try:
+            expires_at = datetime.fromisoformat(str(expires_raw))
+        except ValueError as exc:
+            raise GateRequiredError("exception expires_at must be an ISO-8601 datetime") from exc
+        if expires_at.tzinfo is None:
+            raise GateRequiredError("exception expires_at must include a timezone")
+        if not now < expires_at <= now + timedelta(days=MAX_EXCEPTION_DAYS):
+            raise GateRequiredError(
+                f"exception expires_at must be in the future and within {MAX_EXCEPTION_DAYS} days"
+            )
+        return policies, expires_at
 
     # --- compensation (FR-O11) ---------------------------------------------------
 

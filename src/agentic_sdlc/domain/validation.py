@@ -32,6 +32,8 @@ _BLOCKED_NETWORKS = [
         "198.18.0.0/15",  # benchmarking
         "224.0.0.0/4",  # multicast
         "240.0.0.0/4",  # reserved
+        "64:ff9b::/96",  # NAT64 well-known prefix: embeds an IPv4 address (e.g. loopback)
+        "64:ff9b:1::/48",  # local-use NAT64
         "::1/128",  # loopback
         "::/128",  # unspecified
         "fc00::/7",  # ULA
@@ -41,6 +43,7 @@ _BLOCKED_NETWORKS = [
 ]
 
 _HOST_RE = re.compile(r"^[A-Za-z0-9.-]+$")
+_LABEL_RE = re.compile(r"^(?!-)[a-z0-9-]{1,63}(?<!-)$")
 _NUMERIC_HOST_RE = re.compile(r"^(0x[0-9a-fA-F]+|0[0-7]+|\d+)$")
 # every label numeric (decimal / octal / hex) but not a canonical dotted quad:
 # "127.1", "0x7f.1", "0177.0.0.1" — expanded to an IPv4 address by libcurl and browsers
@@ -76,6 +79,13 @@ def validate_target_url(raw: str, policy: UrlPolicy) -> str:
     host = (parts.hostname or "").lower().rstrip(".")  # "localhost." is the FQDN form of localhost
     if not host:
         raise ValidationError("target_url must include a host", field="target_url")
+    if not host.isascii() and ":" not in host:
+        try:  # internationalised domain name -> punycode, so "münchen.de" is accepted
+            host = host.encode("idna").decode("ascii")
+        except UnicodeError as exc:
+            raise ValidationError(
+                "target_url host is not a valid domain name", field="target_url"
+            ) from exc
     if " " in parts.netloc:
         raise ValidationError("target_url host contains whitespace", field="target_url")
 
@@ -112,6 +122,14 @@ def _reject_blocked_host(host: str, policy: UrlPolicy) -> None:
         raise ValidationError(
             "target_url host is an abbreviated numeric address, not allowed",
             field="target_url",
+        )
+    labels = host.split(".")
+    if any(not _LABEL_RE.match(label) for label in labels):
+        raise ValidationError("target_url host is not a valid domain name", field="target_url")
+    if len(labels) < 2:
+        # single-label names ("metadata", "intranet") only resolve on internal networks
+        raise ValidationError(
+            "target_url host must be a fully qualified domain name", field="target_url"
         )
     if host in policy.blocked_hostnames or host.endswith(policy.blocked_hostname_suffixes):
         raise ValidationError(

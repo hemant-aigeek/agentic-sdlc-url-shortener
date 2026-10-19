@@ -6,6 +6,7 @@ so tests can build an isolated app with an in-memory database.
 
 from __future__ import annotations
 
+import re
 import uuid
 from collections.abc import Awaitable, Callable
 
@@ -24,6 +25,7 @@ from agentic_sdlc.policy.registry import POLICY_VERSION
 from agentic_sdlc.telemetry.logging import bind, configure_logging, unbind
 
 CORRELATION_HEADER = "X-Correlation-ID"
+_CORRELATION_RE = re.compile(r"^[A-Za-z0-9._-]{1,64}$")
 
 
 def create_app(settings: Settings | None = None) -> FastAPI:
@@ -69,7 +71,9 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     async def _correlation(
         request: Request, call_next: Callable[[Request], Awaitable[Response]]
     ) -> Response:
-        cid = request.headers.get(CORRELATION_HEADER) or uuid.uuid4().hex[:16]
+        supplied = request.headers.get(CORRELATION_HEADER) or ""
+        # client-supplied IDs are echoed and logged: accept only short, safe tokens
+        cid = supplied if _CORRELATION_RE.match(supplied) else uuid.uuid4().hex[:16]
         request.state.correlation_id = cid
         bind(correlation_id=cid)
         try:
