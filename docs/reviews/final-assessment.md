@@ -64,7 +64,7 @@ dispositioned, nothing mandatory remains open.
 | Brownfield scenario | 4 | impact analysis before change, CHG-001 scope-aware |
 | Ambiguous scenario | 5 | block → clarify → replan → resume → exception → accepted limitations |
 | Documentation | 4 | reviewer guide verified row by row; a handful of field-name drifts were corrected during review |
-| GitHub evidence | 4 | 60+ coherent conventional commits; lifecycle visible; no squash |
+| GitHub evidence | 4 | ~60 coherent conventional commits; lifecycle visible; no squash |
 | Defensibility of decisions | 5 | 11 ADRs with options/consequences/reversibility; Gate 3 rationale per ambiguity |
 | Engineering judgment | 5 | depth over breadth; determinism over flair; limitations stated before being asked |
 
@@ -158,7 +158,7 @@ dispositioned, nothing mandatory remains open.
 
 ## Git History Assessment
 
-Coherent conventional commits from SpecKit init through governance
+Nearly sixty coherent conventional commits from SpecKit init through governance
 artifacts, test→feat pairs for every behaviour group, scenario evidence
 commits, documentation, then review-driven fixes with their own red commits.
 Timestamps reflect the actual working sessions. No history rewriting after
