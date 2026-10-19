@@ -215,3 +215,35 @@ def test_suspend_and_resume_from_persisted_state_with_new_engine(
     other = make_engine(store, agent, settings, {"g": chain})
     assert other.resume(run_id).state is RunState.COMPLETED
     assert [c.stage for c in agent.calls] == ["a", "b", "c"]
+
+
+@pytest.mark.req("FR-O08", "FR-O10", "NFR-02")
+def test_concurrent_run_calls_on_one_run_execute_each_stage_once(
+    store: WorkflowStore, agent: ScriptedAgent, settings: Settings
+) -> None:
+    """Duplicate-execution protection: two callers advancing the same run must not
+    both execute a ready stage (found in the pre-submission review)."""
+    import threading
+
+    agent.sleep_s = 0.05  # make the window wide enough for the race to show
+    engine = make_engine(store, agent, settings, {"g": chain})
+    run_id = engine.start(title="t", requirement="r", scope="greenfield", planner="g")
+    errors: list[BaseException] = []
+
+    def advance() -> None:
+        try:
+            engine.run(run_id)
+        except BaseException as exc:  # noqa: BLE001 - we want every failure recorded
+            errors.append(exc)
+
+    threads = [threading.Thread(target=advance) for _ in range(3)]
+    for t in threads:
+        t.start()
+    for t in threads:
+        t.join()
+
+    assert errors == []
+    assert store.load_run(run_id).state is RunState.COMPLETED
+    started = [e.stage for e in store.list_events(run_id) if e.kind is EventKind.STAGE_STARTED]
+    assert sorted(started) == ["a", "b", "c"], started
+    assert [c.stage for c in agent.calls] == ["a", "b", "c"]
