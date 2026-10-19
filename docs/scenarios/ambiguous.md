@@ -44,7 +44,7 @@ ingest → quality_check (2 ambiguities, max severity HIGH)
 | 15. Final validation | seq 34–35 `verify SUCCEEDED`; `policy.json` 8 × PASS / N-A |
 | Fallback on permanent failure (bonus path) | seq 38–42: `failure_detected PERMANENT` → `stage_failed` → `fallback_used` → `recovery_completed RECOVERED`; stage state `FALLBACK` |
 | Policy exception with compensating control and expiry | `policy.json` → `SEC-003 EXCEPTION-REQUESTED`; `exceptions`: approver, compensating control "manual security checklist reviewed and attached", `expires` 30 days later |
-| 16–17. Audit trail and terminal outcome | 54 ordered events with actor type; seq 54 `run_completed`; `scenario.json` → `READY WITH ACCEPTED LIMITATIONS` (the approved exception is the accepted limitation) |
+| 16–17. Audit trail and terminal outcome | 54 ordered events with actor type; seq 54 `run_completed`; `scenario.json` → `outcome.release_decision: READY WITH ACCEPTED LIMITATIONS` (the approved exception is the accepted limitation) |
 
 ## 4. Why the replan is governed, not a shortcut
 

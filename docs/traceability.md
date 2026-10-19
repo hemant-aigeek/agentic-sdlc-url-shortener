@@ -64,7 +64,7 @@ task targets; validation is `./scripts/check.sh`; documentation is `docs/`.
 | NFR-09 | Every FR maps to at least one automated test; the suite runs locally in < 2 min — AS-03. | T-001, T-113 | `tests/architecture/test_traceability.py::test_every_requirement_has_a_test_and_every_test_cites_a_known_id` | `scripts/check.sh` |
 | NFR-10 | Brownfield changes are blocked by policy until impact analysis exists; versioned API/schema changes require ap | — | `tests/contract/test_openapi_drift.py::test_committed_contract_matches_application`<br>`tests/contract/test_openapi_drift.py::test_contract_is_versioned_and_covers_v1_routes`<br>`tests/e2e/test_scenarios.py::test_brownfield_runs_impact_analysis_before_any_change`<br>`tests/unit/test_policy.py::test_chg_001_requires_impact_analysis_before_implementation_on_brownfield`<br>`tests/unit/test_policy.py::test_chg_002_requires_acknowledged_api_change_at_design_approval` | `scripts/check.sh` |
 | NFR-11 | Agents cannot transition past a gate; mandatory gates cannot be configured off. | T-050 | `tests/orchestration/test_gates.py::test_run_stops_at_gate_and_does_not_execute_downstream`<br>`tests/orchestration/test_gates.py::test_running_again_without_a_decision_does_not_advance`<br>`tests/orchestration/test_gates.py::test_decision_on_closed_or_unknown_gate_is_refused`<br>`tests/orchestration/test_gates.py::test_forged_stage_row_cannot_move_a_waiting_run`<br>`tests/orchestration/test_planner.py::test_gates_are_human_owned_and_policy_exception_is_conditional`<br>`tests/security/test_security.py::test_decisions_require_an_attributable_actor` | `scripts/check.sh` |
-| NFR-12 | Clean clone → running app + green suite with documented commands, no external services. | T-003, T-004, T-011, T-016, T-072, T-117 | — | — |
+| NFR-12 | Clean clone → running app + green suite with documented commands, no external services. | T-003, T-004, T-011, T-016, T-072, T-117 | `docs/evidence/clean-clone.md` | `scripts/check.sh` |
 | SC-01 | A reviewer can run the app and the full suite from a clean clone using only README commands. | T-117 | — | — |
 | SC-02 | All three scenarios execute end-to-end through the real orchestrator via a documented command, producing commi | T-072, T-088, T-090 | — | — |
 | SC-03 | Every FR/NFR maps to at least one test or demonstration in the traceability matrix; no orphan requirements, ta | T-113 | `tests/architecture/test_traceability.py::test_every_requirement_has_a_test_and_every_test_cites_a_known_id` | `scripts/check.sh` |
@@ -78,7 +78,7 @@ task targets; validation is `./scripts/check.sh`; documentation is `docs/`.
 
 ## Coverage
 
-- Testable requirement ids: 58; covered by at least one test: 57; uncovered: 1
+- Testable requirement ids: 58; covered by at least one test: 58; uncovered: 0
 - Requirement marker links: 260 across 196 tests
 
 ## ADR coverage
@@ -99,4 +99,4 @@ task targets; validation is `./scripts/check.sh`; documentation is `docs/`.
 
 ## Orphans
 
-- no test covers NFR-12 (Clean clone → running app + green suite with documented commands, no external services.)
+- none
